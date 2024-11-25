@@ -5,14 +5,14 @@ class Botaoprincipal extends StatelessWidget {
   final VoidCallback onPressed;
 
   const Botaoprincipal({
-    Key? key,
+    super.key,
     required this.text,
     required this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: MediaQuery.of(context).size.width * 1,
       height: 48,
       child: ElevatedButton(

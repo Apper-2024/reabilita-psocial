@@ -3,21 +3,24 @@ import '../utils/colors.dart';
 import '../widgets/header.dart';
 
 void main() {
-  runApp(HomeScreen());
+  runApp(const HomeScreen());
 }
 
 class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      
+      backgroundColor: background,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Header(
+              const Header(
                 imageUrl:
                     'https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
                 notificationCount: 3,
@@ -25,7 +28,7 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(height: 16),
               const Align(
                 alignment: Alignment.centerLeft,
-                child: const Column(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
@@ -51,14 +54,14 @@ class HomeScreen extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 18,
                   fontFamily: 'Poppins',
-                  color: AppColors.preto1,
+                  color: preto1,
                 ),
               ),
               const SizedBox(height: 16),
               Container(
                 padding: const EdgeInsets.all(22),
                 decoration: BoxDecoration(
-                  color: AppColors.bege,
+                  color: bege,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Row(
@@ -73,7 +76,7 @@ class HomeScreen extends StatelessWidget {
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
                             fontFamily: 'Poppins',
-                            color: AppColors.preto1,
+                            color: preto1,
                           ),
                         ),
                         SizedBox(height: 8),
@@ -82,7 +85,7 @@ class HomeScreen extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 18,
                             fontFamily: 'Poppins',
-                            color: AppColors.preto1,
+                            color: preto1,
                           ),
                         ),
                         SizedBox(height: 8),
@@ -92,12 +95,12 @@ class HomeScreen extends StatelessWidget {
                             fontSize: 18,
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.bold,
-                            color: AppColors.verde1,
+                            color: verde1,
                           ),
                         ),
                       ],
                     ),
-                    Icon(Icons.flag, color: AppColors.preto1, size: 48),
+                    Icon(Icons.flag, color: preto1, size: 48),
                   ],
                 ),
               ),
@@ -121,19 +124,19 @@ class HomeScreen extends StatelessWidget {
                   children: [
                     SizedBox(width: 8),
                     Expanded(
-                      child: const Text(
+                      child: Text(
                         '“Permeando projetos de vida com sentidos e significados construídos no habitat, rede social e trabalho”',
                         style: TextStyle(
                           fontSize: 16,
                           fontFamily: 'Poppins',
-                          color: AppColors.cinza1,
+                          color: cinza1,
                         ),
                       ),
                     ),
                     SizedBox(width: 10),
                     Icon(
                       Icons.format_quote,
-                      color: AppColors.bege,
+                      color: bege,
                       size: 48,
                     ),
                   ],
@@ -145,7 +148,7 @@ class HomeScreen extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 18,
                   fontFamily: 'Poppins',
-                  color: AppColors.preto1,
+                  color: preto1,
                 ),
               ),
               const SizedBox(height: 16),
@@ -153,7 +156,7 @@ class HomeScreen extends StatelessWidget {
                 height: 120,
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: AppColors.verde1,
+                  color: verde1,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Row(
@@ -168,7 +171,7 @@ class HomeScreen extends StatelessWidget {
                         color: Colors.white,
                       ),
                     ),
-                    Icon(Icons.spa, color: AppColors.verde2, size: 58),
+                    Icon(Icons.spa, color: verde2, size: 58),
                   ],
                 ),
               ),

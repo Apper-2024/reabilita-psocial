@@ -5,7 +5,7 @@ class CustomInputField extends StatelessWidget {
   final String label;
   final String hintText;
   final double width;
-  CustomInputField({
+  const CustomInputField({super.key, 
     required this.label,
     required this.hintText,
     required this.width,
@@ -13,20 +13,20 @@ class CustomInputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: width,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             label,
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           TextFormField(
             decoration: InputDecoration(
               hintText: hintText,
-              border: OutlineInputBorder(),
+              border: const OutlineInputBorder(),
             ),
           ),
         ],

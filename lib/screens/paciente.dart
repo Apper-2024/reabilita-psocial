@@ -1,22 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:reabilita_social/screens/detalhes_paciente.dart';
 import 'package:reabilita_social/screens/form_categoria.dart';
+import 'package:reabilita_social/utils/colors.dart';
 import 'package:reabilita_social/widgets/botaoPrincipal.dart';
-import 'package:reabilita_social/widgets/lista_opcoes.dart';
 
 void main() {
-  runApp(MaterialApp(
+  runApp(const MaterialApp(
     home: PacienteScreen(),
   ));
 }
 
 class PacienteScreen extends StatelessWidget {
+  const PacienteScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: background,
+
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Paciente Sara',
           style: TextStyle(
             fontWeight: FontWeight.bold,
@@ -24,14 +27,14 @@ class PacienteScreen extends StatelessWidget {
           ),
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
         backgroundColor: Colors.white,
         elevation: 0,
-        iconTheme: IconThemeData(color: Colors.black),
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -191,10 +194,10 @@ class PacienteScreen extends StatelessWidget {
                                               hintText: '',
                                               isImageField: true,
                                               images: [
-                                                AssetImage(''),
-                                                AssetImage(''),
-                                                NetworkImage(''),
-                                                NetworkImage(''),
+                                                const AssetImage(''),
+                                                const AssetImage(''),
+                                                const NetworkImage(''),
+                                                const NetworkImage(''),
                                               ],
                                             ),
                                           ],
@@ -588,7 +591,7 @@ class PacienteScreen extends StatelessWidget {
                                               hintText: '',
                                               isImageField: true,
                                               images: [
-                                                AssetImage(''),
+                                                const AssetImage(''),
                                               ],
                                             ),
                                           ],
@@ -707,10 +710,10 @@ class PacienteScreen extends StatelessWidget {
                                               hintText: '',
                                               isImageField: true,
                                               images: [
-                                                AssetImage(''),
-                                                AssetImage(''),
-                                                NetworkImage(''),
-                                                NetworkImage(''),
+                                                const AssetImage(''),
+                                                const AssetImage(''),
+                                                const NetworkImage(''),
+                                                const NetworkImage(''),
                                               ],
                                             ),
                                           ],
@@ -726,7 +729,7 @@ class PacienteScreen extends StatelessWidget {
                 );
               },
             ),
-            Spacer(),
+            const Spacer(),
             Botaoprincipal(text: 'Compartilhar Projeto', onPressed: () {})
           ],
         ),
@@ -739,8 +742,8 @@ class PacienteScreen extends StatelessWidget {
     return GestureDetector(
       onTap: () => onTap(),
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 8.0),
-        padding: EdgeInsets.all(16.0),
+        margin: const EdgeInsets.symmetric(vertical: 8.0),
+        padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16.0),
@@ -749,7 +752,7 @@ class PacienteScreen extends StatelessWidget {
               color: Colors.grey.withOpacity(0.2),
               spreadRadius: 2,
               blurRadius: 6,
-              offset: Offset(0, 2),
+              offset: const Offset(0, 2),
             ),
           ],
         ),
@@ -758,7 +761,7 @@ class PacienteScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              padding: EdgeInsets.all(12.0),
+              padding: const EdgeInsets.all(12.0),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: Colors.orange[100],
@@ -768,11 +771,11 @@ class PacienteScreen extends StatelessWidget {
                 color: Colors.black,
               ),
             ),
-            SizedBox(width: 16.0),
+            const SizedBox(width: 16.0),
             Expanded(
               child: Text(
                 text,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.w500,
                 ),

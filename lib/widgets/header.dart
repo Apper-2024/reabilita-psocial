@@ -5,7 +5,7 @@ class Header extends StatelessWidget {
   final String imageUrl;
   final int notificationCount;
 
-  Header({required this.imageUrl, required this.notificationCount});
+  const Header({super.key, required this.imageUrl, required this.notificationCount});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class Header extends StatelessWidget {
                 const Icon(
                   Icons.notification_add_outlined,
                   size: 38,
-                  color: AppColors.preto1,
+                  color: preto1,
                 ),
                 if (notificationCount > 0)
                   Positioned(
@@ -32,7 +32,7 @@ class Header extends StatelessWidget {
                     child: Container(
                       padding: const EdgeInsets.all(4),
                       decoration: const BoxDecoration(
-                        color: AppColors.verde1,
+                        color: verde1,
                         shape: BoxShape.circle,
                       ),
                       constraints: const BoxConstraints(

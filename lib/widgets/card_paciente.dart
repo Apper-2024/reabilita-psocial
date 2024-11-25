@@ -5,7 +5,7 @@ class CardPaciente extends StatelessWidget {
   final String text;
   final VoidCallback onTap;
 
-  const CardPaciente({
+  const CardPaciente({super.key, 
     required this.icon,
     required this.text,
     required this.onTap,
@@ -22,17 +22,17 @@ class CardPaciente extends StatelessWidget {
             onTap: onTap,
             child: Row(
               children: [
-                SizedBox(width: 16), 
+                const SizedBox(width: 16), 
                 Center(
                   child: Icon(icon, color: Colors.orange, size: 28),
                 ),
-                SizedBox(width: 16),
+                const SizedBox(width: 16),
                 Expanded(
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
                       text,
-                      style: TextStyle(fontSize: 18),
+                      style: const TextStyle(fontSize: 18),
                     ),
                   ),
                 ),
@@ -40,7 +40,7 @@ class CardPaciente extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
       ],
     );
   }

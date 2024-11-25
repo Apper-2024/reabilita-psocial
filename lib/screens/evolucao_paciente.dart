@@ -3,10 +3,9 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:reabilita_social/utils/colors.dart';
 import 'package:reabilita_social/widgets/botaoPrincipal.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:intl/intl.dart';
 
 void main() {
-  runApp(MaterialApp(
+  runApp(const MaterialApp(
     home: EvolucaoPacientePage(),
     locale: Locale('pt', 'BR'),
     supportedLocales: [Locale('pt', 'BR'), Locale('en', 'US')],
@@ -18,6 +17,8 @@ void main() {
 }
 
 class EvolucaoPacientePage extends StatefulWidget {
+  const EvolucaoPacientePage({super.key});
+
   @override
   _EvolucaoPacientePageState createState() => _EvolucaoPacientePageState();
 }
@@ -30,10 +31,10 @@ class _EvolucaoPacientePageState extends State<EvolucaoPacientePage> {
 
   void _adicionarComentario() {
     showModalBottomSheet(
-      backgroundColor: AppColors.background,
+      backgroundColor: background,
       context: context,
       isScrollControlled: true,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (context) => Padding(
@@ -46,20 +47,20 @@ class _EvolucaoPacientePageState extends State<EvolucaoPacientePage> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
+            const Text(
               "Adicionar comentário",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             TextField(
               controller: comentarioController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: "Digite o comentário",
                 border: OutlineInputBorder(),
               ),
               maxLines: 3,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Botaoprincipal(
               text: 'Salvar Comentário',
               onPressed: () {
@@ -86,7 +87,8 @@ class _EvolucaoPacientePageState extends State<EvolucaoPacientePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: background,
+
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: Text(
@@ -104,7 +106,7 @@ class _EvolucaoPacientePageState extends State<EvolucaoPacientePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Center(
+            const Center(
               child: Column(
                 children: [
                   CircleAvatar(
@@ -123,7 +125,7 @@ class _EvolucaoPacientePageState extends State<EvolucaoPacientePage> {
                 ],
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             TableCalendar(
               locale: 'pt_BR',
               firstDay: DateTime.utc(2020, 1, 1),
@@ -146,9 +148,9 @@ class _EvolucaoPacientePageState extends State<EvolucaoPacientePage> {
                 CalendarFormat.twoWeeks: '2 Semanas',
                 CalendarFormat.week: 'Semana',
               },
-              calendarStyle: CalendarStyle(
+              calendarStyle: const CalendarStyle(
                 todayDecoration: BoxDecoration(
-                  color: AppColors.verde2,
+                  color: verde2,
                   shape: BoxShape.circle,
                 ),
               ),
@@ -160,14 +162,14 @@ class _EvolucaoPacientePageState extends State<EvolucaoPacientePage> {
                       bottom: 4,
                       right: 4,
                       child: Container(
-                        decoration: BoxDecoration(
-                          color: AppColors.bege,
+                        decoration: const BoxDecoration(
+                          color: bege,
                           shape: BoxShape.circle,
                         ),
-                        padding: EdgeInsets.all(6),
+                        padding: const EdgeInsets.all(6),
                         child: Text(
                           '$count',
-                          style: TextStyle(color: Colors.black87, fontSize: 12),
+                          style: const TextStyle(color: Colors.black87, fontSize: 12),
                         ),
                       ),
                     );
@@ -180,18 +182,18 @@ class _EvolucaoPacientePageState extends State<EvolucaoPacientePage> {
                       color: Colors.green[900],
                       shape: BoxShape.circle,
                     ),
-                    margin: EdgeInsets.all(6.0),
+                    margin: const EdgeInsets.all(6.0),
                     alignment: Alignment.center,
                     child: Text(
                       '${date.day}',
-                      style: TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.white),
                     ),
                   );
                 },
                 defaultBuilder: (context, date, _) {
                   int count = _comentariosCount(date);
                   return Container(
-                    margin: EdgeInsets.all(6.0),
+                    margin: const EdgeInsets.all(6.0),
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       color: count > 0 ? Colors.green[300] : Colors.transparent,
@@ -207,22 +209,22 @@ class _EvolucaoPacientePageState extends State<EvolucaoPacientePage> {
                 },
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Text(
               "Evolução para ${selectedDate.day}/${selectedDate.month}/${selectedDate.year}",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             if (comentarios[selectedDate]?.isNotEmpty ?? false)
               Expanded(
                 child: ListView.builder(
                   itemCount: comentarios[selectedDate]?.length ?? 0,
                   itemBuilder: (context, index) {
                     return ListTile(
-                      leading: CircleAvatar(
+                      leading: const CircleAvatar(
                         backgroundImage: AssetImage('assets/psicologo.jpg'),
                       ),
-                      title: Text("Dr. Júlia Lorem Ipsum"),
+                      title: const Text("Dr. Júlia Lorem Ipsum"),
                       subtitle: Text(comentarios[selectedDate]![index]),
                     );
                   },
@@ -233,8 +235,8 @@ class _EvolucaoPacientePageState extends State<EvolucaoPacientePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _adicionarComentario,
-        child: Icon(Icons.add, color: Colors.white),
         backgroundColor: Colors.green[900],
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }

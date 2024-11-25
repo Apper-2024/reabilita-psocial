@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ListaOpcao extends StatefulWidget {
-  ListaOpcao({super.key});
+  const ListaOpcao({super.key});
 
   @override
   State<ListaOpcao> createState() => _ListaOpcaoState();
@@ -15,7 +15,7 @@ class _ListaOpcaoState extends State<ListaOpcao> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Center(
+        const Center(
           child: Text(
             'Avaliação',
             style: TextStyle(
@@ -36,7 +36,7 @@ class _ListaOpcaoState extends State<ListaOpcao> {
             },
             activeColor: Colors.green,
           ),
-          title: Text(
+          title: const Text(
             'Cumpriu totalmente',
             style: TextStyle(color: Colors.green),
           ),
@@ -52,7 +52,7 @@ class _ListaOpcaoState extends State<ListaOpcao> {
             },
             activeColor: Colors.green,
           ),
-          title: Text(
+          title: const Text(
             'Cumpriu parcialmente',
             style: TextStyle(color: Colors.green),
           ),
@@ -68,7 +68,7 @@ class _ListaOpcaoState extends State<ListaOpcao> {
             },
             activeColor: Colors.green,
           ),
-          title: Text(
+          title: const Text(
             'Não cumpriu',
             style: TextStyle(color: Colors.green),
           ),

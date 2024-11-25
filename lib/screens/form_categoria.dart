@@ -29,29 +29,31 @@ class FormCategoria extends StatelessWidget {
   final List<FieldConfig> fields;
 
   const FormCategoria({
-    Key? key,
+    super.key,
     required this.titulo,
     required this.fields,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: background,
+
       appBar: AppBar(
         title: Text(
           titulo,
-          style: TextStyle(color: Colors.black87),
+          style: const TextStyle(color: Colors.black87),
         ),
         backgroundColor: Colors.white,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black87),
+          icon: const Icon(Icons.arrow_back, color: Colors.black87),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
       ),
       body: Container(
-        color: AppColors.background,
+        color: background,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -160,12 +162,12 @@ class CustomInputForm extends StatelessWidget {
   final bool hasDate;
 
   const CustomInputForm({
-    Key? key,
+    super.key,
     required this.label,
     required this.hintText,
     required this.width,
     this.hasDate = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -179,18 +181,18 @@ class CustomInputForm extends StatelessWidget {
         children: [
           Text(
             label,
-            style: TextStyle(
+            style: const TextStyle(
               fontWeight: FontWeight.bold,
-              color: AppColors.verde1,
+              color: verde1,
             ),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           TextField(
             decoration: InputDecoration(
               hintText: hintText,
-              border: OutlineInputBorder(),
+              border: const OutlineInputBorder(),
               filled: true,
-              fillColor: AppColors.background,
+              fillColor: background,
             ),
           ),
           if (hasDate)
@@ -198,7 +200,7 @@ class CustomInputForm extends StatelessWidget {
               padding: const EdgeInsets.only(top: 8.0),
               child: Text(
                 'Data de registro: $formattedDate',
-                style: TextStyle(color: Colors.grey, fontSize: 12),
+                style: const TextStyle(color: Colors.grey, fontSize: 12),
               ),
             ),
         ],
@@ -214,12 +216,12 @@ class DoubleHeightInput extends StatelessWidget {
   final bool hasDate;
 
   const DoubleHeightInput({
-    Key? key,
+    super.key,
     required this.label,
     required this.hintText,
     required this.width,
     this.hasDate = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -233,19 +235,19 @@ class DoubleHeightInput extends StatelessWidget {
         children: [
           Text(
             label,
-            style: TextStyle(
+            style: const TextStyle(
               fontWeight: FontWeight.bold,
-              color: AppColors.verde1,
+              color: verde1,
             ),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           TextField(
             maxLines: 4,
             decoration: InputDecoration(
               hintText: hintText,
-              border: OutlineInputBorder(),
+              border: const OutlineInputBorder(),
               filled: true,
-              fillColor: AppColors.background,
+              fillColor: background,
             ),
           ),
           if (hasDate)
@@ -253,7 +255,7 @@ class DoubleHeightInput extends StatelessWidget {
               padding: const EdgeInsets.only(top: 8.0),
               child: Text(
                 'Data de registro: $formattedDate',
-                style: TextStyle(color: Colors.grey, fontSize: 12),
+                style: const TextStyle(color: Colors.grey, fontSize: 12),
               ),
             ),
         ],
@@ -265,7 +267,7 @@ class DoubleHeightInput extends StatelessWidget {
 class RadioField extends StatefulWidget {
   final String label;
 
-  const RadioField({Key? key, required this.label}) : super(key: key);
+  const RadioField({super.key, required this.label});
 
   @override
   _RadioFieldState createState() => _RadioFieldState();
@@ -283,8 +285,7 @@ class _RadioFieldState extends State<RadioField> {
         children: [
           Text(
             widget.label,
-            style:
-                TextStyle(fontWeight: FontWeight.bold, color: AppColors.preto1),
+            style: const TextStyle(fontWeight: FontWeight.bold, color: preto1),
           ),
           Row(
             children: [
@@ -296,9 +297,9 @@ class _RadioFieldState extends State<RadioField> {
                     _curatelado = value;
                   });
                 },
-                activeColor: AppColors.verde1,
+                activeColor: verde1,
               ),
-              Text("Sim"),
+              const Text("Sim"),
               Radio<String>(
                 value: 'Não',
                 groupValue: _curatelado,
@@ -307,9 +308,9 @@ class _RadioFieldState extends State<RadioField> {
                     _curatelado = value;
                   });
                 },
-                activeColor: AppColors.verde1,
+                activeColor: verde1,
               ),
-              Text("Não"),
+              const Text("Não"),
             ],
           ),
         ],
@@ -322,8 +323,7 @@ class ImageField extends StatelessWidget {
   final String label;
   final List<ImageProvider>? images;
 
-  const ImageField({Key? key, required this.label, this.images})
-      : super(key: key);
+  const ImageField({super.key, required this.label, this.images});
 
   @override
   Widget build(BuildContext context) {
@@ -332,12 +332,12 @@ class ImageField extends StatelessWidget {
       children: [
         Text(
           label,
-          style: TextStyle(
+          style: const TextStyle(
             fontWeight: FontWeight.bold,
-            color: AppColors.verde1,
+            color: verde1,
           ),
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: List.generate(4, (index) {

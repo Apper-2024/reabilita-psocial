@@ -11,8 +11,7 @@ class CardProjeto extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
       child: InkWell(
         onTap: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => PacienteScreen()));
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => const PacienteScreen()));
         },
         child: Container(
           padding: const EdgeInsets.all(16),
@@ -52,7 +51,7 @@ class CardProjeto extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 20,
                       fontFamily: 'Poppins',
-                      color: AppColors.verde1,
+                      color: verde1,
                     ),
                   ),
                   Text(
@@ -60,7 +59,7 @@ class CardProjeto extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 18,
                       fontFamily: 'Poppins',
-                      color: AppColors.cinza1,
+                      color: cinza1,
                     ),
                   ),
                 ],

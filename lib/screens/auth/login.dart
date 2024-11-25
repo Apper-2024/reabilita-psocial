@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:reabilita_social/screens/cadastro.dart';
-import 'package:reabilita_social/screens/home.dart';
+import 'package:reabilita_social/screens/auth/cadastro.dart';
 import 'package:reabilita_social/utils/colors.dart';
 import 'package:reabilita_social/widgets/botaoPrincipal.dart';
 import 'package:reabilita_social/widgets/botom_menu.dart';
@@ -21,16 +20,14 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: background,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
               'Olá, bem-vindo de volta 🥶🥶',
-              style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24),
+              style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.bold, fontSize: 24),
             ),
             const SizedBox(height: 33),
             Padding(
@@ -84,7 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           onTap: () {
                             print('clicado');
                           },
-                          child: Text(
+                          child: const Text(
                             'Esqueceu sua senha?',
                             style: TextStyle(color: Colors.red, fontSize: 16),
                           ),
@@ -94,8 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       text: 'Login',
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => BotomMenu()));
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => const BotomMenu()));
 
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text('Login realizado!')),
@@ -111,7 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
+                        const Text(
                           'Não tem uma conta?',
                           style: TextStyle(
                             fontFamily: 'Poppins',
@@ -121,13 +117,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         const SizedBox(width: 5),
                         InkWell(
                           onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => CadastroScreen()));
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => const CadastroScreen()));
                           },
-                          child: Text(
+                          child: const Text(
                             'Se cadastre',
                             style: TextStyle(
-                              color: AppColors.verde1,
+                              color: verde1,
                               fontWeight: FontWeight.bold,
                               fontSize: 18,
                             ),
@@ -148,7 +143,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 'Proteção e Visibilidade de Dados',
                 style: TextStyle(
                   fontFamily: 'Poppins',
-                  color: AppColors.verde1,
+                  color: verde1,
                 ),
               ),
             ),

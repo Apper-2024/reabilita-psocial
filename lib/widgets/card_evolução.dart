@@ -11,8 +11,7 @@ class CardEvolucao extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
       child: InkWell(
         onTap: () {
-          Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => EvolucaoPacientePage()));
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => const EvolucaoPacientePage()));
         },
         child: Container(
           padding: const EdgeInsets.all(16),
@@ -50,7 +49,7 @@ class CardEvolucao extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 20,
                     fontFamily: 'Poppins',
-                    color: AppColors.verde1,
+                    color: verde1,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -60,12 +59,11 @@ class CardEvolucao extends StatelessWidget {
                 width: 30,
                 height: 30,
                 decoration: const BoxDecoration(
-                  color: AppColors.verde2,
+                  color: verde2,
                   borderRadius: BorderRadius.all(Radius.circular(200)),
                 ),
-                child: Center(
-                  child:
-                      Icon(Icons.arrow_forward, size: 18, color: Colors.white),
+                child: const Center(
+                  child: Icon(Icons.arrow_forward, size: 18, color: Colors.white),
                 ),
               ),
             ],

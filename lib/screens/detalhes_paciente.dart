@@ -6,8 +6,7 @@ class ItemConteudo {
   final VoidCallback onTap;
   final VoidCallback onTap2;
 
-  ItemConteudo(
-      {required this.titulo, required this.onTap, required this.onTap2});
+  ItemConteudo({required this.titulo, required this.onTap, required this.onTap2});
 }
 
 class DetalhesPaciente extends StatelessWidget {
@@ -17,7 +16,7 @@ class DetalhesPaciente extends StatelessWidget {
   final String categoria;
   final List<ItemConteudo> conteudos;
 
-  const DetalhesPaciente({
+  const DetalhesPaciente({super.key, 
     required this.nomePaciente,
     required this.dataCriacao,
     required this.conteudos,
@@ -28,21 +27,21 @@ class DetalhesPaciente extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: background,
       appBar: AppBar(
-        backgroundColor: AppColors.background,
+        backgroundColor: background,
         title: Text(
           titulo,
-          style: TextStyle(color: Colors.black),
+          style: const TextStyle(color: Colors.black),
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.of(context).pop(),
         ),
         centerTitle: true,
         actions: [
           IconButton(
-            icon: Icon(Icons.arrow_forward, color: Colors.black),
+            icon: const Icon(Icons.arrow_forward, color: Colors.black),
             onPressed: () {
               // Coloque a lógica desejada para o botão da AppBar
               print("teste");
@@ -57,17 +56,17 @@ class DetalhesPaciente extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Center(
+            const Center(
               child: CircleAvatar(
                 radius: 50,
                 backgroundImage: AssetImage('assets/imagem_paciente.jpg'),
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Center(
               child: Text(
                 nomePaciente,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
                 ),
@@ -76,11 +75,11 @@ class DetalhesPaciente extends StatelessWidget {
             Center(
               child: Text(
                 'Paciente criada no dia $dataCriacao pelo Dr. Lorem Ipsum',
-                style: TextStyle(color: Colors.grey),
+                style: const TextStyle(color: Colors.grey),
                 textAlign: TextAlign.center,
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             // Exibe a lista de itens dinâmicos
             Expanded(
@@ -101,8 +100,8 @@ class DetalhesPaciente extends StatelessWidget {
           print('Floating Action Button pressionado');
           // Adicione a lógica para a ação do botão
         },
-        child: Icon(Icons.add, color: Colors.white),
         backgroundColor: Colors.green[900],
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }
@@ -111,7 +110,7 @@ class DetalhesPaciente extends StatelessWidget {
 class ItemLista extends StatelessWidget {
   final ItemConteudo conteudo;
 
-  const ItemLista({required this.conteudo});
+  const ItemLista({super.key, required this.conteudo});
 
   @override
   Widget build(BuildContext context) {
@@ -121,8 +120,7 @@ class ItemLista extends StatelessWidget {
         onTap: conteudo.onTap,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment:
-              CrossAxisAlignment.start, // Alinha ao topo para textos longos
+          crossAxisAlignment: CrossAxisAlignment.start, // Alinha ao topo para textos longos
           children: [
             Expanded(
               // Permite que o texto ocupe o espaço disponível
@@ -136,14 +134,14 @@ class ItemLista extends StatelessWidget {
               ),
             ),
             Container(
-              padding: EdgeInsets.all(8),
+              padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: Colors.orange[100],
               ),
-              child: Icon(
+              child: const Icon(
                 Icons.arrow_forward_ios,
-                color: AppColors.verde1,
+                color: verde1,
                 size: 16,
               ),
             ),

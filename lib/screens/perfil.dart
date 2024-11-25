@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:reabilita_social/screens/home.dart';
-import 'package:reabilita_social/screens/login.dart';
-import 'package:reabilita_social/screens/paciente.dart';
+import 'package:reabilita_social/screens/auth/login.dart';
 import '../utils/colors.dart';
 import '../widgets/header.dart';
 
 class PerfilScreen extends StatelessWidget {
+  const PerfilScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: background,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Header(
+              const Header(
                 imageUrl:
                     'https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
                 notificationCount: 3,
@@ -27,13 +27,13 @@ class PerfilScreen extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 20,
                   fontFamily: 'Poppins',
-                  color: AppColors.preto1,
+                  color: preto1,
                 ),
               ),
               const SizedBox(height: 30),
               const Row(
                 children: [
-                  const Icon(Icons.account_circle, size: 36),
+                  Icon(Icons.account_circle, size: 36),
                   SizedBox(
                     width: 10,
                   ),
@@ -49,7 +49,7 @@ class PerfilScreen extends StatelessWidget {
               const SizedBox(height: 10),
               const Row(
                 children: [
-                  const Icon(Icons.settings, size: 36),
+                  Icon(Icons.settings, size: 36),
                   SizedBox(
                     width: 10,
                   ),
@@ -65,7 +65,7 @@ class PerfilScreen extends StatelessWidget {
               const SizedBox(height: 10),
               const Row(
                 children: [
-                  const Icon(Icons.help_rounded, size: 36),
+                  Icon(Icons.help_rounded, size: 36),
                   SizedBox(
                     width: 10,
                   ),
@@ -81,7 +81,7 @@ class PerfilScreen extends StatelessWidget {
               const SizedBox(height: 10),
               const Row(
                 children: [
-                  const Icon(Icons.document_scanner, size: 36),
+                  Icon(Icons.document_scanner, size: 36),
                   SizedBox(
                     width: 10,
                   ),
@@ -93,18 +93,15 @@ class PerfilScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               InkWell(
                 onTap: () {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => LoginScreen()));
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => const LoginScreen()));
                 },
                 child: Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: AppColors.preto1),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: preto1),
                   width: MediaQuery.of(context).size.width * 0.9,
                   child: const Padding(
                     padding: EdgeInsets.all(8.0),
