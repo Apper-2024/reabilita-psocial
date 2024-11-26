@@ -6,4 +6,5 @@ import 'package:flutter/material.dart';
   const Color preto1 = Color(0xFF404040);
   const Color cinza1 = Color(0xFFBFBFBF);
   const Color background = Color(0xFFF4F4F4);
+  const Color branco = Colors.white;
 

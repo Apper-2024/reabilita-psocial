@@ -1,8 +1,11 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:reabilita_social/screens/auth/cadastro.dart';
+import 'package:reabilita_social/repository/auth.dart';
 import 'package:reabilita_social/utils/colors.dart';
+import 'package:reabilita_social/utils/snack/snack_erro.dart';
+import 'package:reabilita_social/utils/snack/snack_sucesso.dart';
 import 'package:reabilita_social/widgets/botaoPrincipal.dart';
-import 'package:reabilita_social/widgets/botom_menu.dart';
+import 'package:reabilita_social/widgets/text_field_custom.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -26,7 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
-              'Olá, bem-vindo de volta 🥶🥶',
+              'Olá, bem-vindo de volta ao Reabilita Social!',
               style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.bold, fontSize: 24),
             ),
             const SizedBox(height: 33),
@@ -36,43 +39,50 @@ class _LoginScreenState extends State<LoginScreen> {
                 key: _formKey,
                 child: Column(
                   children: [
-                    TextFormField(
-                      controller: emailController,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: "Digite seu email",
-                      ),
+                    TextFieldCustom(
+                      tipoTexto: TextInputType.emailAddress,
+                      hintText: "Digite seu email",
+                      labelText: "ex. joao@gmail.com",
+                      senha: false,
+                      formController: emailController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Por favor, digite seu email';
+                          return 'Campo obrigatório';
+                        }
+                        if (!EmailValidator.validate(value)) {
+                          return 'Email inválido';
                         }
                         return null;
                       },
                     ),
                     const SizedBox(height: 30),
-                    TextFormField(
-                      controller: senhaController,
-                      obscureText: !verSenha,
-                      decoration: InputDecoration(
-                        border: const OutlineInputBorder(),
-                        labelText: "Digite sua senha",
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            verSenha ? Icons.visibility : Icons.visibility_off,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              verSenha = !verSenha;
-                            });
-                          },
-                        ),
-                      ),
+                    TextFieldCustom(
+                      hintText: "Senha",
+                      labelText: "*******",
+                      tipoTexto: TextInputType.text,
+                      senha: verSenha,
+                      formController: senhaController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Por favor, digite sua senha';
+                          return 'Campo obrigatório';
+                        }
+
+                        if (value.length < 6) {
+                          return 'Senha deve possuir mais de 6 digitos!';
                         }
                         return null;
                       },
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          verSenha ? Icons.visibility : Icons.visibility_off,
+                          color: preto1,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            verSenha = !verSenha;
+                          });
+                        },
+                      ),
                     ),
                     const SizedBox(height: 20),
                     Align(
@@ -89,17 +99,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(height: 20),
                     Botaoprincipal(
                       text: 'Login',
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => const BotomMenu()));
-
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Login realizado!')),
-                          );
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Erro no login')),
-                          );
+                      onPressed: () async {
+                        try {
+                          await AuthRepository().fazerLogin(emailController.text, senhaController.text);
+                          Navigator.pushNamed(context, '/menuPrincipal');
+                          snackSucesso(context, "Login feito com sucesso");
+                        } catch (e) {
+                          snackErro(context, e.toString());
                         }
                       },
                     ),
@@ -117,7 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         const SizedBox(width: 5),
                         InkWell(
                           onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => const CadastroScreen()));
+                            Navigator.pushNamed(context, "/cadastro");
                           },
                           child: const Text(
                             'Se cadastre',

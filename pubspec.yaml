@@ -39,9 +39,13 @@ dependencies:
   cupertino_icons: ^1.0.6
   table_calendar: ^3.0.8
 
-  intl: any
+  intl: ^0.19.0
   supabase_flutter: ^2.8.1
   awesome_snackbar_content: ^0.1.4
+  email_validator: ^3.0.0
+  mask_text_input_formatter: ^2.9.0
+  http: ^1.2.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

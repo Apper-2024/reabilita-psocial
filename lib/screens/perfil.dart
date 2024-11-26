@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:reabilita_social/screens/auth/login.dart';
 import '../utils/colors.dart';
 import '../widgets/header.dart';
 
@@ -96,9 +95,9 @@ class PerfilScreen extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              InkWell(
+              GestureDetector(
                 onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => const LoginScreen()));
+                  Navigator.pushNamed(context, "/");
                 },
                 child: Container(
                   decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: preto1),

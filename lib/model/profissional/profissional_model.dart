@@ -4,15 +4,15 @@ class ProfissionalModel {
   String nome;
   String email;
   String telefone;
-  String genero;
+  String? genero;
   String cpf;
-  String raca;
-  String profissao;
-  String localTrabalho;
+  String? raca;
+  String? profissao;
+  String? localTrabalho;
   EnderecoModel endereco;
   String tipoUsuario;
   String statusConta;
-  String dataNascimento;
+  DateTime dataNascimento;
 
   ProfissionalModel({
     required this.nome,
