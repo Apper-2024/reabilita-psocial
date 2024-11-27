@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:reabilita_social/enum/enum_status_conta.dart';
@@ -6,7 +7,6 @@ import 'package:reabilita_social/model/endereco_model.dart';
 import 'package:reabilita_social/model/profissional/profissional_model.dart';
 import 'package:reabilita_social/utils/colors.dart';
 import 'package:reabilita_social/utils/formaters/formater_data.dart';
-import 'package:reabilita_social/utils/snack/snack_atencao.dart';
 import 'package:reabilita_social/utils/snack/snack_erro.dart';
 import 'package:reabilita_social/widgets/botaoPrincipal.dart';
 import 'package:reabilita_social/widgets/dropdown_custom.dart';
@@ -19,9 +19,8 @@ class CadastroScreen extends StatefulWidget {
   _CadastroScreenState createState() => _CadastroScreenState();
 }
 
-final _formKey = GlobalKey<FormState>();
-
 class _CadastroScreenState extends State<CadastroScreen> {
+  final _formKey = GlobalKey<FormState>();
   bool concordo = false;
   bool _escondidoSenha = true;
   bool _escondidoRepetirSenha = true;
@@ -32,18 +31,19 @@ class _CadastroScreenState extends State<CadastroScreen> {
     email: '',
     nome: '',
     telefone: '',
-    genero: null,
-    cpf: ',',
-    dataNascimento: DateTime.now(),
+    uidProfissional: "",
     endereco: EnderecoModel(
       cep: '',
-      complemento: '',
-      rua: '',
-      numero: '',
-      bairro: '',
       cidade: '',
       estado: '',
+      bairro: '',
+      complemento: '',
+      numero: '',
+      rua: '',
     ),
+    genero: null,
+    cpf: ',',
+    dataNascimento: Timestamp.now(),
     localTrabalho: null,
     profissao: null,
     raca: null,

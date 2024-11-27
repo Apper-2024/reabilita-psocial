@@ -1,20 +1,25 @@
-class MetaModel {
-  List<String> meta;
-  DateTime dataCriacao;
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-  MetaModel({required this.meta, required this.dataCriacao});
+class MetaModel {
+  String meta;
+  Timestamp dataCriacao;
+  String tipo;
+
+  MetaModel({required this.meta, required this.dataCriacao, required this.tipo});
 
   factory MetaModel.fromMap(Map<String, dynamic> map) {
     return MetaModel(
-      meta: List<String>.from(map['meta']),
-      dataCriacao: DateTime.parse(map['dataCriacao']),
+      meta: map['meta'],
+      dataCriacao: map['dataCriacao'],
+      tipo: map['tipo'],
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'meta': meta,
-      'dataCriacao': dataCriacao.toIso8601String(),
+      'dataCriacao': dataCriacao,
+      'tipo': tipo,
     };
   }
 }

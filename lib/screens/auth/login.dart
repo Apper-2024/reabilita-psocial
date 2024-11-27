@@ -1,6 +1,6 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:reabilita_social/repository/auth.dart';
+import 'package:reabilita_social/repository/auth/auth_repository.dart';
 import 'package:reabilita_social/utils/colors.dart';
 import 'package:reabilita_social/utils/snack/snack_erro.dart';
 import 'package:reabilita_social/utils/snack/snack_sucesso.dart';

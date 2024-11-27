@@ -1,18 +1,35 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
+import 'package:reabilita_social/firebase_options.dart';
 import 'package:reabilita_social/presentation/theme__manager.dart';
+import 'package:reabilita_social/provider/profissional_provider.dart';
 import 'package:reabilita_social/screens/auth/cadastros/cadastro.dart';
 import 'package:reabilita_social/screens/auth/cadastros/cadastro_final.dart';
 import 'package:reabilita_social/screens/auth/login.dart';
 import 'package:reabilita_social/screens/home.dart';
-import 'package:reabilita_social/services/supabase_service.dart';
+import 'package:reabilita_social/verifica_conta.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await SupabaseService().initSupabase();
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    print("Firebase initialized successfully");
+  } catch (e) {
+    print("Error initializing Firebase: $e");
+  }
 
-  // await initializeDateFormatting('pt_BR', null);
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(value: ProfissionalProvider.instance),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -30,10 +47,11 @@ class MyApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
       ],
       routes: {
-        '/': (context) => const LoginScreen(),
+        '/': (context) => const VerificaConta(),
+        '/login': (context) => const LoginScreen(),
         '/menuPrincipal': (context) => const HomeScreen(),
-        '/cadastro': (context) =>  const CadastroScreen(),
-        '/cadastroFinal': (context) =>  const CadastroFinalScreen(),
+        '/cadastro': (context) => const CadastroScreen(),
+        '/cadastroFinal': (context) => const CadastroFinalScreen(),
       },
       initialRoute: '/',
     );

@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class PactuacaoModel {
   String paciente;
   String responsavelPactuacao;
@@ -5,7 +7,7 @@ class PactuacaoModel {
   String familia;
   String responsavel;
   String foto;
-  DateTime data;
+  Timestamp data;
 
   PactuacaoModel({
     required this.paciente,
@@ -25,7 +27,7 @@ class PactuacaoModel {
       familia: map['familia'],
       responsavel: map['responsavel'],
       foto: map['foto'],
-      data: DateTime.parse(map['data']),
+      data: map['data'],
     );
   }
 
@@ -37,27 +39,7 @@ class PactuacaoModel {
       'familia': familia,
       'responsavel': responsavel,
       'foto': foto,
-      'data': data.toIso8601String(),
-    };
-  }
-}
-
-class ListPactuacaoModel {
-  List<PactuacaoModel> listPactuacao;
-
-  ListPactuacaoModel({required this.listPactuacao});
-
-  factory ListPactuacaoModel.fromMap(Map<String, dynamic> map) {
-    return ListPactuacaoModel(
-      listPactuacao: List<PactuacaoModel>.from(
-        map['listPactuacao']?.map((x) => PactuacaoModel.fromMap(x)),
-      ),
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'listPactuacao': listPactuacao.map((x) => x.toMap()).toList(),
+      'data': data,
     };
   }
 }

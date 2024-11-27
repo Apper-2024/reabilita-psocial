@@ -1,10 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class AvaliacaoModel {
   String intervencao;
   String responsavel;
   String avaliacao;
   String observacao;
   String foto;
-  DateTime data;
+  Timestamp data;
 
   AvaliacaoModel({
     required this.intervencao,
@@ -22,7 +24,7 @@ class AvaliacaoModel {
       'avaliacao': avaliacao,
       'observacao': observacao,
       'foto': foto,
-      'data': data.toIso8601String(),
+      'data': data,
     };
   }
 
@@ -33,7 +35,7 @@ class AvaliacaoModel {
       avaliacao: map['avaliacao'],
       observacao: map['observacao'],
       foto: map['foto'],
-      data: DateTime.parse(map['data']),
+      data: map['data'],
     );
   }
 }

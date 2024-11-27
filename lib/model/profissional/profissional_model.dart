@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:reabilita_social/model/endereco_model.dart';
 
 class ProfissionalModel {
@@ -12,7 +13,8 @@ class ProfissionalModel {
   EnderecoModel endereco;
   String tipoUsuario;
   String statusConta;
-  DateTime dataNascimento;
+  Timestamp dataNascimento;
+  String uidProfissional;
 
   ProfissionalModel({
     required this.nome,
@@ -27,6 +29,8 @@ class ProfissionalModel {
     required this.tipoUsuario,
     required this.statusConta,
     required this.dataNascimento,
+    required this.uidProfissional,
+    
   });
 
   Map<String, dynamic> toMap() {
@@ -43,6 +47,7 @@ class ProfissionalModel {
       'tipoUsuario': tipoUsuario,
       'statusConta': statusConta,
       'dataNascimento': dataNascimento,
+      'uidProfissional': uidProfissional,
     };
   }
 
@@ -60,6 +65,7 @@ class ProfissionalModel {
       tipoUsuario: map['tipoUsuario'],
       statusConta: map['statusConta'],
       dataNascimento: map['dataNascimento'],
+      uidProfissional: map['uidProfissional'],
     );
   }
 }

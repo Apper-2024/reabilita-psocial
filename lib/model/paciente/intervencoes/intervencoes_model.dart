@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class IntervencoesModel {
   String problema;
   List<ListIntervencoesModel> listIntervencoes;
@@ -23,11 +25,11 @@ class IntervencoesModel {
 
 class ListIntervencoesModel {
   String intervencoes;
-  DateTime dataCriacao;
+  Timestamp dataCriacao;
   String nomeResponsavel;
   String meta;
   String prazo;
-  DateTime data;
+  Timestamp data;
 
   ListIntervencoesModel({
     required this.intervencoes,
@@ -41,22 +43,22 @@ class ListIntervencoesModel {
   factory ListIntervencoesModel.fromMap(Map<String, dynamic> map) {
     return ListIntervencoesModel(
       intervencoes: map['intervencoes'],
-      dataCriacao: DateTime.parse(map['dataCriacao']),
+      dataCriacao: map['dataCriacao'],
       nomeResponsavel: map['nomeResponsavel'],
       meta: map['meta'],
       prazo: map['prazo'],
-      data: DateTime.parse(map['data']),
+      data: map['data'],
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'intervencoes': intervencoes,
-      'dataCriacao': dataCriacao.toIso8601String(),
+      'dataCriacao': dataCriacao,
       'nomeResponsavel': nomeResponsavel,
       'meta': meta,
       'prazo': prazo,
-      'data': data.toIso8601String(),
+      'data': data,
     };
   }
 }

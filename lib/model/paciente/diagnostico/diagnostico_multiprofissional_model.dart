@@ -1,11 +1,13 @@
-class DiagnosticoMultiprofissionais {
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+class DiagnosticoMultiprofissionaisModel {
   List<String> diagnosticos;
-  DateTime dataCriacao;
+  Timestamp dataCriacao;
   String nomeResponsavel;
   String profissaoResponsavel;
   String cpf;
 
-  DiagnosticoMultiprofissionais({
+  DiagnosticoMultiprofissionaisModel({
     required this.diagnosticos,
     required this.dataCriacao,
     required this.nomeResponsavel,
@@ -13,10 +15,10 @@ class DiagnosticoMultiprofissionais {
     required this.cpf,
   });
 
-  factory DiagnosticoMultiprofissionais.fromMap(Map<String, dynamic> map) {
-    return DiagnosticoMultiprofissionais(
+  factory DiagnosticoMultiprofissionaisModel.fromMap(Map<String, dynamic> map) {
+    return DiagnosticoMultiprofissionaisModel(
       diagnosticos: List<String>.from(map['diagnosticos']),
-      dataCriacao: DateTime.parse(map['dataCriacao']),
+      dataCriacao: map['dataCriacao'],
       nomeResponsavel: map['nomeResponsavel'],
       profissaoResponsavel: map['profissaoResponsavel'],
       cpf: map['cpf'],
@@ -26,7 +28,8 @@ class DiagnosticoMultiprofissionais {
   Map<String, dynamic> toMap() {
     return {
       'diagnosticos': diagnosticos,
-      'dataCriacao': dataCriacao.toIso8601String(),
+      'dataCriacao': dataCriacao
+      ,
       'nomeResponsavel': nomeResponsavel,
       'profissaoResponsavel': profissaoResponsavel,
       'cpf': cpf,
@@ -36,7 +39,7 @@ class DiagnosticoMultiprofissionais {
 
 class HistoriaCasoModel {
   String historia;
-  List<DiagnosticoMultiprofissionais> diagnosticos;
+  List<DiagnosticoMultiprofissionaisModel> diagnosticos;
   List<String> foto;
 
   HistoriaCasoModel({
@@ -48,8 +51,8 @@ class HistoriaCasoModel {
   factory HistoriaCasoModel.fromMap(Map<String, dynamic> map) {
     return HistoriaCasoModel(
       historia: map['historia'],
-      diagnosticos: List<DiagnosticoMultiprofissionais>.from(
-        map['diagnosticos'].map((item) => DiagnosticoMultiprofissionais.fromMap(item)),
+      diagnosticos: List<DiagnosticoMultiprofissionaisModel>.from(
+        map['diagnosticos'].map((item) => DiagnosticoMultiprofissionaisModel.fromMap(item)),
       ),
       foto: List<String>.from(map['foto']),
     );

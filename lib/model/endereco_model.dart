@@ -6,7 +6,7 @@ class EnderecoModel {
   String cidade;
   String cep;
 
-  String complemento;
+  String? complemento;
 
   EnderecoModel({
     required this.rua,
@@ -16,7 +16,7 @@ class EnderecoModel {
     required this.cidade,
     required this.cep,
 
-    required this.complemento,
+     this.complemento,
   });
 
   factory EnderecoModel.fromMap(Map<String, dynamic> data) {

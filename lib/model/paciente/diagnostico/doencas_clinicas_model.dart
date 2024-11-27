@@ -1,20 +1,22 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class DoencaClinicaModel {
   String doencaClinica;
-  DateTime dataCriacao;
+  Timestamp dataCriacao;
 
   DoencaClinicaModel({required this.doencaClinica, required this.dataCriacao});
 
   factory DoencaClinicaModel.fromMap(Map<String, dynamic> map) {
     return DoencaClinicaModel(
       doencaClinica: map['doencaClinica'],
-      dataCriacao: DateTime.parse(map['dataCriacao']),
+      dataCriacao: map['dataCriacao'],
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'doencaClinica': doencaClinica,
-      'dataCriacao': dataCriacao.toIso8601String(),
+      'dataCriacao': dataCriacao,
     };
   }
 }

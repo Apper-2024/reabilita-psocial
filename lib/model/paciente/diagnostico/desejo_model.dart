@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class DesejoModel {
   String desejos;
   List<SonhoVidaModel> sonhoVida;
@@ -23,21 +25,21 @@ class DesejoModel {
 
 class SonhoVidaModel {
   List<String> sonhoVida;
-  DateTime dataCriacao;
+  Timestamp dataCriacao;
 
   SonhoVidaModel({required this.sonhoVida, required this.dataCriacao});
 
   factory SonhoVidaModel.fromMap(Map<String, dynamic> map) {
     return SonhoVidaModel(
       sonhoVida: List<String>.from(map['sonhoVida']),
-      dataCriacao: DateTime.parse(map['dataCriacao']),
+      dataCriacao: map['dataCriacao'],
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'sonhoVida': sonhoVida,
-      'dataCriacao': dataCriacao.toIso8601String(),
+      'dataCriacao': dataCriacao,
     };
   }
 }

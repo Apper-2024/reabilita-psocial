@@ -12,9 +12,7 @@ class DadosPacienteModel {
   String tipoUsuario;
   String statusConta;
   String dataNascimento;
-  String observacoes;
-  bool pacienteCuratelado;
-  String tecnicoReferencia;
+  OutrasInformacoesModel outrasInformacoes;
 
   DadosPacienteModel({
     required this.nome,
@@ -28,9 +26,7 @@ class DadosPacienteModel {
     required this.tipoUsuario,
     required this.statusConta,
     required this.dataNascimento,
-    required this.observacoes,
-    required this.pacienteCuratelado,
-    required this.tecnicoReferencia,
+    required this.outrasInformacoes,
   });
 
   Map<String, dynamic> toMap() {
@@ -46,9 +42,7 @@ class DadosPacienteModel {
       'tipoUsuario': tipoUsuario,
       'statusConta': statusConta,
       'dataNascimento': dataNascimento,
-      'observacoes': observacoes,
-      'pacienteCuratelado': pacienteCuratelado,
-      'tecnicoReferencia': tecnicoReferencia,
+      'outrasInformacoes': outrasInformacoes.toMap(),
     };
   }
 
@@ -65,9 +59,39 @@ class DadosPacienteModel {
       tipoUsuario: map['tipoUsuario'],
       statusConta: map['statusConta'],
       dataNascimento: map['dataNascimento'],
-      observacoes: map['observacoes'],
-      pacienteCuratelado: map['pacienteCuratelado'],
+      outrasInformacoes: OutrasInformacoesModel.fromMap(map['outrasInformacoes']),
+    );
+  }
+}
+
+class OutrasInformacoesModel {
+  String observacao;
+  String tecnicoReferencia;
+  String outrasInformacoes;
+  bool pacienteCuratelado;
+
+  OutrasInformacoesModel({
+    required this.observacao,
+    required this.tecnicoReferencia,
+    required this.outrasInformacoes,
+    required this.pacienteCuratelado,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'observacao': observacao,
+      'tecnicoReferencia': tecnicoReferencia,
+      'outrasInformacoes': outrasInformacoes,
+      'pacienteCuratelado': pacienteCuratelado,
+    };
+  }
+
+  factory OutrasInformacoesModel.fromMap(Map<String, dynamic> map) {
+    return OutrasInformacoesModel(
+      observacao: map['observacao'],
       tecnicoReferencia: map['tecnicoReferencia'],
+      outrasInformacoes: map['outrasInformacoes'],
+      pacienteCuratelado: map['pacienteCuratelado'],
     );
   }
 }

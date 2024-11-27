@@ -1,13 +1,14 @@
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:reabilita_social/enum/enum_status_conta.dart';
-import 'package:reabilita_social/enum/enum_tipo_usuario.dart';
 import 'package:reabilita_social/model/endereco_model.dart';
 import 'package:reabilita_social/model/profissional/profissional_model.dart';
+import 'package:reabilita_social/repository/auth/auth_repository.dart';
+import 'package:reabilita_social/repository/profissional/gerencia_profissional_repository.dart';
+import 'package:reabilita_social/repository/usuarios/gerencia_usuario_repository.dart';
 import 'package:reabilita_social/utils/colors.dart';
 import 'package:reabilita_social/utils/formaters/formater_data.dart';
 import 'package:reabilita_social/utils/snack/snack_atencao.dart';
 import 'package:reabilita_social/utils/snack/snack_erro.dart';
+import 'package:reabilita_social/utils/snack/snack_sucesso.dart';
 import 'package:reabilita_social/widgets/botaoPrincipal.dart';
 import 'package:reabilita_social/widgets/dropdown_custom.dart';
 import 'package:reabilita_social/widgets/endereco_form.dart';
@@ -20,15 +21,8 @@ class CadastroFinalScreen extends StatefulWidget {
   _CadastroFinalScreenState createState() => _CadastroFinalScreenState();
 }
 
-final _formKey = GlobalKey<FormState>();
-
 class _CadastroFinalScreenState extends State<CadastroFinalScreen> {
-  bool concordo = false;
-  bool _escondidoSenha = true;
-  bool _escondidoRepetirSenha = true;
-  final _senhaController = TextEditingController();
-  final _repetirSenhaController = TextEditingController();
-
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     final Map<String, dynamic> args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
@@ -125,7 +119,6 @@ class _CadastroFinalScreenState extends State<CadastroFinalScreen> {
                     if (value == null || value.isEmpty) {
                       return 'Campo obrigatório';
                     }
-
                     return null;
                   },
                   onSaved: (value) {
@@ -184,54 +177,31 @@ class _CadastroFinalScreenState extends State<CadastroFinalScreen> {
                   text: "Cadastrar",
                   onPressed: () async {
                     try {
-                      if (_senhaController.text != _repetirSenhaController.text) {
-                        snackAtencao(context, "Senhas devem ser iguais!");
+                      if (profissional.raca == null) {
+                        snackAtencao(context, "Selecione um raça");
                         return;
                       }
-                      if (!_formKey.currentState!.validate()) {
-                        snackAtencao(context, "Preencha os campos corretamente!");
+                      if (profissional.profissao == null) {
+                        snackAtencao(context, "Selecione sua profissão");
                         return;
                       }
 
-                      if (concordo == false) {
-                        snackAtencao(context, "Por favor, aceite os termos de uso!");
+                      if (profissional.localTrabalho == null) {
+                        snackAtencao(context, "Selecione o seu local de trabalho");
                         return;
                       }
                       _formKey.currentState!.save();
 
-                      // await AuthRepository().criarUsuario(profissionalModel.email, _senhaController.text);
+                      final usuario = await AuthRepository().criarUsuario(profissional.email, senha);
+
+                      await GerenciaProfissionalRepository().criaProfissional(usuario, profissional);
+                      Navigator.pushNamedAndRemoveUntil(context, "/menuPrincipal", (route) => false);
+                      snackSucesso(context, "Sucesso ao criar sua conta!");
                     } catch (e) {
                       snackErro(context, e.toString());
                       return;
                     }
                   },
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      'Já possui conta? ',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 18,
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    InkWell(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text(
-                        'Login',
-                        style: TextStyle(
-                          color: verde1,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      ),
-                    ),
-                  ],
                 ),
                 const SizedBox(height: 32),
               ],
