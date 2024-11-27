@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -14,9 +15,7 @@ import 'package:reabilita_social/verifica_conta.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   try {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
+    await Firebase.initializeApp(options: DefaultFirebaseOptions.web);
     print("Firebase initialized successfully");
   } catch (e) {
     print("Error initializing Firebase: $e");
@@ -46,6 +45,7 @@ class MyApp extends StatelessWidget {
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],
+      initialRoute: '/',
       routes: {
         '/': (context) => const VerificaConta(),
         '/login': (context) => const LoginScreen(),
@@ -53,7 +53,6 @@ class MyApp extends StatelessWidget {
         '/cadastro': (context) => const CadastroScreen(),
         '/cadastroFinal': (context) => const CadastroFinalScreen(),
       },
-      initialRoute: '/',
     );
   }
 }

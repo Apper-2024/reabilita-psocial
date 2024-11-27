@@ -7,16 +7,15 @@ import 'package:reabilita_social/services/firebase_service.dart';
 class AuthRepository {
   FirebaseFirestore db = FirebaseService().db;
   FirebaseAuth auth = FirebaseService().auth;
+  Future<void> setPersistence() async {
+    await auth.setPersistence(Persistence.LOCAL);
+  }
 
-  Future<User> fazerLogin(String email, String senha) async {
+  Future<void> fazerLogin(String email, String senha) async {
     try {
-      final userCredential = await auth.signInWithEmailAndPassword(email: email, password: senha);
+      await setPersistence();
 
-      final user = userCredential.user;
-      if (user == null) {
-        throw 'Usuário não encontrado';
-      }
-      return user;
+      await auth.signInWithEmailAndPassword(email: email, password: senha);
     } on FirebaseAuthException catch (e) {
       throw FirebaseErrorRepository.handleFirebaseAuthException(e);
     } catch (e) {

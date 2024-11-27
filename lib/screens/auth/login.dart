@@ -102,7 +102,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: () async {
                         try {
                           await AuthRepository().fazerLogin(emailController.text, senhaController.text);
-                          Navigator.pushNamed(context, '/menuPrincipal');
+                          Navigator.pushNamedAndRemoveUntil(context, '/menuPrincipal', (route) => false);
                           snackSucesso(context, "Login feito com sucesso");
                         } catch (e) {
                           snackErro(context, e.toString());
