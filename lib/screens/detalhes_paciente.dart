@@ -16,7 +16,8 @@ class DetalhesPaciente extends StatelessWidget {
   final String categoria;
   final List<ItemConteudo> conteudos;
 
-  const DetalhesPaciente({super.key, 
+  const DetalhesPaciente({
+    super.key,
     required this.nomePaciente,
     required this.dataCriacao,
     required this.conteudos,
@@ -59,7 +60,8 @@ class DetalhesPaciente extends StatelessWidget {
             const Center(
               child: CircleAvatar(
                 radius: 50,
-                backgroundImage: AssetImage('assets/imagem_paciente.jpg'),
+                backgroundImage: NetworkImage(
+                    "https://wendellcarvalho.com.br/wp-content/uploads/2023/07/Saiba-o-que-e-uma-pessoa-temperamental-e-como-esse-comportamento-pode-afetar-diferentes-areas-da-vida.jpg"),
               ),
             ),
             const SizedBox(height: 10),

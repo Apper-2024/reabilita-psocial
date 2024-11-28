@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:reabilita_social/widgets/card_evolu%C3%A7%C3%A3o.dart';
+import 'package:reabilita_social/widgets/card/card_evolu%C3%A7%C3%A3o.dart';
 import '../utils/colors.dart';
 import '../widgets/header.dart';
 
-void main() {
-  runApp(const MaterialApp(
-    home: EvolucaoScreen(),
-  ));
-}
+
 
 class EvolucaoScreen extends StatelessWidget {
   const EvolucaoScreen({super.key});

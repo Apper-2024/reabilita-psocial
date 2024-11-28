@@ -9,8 +9,10 @@ import 'package:reabilita_social/provider/profissional_provider.dart';
 import 'package:reabilita_social/screens/auth/cadastros/cadastro.dart';
 import 'package:reabilita_social/screens/auth/cadastros/cadastro_final.dart';
 import 'package:reabilita_social/screens/auth/login.dart';
-import 'package:reabilita_social/screens/home.dart';
+import 'package:reabilita_social/screens/cadastro_projeto.dart';
+import 'package:reabilita_social/screens/paciente.dart';
 import 'package:reabilita_social/verifica_conta.dart';
+import 'package:reabilita_social/widgets/bottomMenu/botom_menu_profissional.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,6 +22,7 @@ void main() async {
   } catch (e) {
     print("Error initializing Firebase: $e");
   }
+ await FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
 
   runApp(
     MultiProvider(
@@ -39,17 +42,21 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: getApplicationTheme(),
+
       // locale: const Locale('pt', 'BR'),
       // supportedLocales: const [Locale('pt', 'BR'), Locale('en', 'US')],
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],
+
       initialRoute: '/',
       routes: {
         '/': (context) => const VerificaConta(),
         '/login': (context) => const LoginScreen(),
-        '/menuPrincipal': (context) => const HomeScreen(),
+        '/cadastroProjeto': (context) => const CadastroProjetoScreen(),
+        '/telaPaciente': (context) => const PacienteScreen(),
+        '/menuProfissional': (context) => const BottomMenuProfissional(),
         '/cadastro': (context) => const CadastroScreen(),
         '/cadastroFinal': (context) => const CadastroFinalScreen(),
       },

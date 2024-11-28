@@ -7,7 +7,7 @@ class Navegacao {
   static void enviaParaMenu(BuildContext context, UsuarioModel usuarioModel) {
     final tipoUsuario = usuarioModel.tipo;
     if (tipoUsuario == EnumTipoUsuario.profissional.name) {
-      Navigator.pushNamedAndRemoveUntil(context, '/menuPrincipal', (route) => false);
+      Navigator.pushNamedAndRemoveUntil(context, '/menuProfissional', (route) => false);
     } else if (tipoUsuario == EnumTipoUsuario.paciente.name) {
       Navigator.pushNamedAndRemoveUntil(context, '/menuPrincipal', (route) => false);
     } else if (tipoUsuario == EnumTipoUsuario.administrador.name) {

@@ -16,7 +16,8 @@ class TextFieldCustom extends StatelessWidget {
   final TextInputType tipoTexto;
   final Function(String?)? onSaved;
   final String? valorInicial;
-
+  final int? maxLines;
+  final int? minLines;
   const TextFieldCustom(
       {super.key,
       required this.labelText,
@@ -31,7 +32,9 @@ class TextFieldCustom extends StatelessWidget {
       this.caracterMax,
       required this.tipoTexto,
       this.onSaved,
-      this.valorInicial});
+      this.valorInicial,
+      this.maxLines,
+      this.minLines});
 
   @override
   Widget build(BuildContext context) => TextFormField(
@@ -43,7 +46,8 @@ class TextFieldCustom extends StatelessWidget {
         validator: validator,
         maxLength: caracterMax,
         obscureText: senha ?? false,
-        
+        maxLines: maxLines ?? 1,
+        minLines: minLines ?? 1,
         initialValue: valorInicial,
         buildCounter: (context, {required currentLength, required isFocused, required maxLength}) {
           return null;
@@ -60,6 +64,7 @@ class TextFieldCustom extends StatelessWidget {
             hintStyle: const TextStyle(color: cinza1, fontWeight: FontWeight.w600, fontSize: 12),
             suffixIcon: suffixIcon,
             prefixIcon: prefixIcon,
+            
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: const BorderSide(color: verde1, width: 2),

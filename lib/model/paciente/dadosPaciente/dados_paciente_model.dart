@@ -4,7 +4,7 @@ class DadosPacienteModel {
   String nome;
   String email;
   String telefone;
-  String genero;
+  String? genero;
   String cns;
   String profissao;
   String rendaMensal;

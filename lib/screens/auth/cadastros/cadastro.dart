@@ -8,7 +8,7 @@ import 'package:reabilita_social/model/profissional/profissional_model.dart';
 import 'package:reabilita_social/utils/colors.dart';
 import 'package:reabilita_social/utils/formaters/formater_data.dart';
 import 'package:reabilita_social/utils/snack/snack_erro.dart';
-import 'package:reabilita_social/widgets/botaoPrincipal.dart';
+import 'package:reabilita_social/widgets/botao/botaoPrincipal.dart';
 import 'package:reabilita_social/widgets/dropdown_custom.dart';
 import 'package:reabilita_social/widgets/text_field_custom.dart';
 

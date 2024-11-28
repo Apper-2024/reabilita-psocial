@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:reabilita_social/screens/paciente.dart';
 import 'package:reabilita_social/utils/colors.dart';
 
 class CardProjeto extends StatelessWidget {
@@ -8,10 +7,10 @@ class CardProjeto extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+      padding: const EdgeInsets.all(16),
       child: InkWell(
         onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => const PacienteScreen()));
+          Navigator.pushNamed(context, "/telaPaciente");
         },
         child: Container(
           padding: const EdgeInsets.all(16),

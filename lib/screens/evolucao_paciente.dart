@@ -1,20 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:reabilita_social/utils/colors.dart';
-import 'package:reabilita_social/widgets/botaoPrincipal.dart';
+import 'package:reabilita_social/widgets/botao/botaoPrincipal.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-void main() {
-  runApp(const MaterialApp(
-    home: EvolucaoPacientePage(),
-    locale: Locale('pt', 'BR'),
-    supportedLocales: [Locale('pt', 'BR'), Locale('en', 'US')],
-    localizationsDelegates: [
-      GlobalMaterialLocalizations.delegate,
-      GlobalWidgetsLocalizations.delegate,
-    ],
-  ));
-}
+
 
 class EvolucaoPacientePage extends StatefulWidget {
   const EvolucaoPacientePage({super.key});

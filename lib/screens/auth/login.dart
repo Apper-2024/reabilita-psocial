@@ -4,7 +4,7 @@ import 'package:reabilita_social/repository/auth/auth_repository.dart';
 import 'package:reabilita_social/utils/colors.dart';
 import 'package:reabilita_social/utils/snack/snack_erro.dart';
 import 'package:reabilita_social/utils/snack/snack_sucesso.dart';
-import 'package:reabilita_social/widgets/botaoPrincipal.dart';
+import 'package:reabilita_social/widgets/botao/botaoPrincipal.dart';
 import 'package:reabilita_social/widgets/text_field_custom.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -17,7 +17,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController senhaController = TextEditingController();
-  bool verSenha = false;
+  bool verSenha = true;
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -41,8 +41,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     TextFieldCustom(
                       tipoTexto: TextInputType.emailAddress,
-                      hintText: "Digite seu email",
-                      labelText: "ex. joao@gmail.com",
+                      hintText: "ex. joao@gmail.com",
+                      labelText: "Digite seu email",
                       senha: false,
                       formController: emailController,
                       validator: (value) {
@@ -57,8 +57,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     const SizedBox(height: 30),
                     TextFieldCustom(
-                      hintText: "Senha",
-                      labelText: "*******",
+                      hintText: "*******",
+                      labelText: "Senha",
                       tipoTexto: TextInputType.text,
                       senha: verSenha,
                       formController: senhaController,
@@ -102,7 +102,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: () async {
                         try {
                           await AuthRepository().fazerLogin(emailController.text, senhaController.text);
-                          Navigator.pushNamedAndRemoveUntil(context, '/menuPrincipal', (route) => false);
+                          Navigator.pushNamedAndRemoveUntil(context, '/menuProfissional', (route) => false);
                           snackSucesso(context, "Login feito com sucesso");
                         } catch (e) {
                           snackErro(context, e.toString());

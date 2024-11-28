@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:reabilita_social/widgets/card_projeto.dart';
+import 'package:reabilita_social/widgets/card/card_projeto.dart';
 import '../utils/colors.dart';
 import '../widgets/header.dart';
 
-class ProjetoScreen extends StatelessWidget {
-  const ProjetoScreen({super.key});
+class ProjetosScreen extends StatefulWidget {
+  const ProjetosScreen({super.key});
 
+  @override
+  _ProjetosScreenState createState() => _ProjetosScreenState();
+}
+
+class _ProjetosScreenState extends State<ProjetosScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,7 +66,9 @@ class ProjetoScreen extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushNamed(context, '/cadastroProjeto');
+          },
           label: const Text(
             'Adicionar Projeto',
             style: TextStyle(color: background),

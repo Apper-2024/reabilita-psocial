@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:reabilita_social/model/endereco_model.dart';
 import 'package:reabilita_social/model/profissional/profissional_model.dart';
 import 'package:reabilita_social/repository/auth/auth_repository.dart';
 import 'package:reabilita_social/repository/profissional/gerencia_profissional_repository.dart';
-import 'package:reabilita_social/repository/usuarios/gerencia_usuario_repository.dart';
 import 'package:reabilita_social/utils/colors.dart';
 import 'package:reabilita_social/utils/formaters/formater_data.dart';
 import 'package:reabilita_social/utils/snack/snack_atencao.dart';
 import 'package:reabilita_social/utils/snack/snack_erro.dart';
 import 'package:reabilita_social/utils/snack/snack_sucesso.dart';
-import 'package:reabilita_social/widgets/botaoPrincipal.dart';
+import 'package:reabilita_social/widgets/botao/botaoPrincipal.dart';
 import 'package:reabilita_social/widgets/dropdown_custom.dart';
 import 'package:reabilita_social/widgets/endereco_form.dart';
 import 'package:reabilita_social/widgets/text_field_custom.dart';

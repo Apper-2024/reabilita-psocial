@@ -2,17 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:reabilita_social/screens/detalhes_paciente.dart';
 import 'package:reabilita_social/screens/form_categoria.dart';
 import 'package:reabilita_social/utils/colors.dart';
-import 'package:reabilita_social/widgets/botaoPrincipal.dart';
+import 'package:reabilita_social/widgets/botao/botaoPrincipal.dart';
 
-void main() {
-  runApp(const MaterialApp(
-    home: PacienteScreen(),
-  ));
-}
 
-class PacienteScreen extends StatelessWidget {
+
+class PacienteScreen extends StatefulWidget {
   const PacienteScreen({super.key});
 
+  @override
+  _PacienteScreenState createState() => _PacienteScreenState();
+}
+
+class _PacienteScreenState extends State<PacienteScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
