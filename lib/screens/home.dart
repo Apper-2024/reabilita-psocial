@@ -25,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
               const Header(
                 imageUrl:
                     'https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-                notificationCount: 3,
+                notificationCount: 4,
               ),
               const SizedBox(height: 16),
               const Align(

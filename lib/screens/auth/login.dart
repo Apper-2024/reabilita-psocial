@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:reabilita_social/repository/auth/auth_repository.dart';
 import 'package:reabilita_social/utils/colors.dart';
 import 'package:reabilita_social/utils/snack/snack_erro.dart';
-import 'package:reabilita_social/utils/snack/snack_sucesso.dart';
+import 'package:reabilita_social/verifica_conta.dart';
 import 'package:reabilita_social/widgets/botao/botaoPrincipal.dart';
 import 'package:reabilita_social/widgets/text_field_custom.dart';
 
@@ -86,24 +86,36 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     const SizedBox(height: 20),
                     Align(
-                        alignment: AlignmentDirectional.centerEnd,
-                        child: InkWell(
-                          onTap: () {
-                            print('clicado');
-                          },
-                          child: const Text(
-                            'Esqueceu sua senha?',
-                            style: TextStyle(color: Colors.red, fontSize: 16),
-                          ),
-                        )),
+                      alignment: AlignmentDirectional.centerEnd,
+                      child: InkWell(
+                        onTap: () {
+                          print('clicado');
+                        },
+                        child: const Text(
+                          'Esqueceu sua senha?',
+                          style: TextStyle(color: Colors.red, fontSize: 16),
+                        ),
+                      ),
+                    ),
+                    Align(
+                      alignment: AlignmentDirectional.centerEnd,
+                      child: InkWell(
+                        onTap: () {
+                          print('clicado');
+                        },
+                        child: const Text(
+                          'Primeiro acesso, paciente?',
+                          style: TextStyle(color: preto1, fontSize: 16),
+                        ),
+                      ),
+                    ),
                     const SizedBox(height: 20),
                     Botaoprincipal(
                       text: 'Login',
                       onPressed: () async {
                         try {
-                          await AuthRepository().fazerLogin(emailController.text, senhaController.text);
-                          Navigator.pushNamedAndRemoveUntil(context, '/menuProfissional', (route) => false);
-                          snackSucesso(context, "Login feito com sucesso");
+                          final usuario = await AuthRepository().fazerLogin(emailController.text, senhaController.text);
+                          verificaUser(context, usuario);
                         } catch (e) {
                           snackErro(context, e.toString());
                         }

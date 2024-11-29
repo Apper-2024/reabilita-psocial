@@ -1,18 +1,18 @@
 class UsuarioModel {
   String email;
-  String tipo;
+  String tipoUsuario;
   String uid;
 
   UsuarioModel({
     required this.email,
-    required this.tipo,
+    required this.tipoUsuario,
     required this.uid,
   });
 
   factory UsuarioModel.fromMap(Map<String, dynamic> data) {
     return UsuarioModel(
       email: data['email'] ?? '',
-      tipo: data['tipo'] ?? '',
+      tipoUsuario: data['tipoUsuario'] ?? '',
       uid: data['uid'] ?? '',
     );
   }
@@ -20,7 +20,7 @@ class UsuarioModel {
   Map<String, dynamic> toMap() {
     return {
       'email': email,
-      'tipo': tipo,
+      'tipoUsuario': tipoUsuario,
       'uid': uid,
     };
   }

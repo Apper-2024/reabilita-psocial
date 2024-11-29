@@ -15,6 +15,7 @@ class FirebaseErrorRepository {
         return 'Ops, algo deu errado. Tente novamente mais tarde!';
     }
   }
+  
 
   static String handleFirebaseAuthException(FirebaseAuthException e) {
     switch (e.code) {

@@ -13,6 +13,7 @@ class ProfissionalModel {
   EnderecoModel endereco;
   String tipoUsuario;
   String statusConta;
+  String urlFoto;
   Timestamp dataNascimento;
   String uidProfissional;
 
@@ -29,6 +30,7 @@ class ProfissionalModel {
     required this.tipoUsuario,
     required this.statusConta,
     required this.dataNascimento,
+    required this.urlFoto,
     required this.uidProfissional,
     
   });
@@ -47,6 +49,7 @@ class ProfissionalModel {
       'tipoUsuario': tipoUsuario,
       'statusConta': statusConta,
       'dataNascimento': dataNascimento,
+      'urlFoto': urlFoto,
       'uidProfissional': uidProfissional,
     };
   }
@@ -65,6 +68,7 @@ class ProfissionalModel {
       tipoUsuario: map['tipoUsuario'],
       statusConta: map['statusConta'],
       dataNascimento: map['dataNascimento'],
+      urlFoto: map['urlFoto'],
       uidProfissional: map['uidProfissional'],
     );
   }

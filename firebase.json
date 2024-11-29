@@ -1,1 +1,30 @@
-{"flutter":{"platforms":{"dart":{"lib/firebase_options.dart":{"projectId":"reabilitapsocial","configurations":{"web":"1:943139858468:web:b9f5bccbc09c81c53310b1"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "reabilitapsocial",
+          "configurations": {
+            "web": "1:943139858468:web:b9f5bccbc09c81c53310b1"
+          }
+        }
+      }
+    }
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ],
+      "predeploy": [
+        "npm --prefix \"$RESOURCE_DIR\" run lint"
+      ]
+    }
+  ]
+}

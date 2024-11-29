@@ -12,6 +12,10 @@ class DadosPacienteModel {
   String tipoUsuario;
   String statusConta;
   String dataNascimento;
+  String uidProfisional;
+  String? uidPaciente;
+  String urlFoto;
+
   OutrasInformacoesModel outrasInformacoes;
 
   DadosPacienteModel({
@@ -26,6 +30,9 @@ class DadosPacienteModel {
     required this.tipoUsuario,
     required this.statusConta,
     required this.dataNascimento,
+    required this.uidProfisional,
+    this.uidPaciente,
+    required this.urlFoto,
     required this.outrasInformacoes,
   });
 
@@ -42,6 +49,9 @@ class DadosPacienteModel {
       'tipoUsuario': tipoUsuario,
       'statusConta': statusConta,
       'dataNascimento': dataNascimento,
+      'uidProfisional': uidProfisional,
+      'uidPaciente': uidPaciente,
+      'urlFoto': urlFoto,
       'outrasInformacoes': outrasInformacoes.toMap(),
     };
   }
@@ -59,6 +69,9 @@ class DadosPacienteModel {
       tipoUsuario: map['tipoUsuario'],
       statusConta: map['statusConta'],
       dataNascimento: map['dataNascimento'],
+      uidProfisional: map['uidProfisional'],
+      uidPaciente: map['uidPaciente'],
+      urlFoto: map['urlFoto'],
       outrasInformacoes: OutrasInformacoesModel.fromMap(map['outrasInformacoes']),
     );
   }

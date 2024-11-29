@@ -1,4 +1,7 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:reabilita_social/controller/image_controller.dart';
 import 'package:reabilita_social/model/profissional/profissional_model.dart';
 import 'package:reabilita_social/repository/auth/auth_repository.dart';
 import 'package:reabilita_social/repository/profissional/gerencia_profissional_repository.dart';
@@ -7,6 +10,7 @@ import 'package:reabilita_social/utils/formaters/formater_data.dart';
 import 'package:reabilita_social/utils/snack/snack_atencao.dart';
 import 'package:reabilita_social/utils/snack/snack_erro.dart';
 import 'package:reabilita_social/utils/snack/snack_sucesso.dart';
+import 'package:reabilita_social/widgets/anexo.dart';
 import 'package:reabilita_social/widgets/botao/botaoPrincipal.dart';
 import 'package:reabilita_social/widgets/dropdown_custom.dart';
 import 'package:reabilita_social/widgets/endereco_form.dart';
@@ -21,6 +25,8 @@ class CadastroFinalScreen extends StatefulWidget {
 
 class _CadastroFinalScreenState extends State<CadastroFinalScreen> {
   final _formKey = GlobalKey<FormState>();
+  Uint8List? _image;
+
   @override
   Widget build(BuildContext context) {
     final Map<String, dynamic> args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
@@ -171,6 +177,21 @@ class _CadastroFinalScreenState extends State<CadastroFinalScreen> {
                   },
                 ),
                 const SizedBox(height: 16),
+                InkWell(
+                  onTap: () {
+                    ImagePickerUtil.pegarFoto(context, (foto) {
+                      setState(() {
+                        _image = foto;
+                      });
+                    });
+                  },
+                  child: const Text(
+                    "Tire uma foto ou selecione uma imagem",
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600, color: preto1),
+                  ),
+                ),
+                if (_image != null) Anexo(arquivoBytes: _image!),
+                const SizedBox(height: 16),
                 Botaoprincipal(
                   text: "Cadastrar",
                   onPressed: () async {
@@ -188,11 +209,16 @@ class _CadastroFinalScreenState extends State<CadastroFinalScreen> {
                         snackAtencao(context, "Selecione o seu local de trabalho");
                         return;
                       }
+
+                       if (_image == null) {
+                        snackAtencao(context, "Selecione uma foto");
+                        return;
+                      }
                       _formKey.currentState!.save();
 
                       final usuario = await AuthRepository().criarUsuario(profissional.email, senha);
 
-                      await GerenciaProfissionalRepository().criaProfissional(usuario, profissional);
+                      await GerenciaProfissionalRepository().criaProfissional(usuario, profissional, _image!);
                       Navigator.pushNamedAndRemoveUntil(context, "/menuPrincipal", (route) => false);
                       snackSucesso(context, "Sucesso ao criar sua conta!");
                     } catch (e) {

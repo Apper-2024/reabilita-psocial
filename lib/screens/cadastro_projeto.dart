@@ -1,13 +1,22 @@
+import 'package:camera_camera/camera_camera.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:reabilita_social/controller/image_controller.dart';
+import 'package:reabilita_social/enum/enum_status_conta.dart';
+import 'package:reabilita_social/enum/enum_tipo_usuario.dart';
 import 'package:reabilita_social/model/endereco_model.dart';
 import 'package:reabilita_social/model/paciente/dadosPaciente/dados_paciente_model.dart';
 import 'package:reabilita_social/model/paciente/paciente_model.dart';
+import 'package:reabilita_social/repository/paciente/gerencia_paciente_repository.dart';
 import 'package:reabilita_social/utils/colors.dart';
 import 'package:reabilita_social/utils/formaters/formater_data.dart';
+import 'package:reabilita_social/utils/snack/snack_atencao.dart';
 import 'package:reabilita_social/utils/snack/snack_erro.dart';
+import 'package:reabilita_social/utils/snack/snack_sucesso.dart';
+import 'package:reabilita_social/widgets/anexo.dart';
 import 'package:reabilita_social/widgets/botao/botaoPrincipal.dart';
-import 'package:reabilita_social/widgets/custom_form_data.dart';
+import 'package:reabilita_social/widgets/inputText/custom_form_data.dart';
 import 'package:reabilita_social/widgets/dropdown_custom.dart';
 import 'package:reabilita_social/widgets/endereco_form.dart';
 import 'package:reabilita_social/widgets/text_field_custom.dart';
@@ -20,42 +29,48 @@ class CadastroProjetoScreen extends StatefulWidget {
 }
 
 class _CadastroProjetoScreenState extends State<CadastroProjetoScreen> {
+  Uint8List? _image;
+
+ 
+
+  final paciente = PacienteModel(
+    dadosPacienteModel: DadosPacienteModel(
+      nome: "",
+      dataNascimento: "",
+      cns: "",
+      email: "",
+      telefone: "",
+      genero: null,
+      profissao: "",
+      rendaMensal: "",
+      tipoUsuario: EnumTipoUsuario.paciente.name,
+      statusConta: EnumStatusConta.ativo.name,
+      endereco: EnderecoModel(
+        cep: "",
+        rua: "",
+        bairro: "",
+        cidade: "",
+        estado: "",
+        complemento: "",
+        numero: "",
+      ),
+      outrasInformacoes: OutrasInformacoesModel(
+        observacao: "",
+        outrasInformacoes: "",
+        pacienteCuratelado: false,
+        tecnicoReferencia: "",
+      ),
+      uidProfisional: "",
+      urlFoto: "",
+      uidPaciente: "",
+    ),
+  );
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _dataNascimento = TextEditingController();
   bool? pacienteCuratelado = false;
   @override
   Widget build(BuildContext context) {
     List<String> generos = ['Masculino', 'Feminino', 'Outro'];
-
-    final paciente = PacienteModel(
-      dadosPacienteModel: DadosPacienteModel(
-        nome: "",
-        dataNascimento: "",
-        cns: "",
-        email: "",
-        telefone: "",
-        genero: null,
-        profissao: "",
-        rendaMensal: "",
-        tipoUsuario: "",
-        statusConta: "",
-        endereco: EnderecoModel(
-          cep: "",
-          rua: "",
-          bairro: "",
-          cidade: "",
-          estado: "",
-          complemento: "",
-          numero: "",
-        ),
-        outrasInformacoes: OutrasInformacoesModel(
-          observacao: "",
-          outrasInformacoes: "",
-          pacienteCuratelado: false,
-          tecnicoReferencia: "",
-        ),
-      ),
-    );
 
     return Scaffold(
       backgroundColor: background,
@@ -82,7 +97,7 @@ class _CadastroProjetoScreenState extends State<CadastroProjetoScreen> {
               children: [
                 const SizedBox(height: 36),
                 const Text(
-                  'Finalizar Cadastro',
+                  'Cadastrar Paciente',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -160,7 +175,7 @@ class _CadastroProjetoScreenState extends State<CadastroProjetoScreen> {
                 TextFieldCustom(
                   tipoTexto: TextInputType.number,
                   hintText: "ex. (16) 99999-9999",
-                  labelText: "CNS",
+                  labelText: "Numero de telefone",
                   senha: false,
                   inputFormatters: [telefoneFormater],
                   validator: (value) {
@@ -203,12 +218,12 @@ class _CadastroProjetoScreenState extends State<CadastroProjetoScreen> {
                 const SizedBox(height: 16),
                 TextFieldCustom(
                   tipoTexto: TextInputType.number,
-                  hintText: "ex. 1.000,00",
+                  hintText: "R\$",
                   labelText: "Salário",
                   senha: false,
                   inputFormatters: [
-                    CurrencyPtBrInputFormatter(),
                     FilteringTextInputFormatter.digitsOnly,
+                    CurrencyPtBrInputFormatter(),
                   ],
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -246,6 +261,20 @@ class _CadastroProjetoScreenState extends State<CadastroProjetoScreen> {
                   },
                 ),
                 const SizedBox(height: 16),
+                InkWell(
+                  onTap: () {
+                    ImagePickerUtil.pegarFoto(context, (foto) {
+  setState(() {
+    _image = foto;
+  });
+});
+                  },
+                  child: const Text(
+                    "Tire uma foto ou selecione uma imagem",
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600, color: preto1),
+                  ),
+                ),
+                if (_image != null) Anexo(arquivoBytes: _image!),
                 const Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -355,9 +384,9 @@ class _CadastroProjetoScreenState extends State<CadastroProjetoScreen> {
                   },
                 ),
                 const SizedBox(height: 16),
-                Align(
+                const Align(
                   alignment: Alignment.centerLeft,
-                  child: const Text(
+                  child: Text(
                     "Principal Rede de Apoio/Suporte do Paciente",
                     style: TextStyle(
                       fontSize: 16,
@@ -389,28 +418,37 @@ class _CadastroProjetoScreenState extends State<CadastroProjetoScreen> {
                   text: "Cadastrar",
                   onPressed: () async {
                     try {
-                      // if (profissional.raca == null) {
-                      //   snackAtencao(context, "Selecione um raça");
-                      //   return;
-                      // }
-                      // if (profissional.profissao == null) {
-                      //   snackAtencao(context, "Selecione sua profissão");
-                      //   return;
-                      // }
+                      if (!_formKey.currentState!.validate()) {
+                        snackAtencao(context, "Preencha todos os campos obrigatórios");
+                        return;
+                      }
+                      _formKey.currentState!.save();
 
-                      // if (profissional.localTrabalho == null) {
-                      //   snackAtencao(context, "Selecione o seu local de trabalho");
-                      //   return;
-                      // }
-                      // _formKey.currentState!.save();
+                      if (paciente.dadosPacienteModel.genero == null) {
+                        snackAtencao(context, "Selecione o genero");
+                        return;
+                      }
 
-                      // final usuario = await AuthRepository().criarUsuario(profissional.email, senha);
+                      if (_image == null) {
+                        snackAtencao(context, "Selecione uma foto");
+                        return;
+                      }
+                      paciente.dadosPacienteModel.outrasInformacoes.pacienteCuratelado = pacienteCuratelado!;
 
-                      // await GerenciaProfissionalRepository().criaProfissional(usuario, profissional);
-                      // Navigator.pushNamedAndRemoveUntil(context, "/menuPrincipal", (route) => false);
-                      // snackSucesso(context, "Sucesso ao criar sua conta!");
+                      paciente.dadosPacienteModel.uidProfisional = FirebaseAuth.instance.currentUser!.uid;
+
+                      String telefone = paciente.dadosPacienteModel.telefone;
+
+                      String senha = telefone.substring(telefone.length - 4);
+
+                      await GerenciaPacienteRepository().cadastrarPaciente(paciente.dadosPacienteModel, _image!, senha);
+
+                      snackSucesso(context, "Sucesso ao criar paciente!, senha ultimos 4 digitos do telefone");
+                      Navigator.pop(context);
+                      return;
                     } catch (e) {
                       snackErro(context, e.toString());
+                      Navigator.pop(context);
                       return;
                     }
                   },

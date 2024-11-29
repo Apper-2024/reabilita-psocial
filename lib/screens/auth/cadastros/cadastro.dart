@@ -47,6 +47,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
     localTrabalho: null,
     profissao: null,
     raca: null,
+    urlFoto: '',
     statusConta: EnumStatusConta.analise.name,
     tipoUsuario: EnumTipoUsuario.profissional.name,
   );

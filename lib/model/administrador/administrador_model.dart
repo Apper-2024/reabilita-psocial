@@ -6,6 +6,7 @@ class AdministradorModel {
   String telefone;
   String tipoUsuario;
   String statusConta;
+  String uidAdministrador;
   Timestamp dataCriacao;
 
   AdministradorModel({
@@ -14,6 +15,7 @@ class AdministradorModel {
     required this.telefone,
     required this.tipoUsuario,
     required this.statusConta,
+    required this.uidAdministrador,
     required this.dataCriacao,
   });
 
@@ -24,6 +26,7 @@ class AdministradorModel {
       'telefone': telefone,
       'tipoUsuario': tipoUsuario,
       'statusConta': statusConta,
+      'uidAdministrador': uidAdministrador,
       'dataCriacao': dataCriacao,
     };
   }
@@ -35,9 +38,8 @@ class AdministradorModel {
       telefone: map['telefone'] as String,
       tipoUsuario: map['tipoUsuario'] as String,
       statusConta: map['statusConta'] as String,
+      uidAdministrador: map['uidAdministrador'] as String,
       dataCriacao: map['dataCriacao'],
     );
   }
-
-
 }
