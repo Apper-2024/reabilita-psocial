@@ -219,7 +219,7 @@ class _CadastroFinalScreenState extends State<CadastroFinalScreen> {
                       final usuario = await AuthRepository().criarUsuario(profissional.email, senha);
 
                       await GerenciaProfissionalRepository().criaProfissional(usuario, profissional, _image!);
-                      Navigator.pushNamedAndRemoveUntil(context, "/menuPrincipal", (route) => false);
+                      Navigator.pushNamedAndRemoveUntil(context, "/menuProfissional", (route) => false);
                       snackSucesso(context, "Sucesso ao criar sua conta!");
                     } catch (e) {
                       snackErro(context, e.toString());

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:reabilita_social/utils/colors.dart';
 import 'package:reabilita_social/widgets/card/card_profissionais.dart';
-import 'package:reabilita_social/widgets/card/card_projeto.dart';
 
 class ProfissionaisPendentesScreen extends StatefulWidget {
   const ProfissionaisPendentesScreen({super.key});
@@ -13,7 +12,7 @@ class ProfissionaisPendentesScreen extends StatefulWidget {
 class _ProfissionaisPendentesScreenState extends State<ProfissionaisPendentesScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       backgroundColor: background,
       body: SingleChildScrollView(
         child: Padding(
@@ -31,7 +30,9 @@ class _ProfissionaisPendentesScreenState extends State<ProfissionaisPendentesScr
                 ),
               ),
               SizedBox(height: 16),
-              CardProfissionais(),
+              CardProfissionais(
+                onTap: () {},
+              ),
               SizedBox(height: 16),
             ],
           ),

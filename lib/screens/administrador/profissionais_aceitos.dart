@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:reabilita_social/utils/colors.dart';
 import 'package:reabilita_social/widgets/card/card_profissionais.dart';
-import 'package:reabilita_social/widgets/card/card_projeto.dart';
 
 class ProfissionaisAceitosScreen extends StatefulWidget {
   const ProfissionaisAceitosScreen({super.key});
@@ -15,7 +14,7 @@ class _ProfissionaisAceitosScreenState extends State<ProfissionaisAceitosScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: background,
-      body: const SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(16.0),
           child: Column(
@@ -31,7 +30,9 @@ class _ProfissionaisAceitosScreenState extends State<ProfissionaisAceitosScreen>
                 ),
               ),
               SizedBox(height: 16),
-              CardProfissionais(),
+              CardProfissionais(
+                onTap: () {},
+              ),
               SizedBox(height: 16),
             ],
           ),

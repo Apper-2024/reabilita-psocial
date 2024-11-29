@@ -1,8 +1,9 @@
 import 'dart:typed_data';
-
-import 'package:camera_camera/camera_camera.dart';
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:reabilita_social/controller/camera_controller.dart';
+import 'package:reabilita_social/main.dart';
 import 'package:reabilita_social/screens/preview_page.dart';
 import 'package:reabilita_social/utils/snack/snack_atencao.dart';
 
@@ -34,7 +35,7 @@ class ImageController {
 }
 
 class ImagePickerUtil {
-  static Future<void> pegarFoto(BuildContext context, Function setImage) async {
+  static Future<void> pegarFoto(BuildContext context, Function(Uint8List) setImage) async {
     showModalBottomSheet<void>(
       context: context,
       builder: (BuildContext context) {
@@ -42,7 +43,7 @@ class ImagePickerUtil {
           height: 200,
           decoration: const BoxDecoration(
             borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
-            color: Colors.white, // Substitua 'branco' por Colors.white
+            color: Colors.white,
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -51,19 +52,23 @@ class ImagePickerUtil {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   InkWell(
-                    onTap: () {
-                      Navigator.of(context).push(
+                    onTap: () async {
+                      Navigator.pop(context); // Fecha o bottom sheet antes de navegar
+
+                      Navigator.push(
+                        context,
                         MaterialPageRoute(
-                          builder: (context) => CameraCamera(onFile: (file) async {
-                            final bytes = await file.readAsBytes();
-                            final foto = await ImageController().showPreview(context, bytes);
-                            if (foto == null) {
-                              snackAtencao(context, "Selecione uma foto");
-                              return;
-                            }
-                            setImage(foto);
-                            Navigator.pop(context);
-                          }),
+                          builder: (context) => MyCustomCameraScreen(
+                            onPictureTaken: (Uint8List bytes) async {
+                              final imageController = ImageController();
+                              final foto = await imageController.showPreview(context, bytes);
+                              if (foto == null) {
+                                snackAtencao(context, "Selecione uma foto");
+                                return;
+                              }
+                              setImage(foto);
+                            },
+                          ),
                         ),
                       );
                     },
@@ -82,7 +87,8 @@ class ImagePickerUtil {
                   ),
                   InkWell(
                     onTap: () async {
-                      final foto = await ImageController().getFileFromGallery();
+                      final imageController = ImageController();
+                      final foto = await imageController.getFileFromGallery();
                       if (foto == null) {
                         snackAtencao(context, "Selecione uma foto");
                         return;
@@ -109,6 +115,71 @@ class ImagePickerUtil {
           ),
         );
       },
+    );
+  }
+}
+
+class TakePictureScreen extends StatefulWidget {
+  final CameraDescription camera;
+  final Function(Uint8List) onPictureTaken;
+
+  const TakePictureScreen({
+    Key? key,
+    required this.camera,
+    required this.onPictureTaken,
+  }) : super(key: key);
+
+  @override
+  _TakePictureScreenState createState() => _TakePictureScreenState();
+}
+
+class _TakePictureScreenState extends State<TakePictureScreen> {
+  late CameraController _controller;
+  late Future<void> _initializeControllerFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = CameraController(
+      widget.camera,
+      ResolutionPreset.high,
+    );
+    _initializeControllerFuture = _controller.initialize();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Tirar foto')),
+      body: FutureBuilder<void>(
+        future: _initializeControllerFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return CameraPreview(_controller);
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          try {
+            await _initializeControllerFuture;
+            final image = await _controller.takePicture();
+            final bytes = await image.readAsBytes();
+            widget.onPictureTaken(bytes);
+          } catch (e) {
+            print(e);
+          }
+        },
+        child: const Icon(Icons.camera_alt),
+      ),
     );
   }
 }

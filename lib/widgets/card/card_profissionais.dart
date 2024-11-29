@@ -2,16 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:reabilita_social/utils/colors.dart';
 
 class CardProfissionais extends StatelessWidget {
-  const CardProfissionais({super.key});
+  final void Function()? onTap;
+  const CardProfissionais({super.key, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16),
       child: InkWell(
-        onTap: () {
-          Navigator.pushNamed(context, "/tela");
-        },
+        onTap: onTap,
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
@@ -27,7 +26,7 @@ class CardProfissionais extends StatelessWidget {
             ],
           ),
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
                 width: 56,
@@ -42,15 +41,14 @@ class CardProfissionais extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 18),
-                  Text(
-                    "Fernanda da Silva",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontFamily: 'Poppins',
-                      color: verde1,
-                    ),
-                  ),
-              
+              const Text(
+                "Fernanda da Silva",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontFamily: 'Poppins',
+                  color: verde1,
+                ),
+              ),
             ],
           ),
         ),

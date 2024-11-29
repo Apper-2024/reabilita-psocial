@@ -23,6 +23,7 @@ void main() async {
   } catch (e) {
     print("Error initializing Firebase: $e");
   }
+
 //  await FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
 
   runApp(
