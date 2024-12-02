@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:reabilita_social/screens/detalhes_paciente.dart';
-import 'package:reabilita_social/screens/form_categoria.dart';
+import 'package:reabilita_social/screens/profissional/detalhes_paciente.dart';
+import 'package:reabilita_social/screens/profissional/form_categoria.dart';
 import 'package:reabilita_social/utils/colors.dart';
 import 'package:reabilita_social/widgets/botao/botaoPrincipal.dart';
 

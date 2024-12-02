@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:reabilita_social/screens/evolucao_paciente.dart';
+import 'package:reabilita_social/screens/profissional/evolucao_paciente.dart';
 import 'package:reabilita_social/utils/colors.dart';
 
 class CardEvolucao extends StatelessWidget {

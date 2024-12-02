@@ -43,7 +43,7 @@ class _CadastroProjetoScreenState extends State<CadastroProjetoScreen> {
       profissao: "",
       rendaMensal: "",
       tipoUsuario: EnumTipoUsuario.paciente.name,
-      statusConta: EnumStatusConta.ativo.name,
+      statusConta: EnumStatusConta.naoCadastrada.name,
       endereco: EnderecoModel(
         cep: "",
         rua: "",
@@ -440,7 +440,7 @@ class _CadastroProjetoScreenState extends State<CadastroProjetoScreen> {
 
                       String senha = telefone.substring(telefone.length - 4);
 
-                      await GerenciaPacienteRepository().cadastrarPaciente(paciente.dadosPacienteModel, _image!, senha);
+                      await GerenciaPacienteRepository().cadastrarPacienteNovo(paciente.dadosPacienteModel, _image!, senha);
 
                       snackSucesso(context, "Sucesso ao criar paciente!, senha ultimos 4 digitos do telefone");
                       Navigator.pop(context);

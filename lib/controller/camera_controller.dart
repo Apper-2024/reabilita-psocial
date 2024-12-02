@@ -1,16 +1,15 @@
 import 'dart:typed_data';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:reabilita_social/screens/preview_page.dart';
 import 'package:reabilita_social/utils/snack/snack_atencao.dart';
 
 class MyCustomCameraScreen extends StatefulWidget {
   final Function(Uint8List) onPictureTaken;
 
   const MyCustomCameraScreen({
-    Key? key,
+    super.key,
     required this.onPictureTaken,
-  }) : super(key: key);
+  });
 
   @override
   _MyCustomCameraScreenState createState() => _MyCustomCameraScreenState();

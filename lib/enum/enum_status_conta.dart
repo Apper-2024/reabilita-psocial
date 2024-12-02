@@ -3,6 +3,7 @@ enum EnumStatusConta{
   analise,
   recusada,
   suspenso,
+  naoCadastrada
 }
 
 

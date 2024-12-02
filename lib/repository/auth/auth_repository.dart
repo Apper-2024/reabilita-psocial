@@ -8,12 +8,9 @@ class AuthRepository {
   FirebaseFirestore db = FirebaseService().db;
   FirebaseAuth auth = FirebaseService().auth;
 
-
   Future<User> fazerLogin(String email, String senha) async {
     try {
-
       final userCredential = await auth.signInWithEmailAndPassword(email: email, password: senha);
-
 
       return userCredential.user!;
     } on FirebaseAuthException catch (e) {

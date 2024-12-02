@@ -1,24 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:reabilita_social/provider/profissional_provider.dart';
 import 'package:reabilita_social/repository/auth/auth_repository.dart';
 import '../utils/colors.dart';
 
 class Header extends StatelessWidget {
-  final String imageUrl;
+  // final String imageUrl;
   final int notificationCount;
 
-  const Header({super.key, required this.imageUrl, required this.notificationCount});
+  Header(
+      {super.key,
+      //  required this.imageUrl,
+      required this.notificationCount});
 
+  ProfissionalProvider profissionalProvider = ProfissionalProvider.instance;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            CircleAvatar(
-              backgroundImage: NetworkImage(imageUrl),
-              radius: 24,
+            ClipOval(
+              child: Image.network(
+                profissionalProvider.profissional!.urlFoto,
+                width: 48,
+                height: 48,
+                fit: BoxFit.cover,
+              ),
             ),
             InkWell(
               onTap: () {

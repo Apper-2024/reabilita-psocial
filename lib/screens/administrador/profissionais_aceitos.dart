@@ -16,12 +16,12 @@ class _ProfissionaisAceitosScreenState extends State<ProfissionaisAceitosScreen>
       backgroundColor: background,
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 16),
-              Text(
+              const SizedBox(height: 16),
+              const Text(
                 'Veja os profissionais cadastrados',
                 style: TextStyle(
                   fontSize: 20,
@@ -29,11 +29,11 @@ class _ProfissionaisAceitosScreenState extends State<ProfissionaisAceitosScreen>
                   color: preto1,
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               CardProfissionais(
                 onTap: () {},
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
             ],
           ),
         ),

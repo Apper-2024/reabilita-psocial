@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:reabilita_social/widgets/botao/botaoPrincipal.dart';
-import '../utils/colors.dart';
-import '../widgets/header.dart';
+import '../../../utils/colors.dart';
+import '../../../widgets/header.dart';
 
 class PerfilScreen extends StatelessWidget {
   const PerfilScreen({super.key});
@@ -15,9 +15,9 @@ class PerfilScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Header(
-              imageUrl:
-                  'https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+             Header(
+              // imageUrl:
+              //     'https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
               notificationCount: 3,
             ),
             const SizedBox(height: 16),

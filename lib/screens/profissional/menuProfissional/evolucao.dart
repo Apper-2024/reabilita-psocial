@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:reabilita_social/widgets/card/card_evolu%C3%A7%C3%A3o.dart';
-import '../utils/colors.dart';
-import '../widgets/header.dart';
+import '../../../utils/colors.dart';
+import '../../../widgets/header.dart';
 
 
 
@@ -10,7 +10,7 @@ class EvolucaoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return  Scaffold(
       backgroundColor: background,
       body: SingleChildScrollView(
         child: Padding(
@@ -19,8 +19,8 @@ class EvolucaoScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Header(
-                imageUrl:
-                    'https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+                // imageUrl:
+                //     'https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
                 notificationCount: 3,
               ),
               SizedBox(height: 16),

@@ -10,8 +10,9 @@ import 'package:reabilita_social/screens/administrador/menu_profissionais.dart';
 import 'package:reabilita_social/screens/auth/cadastros/cadastro.dart';
 import 'package:reabilita_social/screens/auth/cadastros/cadastro_final.dart';
 import 'package:reabilita_social/screens/auth/login.dart';
-import 'package:reabilita_social/screens/cadastro_projeto.dart';
-import 'package:reabilita_social/screens/paciente.dart';
+import 'package:reabilita_social/screens/auth/login_primeiro_acesso.dart';
+import 'package:reabilita_social/screens/profissional/cadastro_projeto.dart';
+import 'package:reabilita_social/screens/profissional/paciente.dart';
 import 'package:reabilita_social/verifica_conta.dart';
 import 'package:reabilita_social/widgets/bottomMenu/botom_menu_profissional.dart';
 
@@ -68,6 +69,8 @@ class MyApp extends StatelessWidget {
         '/menuProfissional': (context) => const BottomMenuProfissional(),
         '/cadastro': (context) => const CadastroScreen(),
         '/cadastroFinal': (context) => const CadastroFinalScreen(),
+        '/loginPrimeiroAcesso': (context) => const LoginPrimeiroAcesso(),
+        
         //PACIENTE
       },
     );

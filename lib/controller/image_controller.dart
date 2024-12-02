@@ -3,8 +3,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:reabilita_social/controller/camera_controller.dart';
-import 'package:reabilita_social/main.dart';
-import 'package:reabilita_social/screens/preview_page.dart';
+import 'package:reabilita_social/screens/profissional/preview_page.dart';
 import 'package:reabilita_social/utils/snack/snack_atencao.dart';
 
 class ImageController {
@@ -124,10 +123,10 @@ class TakePictureScreen extends StatefulWidget {
   final Function(Uint8List) onPictureTaken;
 
   const TakePictureScreen({
-    Key? key,
+    super.key,
     required this.camera,
     required this.onPictureTaken,
-  }) : super(key: key);
+  });
 
   @override
   _TakePictureScreenState createState() => _TakePictureScreenState();

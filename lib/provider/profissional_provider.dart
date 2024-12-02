@@ -10,7 +10,7 @@ class ProfissionalProvider with ChangeNotifier {
 
   ProfissionalModel? _profissional;
 
-  ProfissionalModel? get usuario => _profissional;
+  ProfissionalModel? get profissional => _profissional;
 
   void setProfissional(ProfissionalModel u) {
     _profissional = u;

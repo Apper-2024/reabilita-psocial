@@ -5,12 +5,14 @@ class Botaoprincipal extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
   final bool? carregando;
+  final Color? cor;
 
   const Botaoprincipal({
     super.key,
     required this.text,
     required this.onPressed,
     this.carregando,
+    this.cor,
   });
 
   @override
@@ -21,7 +23,7 @@ class Botaoprincipal extends StatelessWidget {
       child: ElevatedButton(
         onPressed: carregando == true ? null : onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF407660),
+          backgroundColor: cor ?? verde1,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5),
           ),

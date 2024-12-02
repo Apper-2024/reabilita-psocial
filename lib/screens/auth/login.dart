@@ -101,7 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       alignment: AlignmentDirectional.centerEnd,
                       child: InkWell(
                         onTap: () {
-                          print('clicado');
+                          Navigator.pushNamed(context, "/loginPrimeiroAcesso");
                         },
                         child: const Text(
                           'Primeiro acesso, paciente?',
