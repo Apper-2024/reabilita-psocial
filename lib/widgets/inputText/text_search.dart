@@ -2,17 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:reabilita_social/utils/colors.dart';
 
 class TextSearch extends StatelessWidget {
-  final ValueChanged<String>? onChanged;
+  final TextEditingController? controller;
   final String hintText;
   const TextSearch({
     super.key,
-    this.onChanged,
+    this.controller,
     required this.hintText,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      controller: controller,
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: const TextStyle(color: cinza1, fontSize: 18),

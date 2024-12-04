@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:reabilita_social/model/paciente/dadosPaciente/dados_paciente_model.dart';
+import 'package:reabilita_social/provider/paciente_provider.dart';
 import 'package:reabilita_social/utils/colors.dart';
+import 'package:reabilita_social/utils/formaters/formater_data.dart';
 
 class ItemConteudo {
   final String titulo;
@@ -10,29 +14,24 @@ class ItemConteudo {
 }
 
 class DetalhesPaciente extends StatelessWidget {
-  final String nomePaciente;
-  final String dataCriacao;
-  final String titulo;
-  final String categoria;
   final List<ItemConteudo> conteudos;
 
   const DetalhesPaciente({
     super.key,
-    required this.nomePaciente,
-    required this.dataCriacao,
     required this.conteudos,
-    required this.titulo,
-    required this.categoria,
   });
 
   @override
   Widget build(BuildContext context) {
+    final pacienteProvider = Provider.of<PacienteProvider>(context, listen: true);
+    DadosPacienteModel pacienteModel = pacienteProvider.paciente!.dadosPacienteModel;
+
     return Scaffold(
       backgroundColor: background,
       appBar: AppBar(
         backgroundColor: background,
         title: Text(
-          titulo,
+          pacienteModel.nome,
           style: const TextStyle(color: Colors.black),
         ),
         leading: IconButton(
@@ -57,17 +56,16 @@ class DetalhesPaciente extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Center(
+            Center(
               child: CircleAvatar(
                 radius: 50,
-                backgroundImage: NetworkImage(
-                    "https://wendellcarvalho.com.br/wp-content/uploads/2023/07/Saiba-o-que-e-uma-pessoa-temperamental-e-como-esse-comportamento-pode-afetar-diferentes-areas-da-vida.jpg"),
+                backgroundImage: NetworkImage(pacienteProvider.paciente!.dadosPacienteModel.urlFoto),
               ),
             ),
             const SizedBox(height: 10),
             Center(
               child: Text(
-                nomePaciente,
+                pacienteModel.nome,
                 style: const TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
@@ -76,16 +74,15 @@ class DetalhesPaciente extends StatelessWidget {
             ),
             Center(
               child: Text(
-                'Paciente criada no dia $dataCriacao pelo Dr. Lorem Ipsum',
+                'Paciente criada no dia ${formatTimesTamp(pacienteModel.dataCriacao)} pelo Dr. Lorem Ipsum',
                 style: const TextStyle(color: Colors.grey),
                 textAlign: TextAlign.center,
               ),
             ),
             const SizedBox(height: 20),
-
-            // Exibe a lista de itens dinâmicos
             Expanded(
               child: ListView.builder(
+                shrinkWrap: true,
                 itemCount: conteudos.length,
                 itemBuilder: (context, index) {
                   return ItemLista(conteudo: conteudos[index]);

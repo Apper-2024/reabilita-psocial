@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -30,8 +31,6 @@ class CadastroProjetoScreen extends StatefulWidget {
 class _CadastroProjetoScreenState extends State<CadastroProjetoScreen> {
   Uint8List? _image;
 
- 
-
   final paciente = PacienteModel(
     dadosPacienteModel: DadosPacienteModel(
       nome: "",
@@ -59,6 +58,7 @@ class _CadastroProjetoScreenState extends State<CadastroProjetoScreen> {
         pacienteCuratelado: false,
         tecnicoReferencia: "",
       ),
+      dataCriacao: Timestamp.now(),
       uidProfisional: "",
       urlFoto: "",
       uidPaciente: "",
@@ -263,10 +263,10 @@ class _CadastroProjetoScreenState extends State<CadastroProjetoScreen> {
                 InkWell(
                   onTap: () {
                     ImagePickerUtil.pegarFoto(context, (foto) {
-  setState(() {
-    _image = foto;
-  });
-});
+                      setState(() {
+                        _image = foto;
+                      });
+                    });
                   },
                   child: const Text(
                     "Tire uma foto ou selecione uma imagem",
@@ -440,7 +440,10 @@ class _CadastroProjetoScreenState extends State<CadastroProjetoScreen> {
 
                       String senha = telefone.substring(telefone.length - 4);
 
-                      await GerenciaPacienteRepository().cadastrarPacienteNovo(paciente.dadosPacienteModel, _image!, senha);
+                      paciente.dadosPacienteModel.dataCriacao = Timestamp.now();
+
+                      await GerenciaPacienteRepository()
+                          .cadastrarPacienteNovo(paciente.dadosPacienteModel, _image!, senha);
 
                       snackSucesso(context, "Sucesso ao criar paciente!, senha ultimos 4 digitos do telefone");
                       Navigator.pop(context);

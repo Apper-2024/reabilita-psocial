@@ -38,7 +38,6 @@ class FormCategoria extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: background,
-
       appBar: AppBar(
         title: Text(
           titulo,
@@ -56,8 +55,10 @@ class FormCategoria extends StatelessWidget {
         color: background,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: _buildFieldRows(context),
+          child: SingleChildScrollView(
+            child: Column(
+              children: _buildFieldRows(context),
+            ),
           ),
         ),
       ),

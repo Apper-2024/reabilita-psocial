@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:reabilita_social/firebase_options.dart';
 import 'package:reabilita_social/presentation/theme__manager.dart';
 import 'package:reabilita_social/provider/administrador_provider.dart';
+import 'package:reabilita_social/provider/paciente_provider.dart';
 import 'package:reabilita_social/provider/profissional_provider.dart';
 import 'package:reabilita_social/screens/administrador/menu_profissionais.dart';
 import 'package:reabilita_social/screens/auth/cadastros/cadastro.dart';
@@ -32,6 +33,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider.value(value: ProfissionalProvider.instance),
         ChangeNotifierProvider.value(value: AdministradorProvider.instance),
+        ChangeNotifierProvider.value(value: PacienteProvider.instance),
       ],
       child: const MyApp(),
     ),

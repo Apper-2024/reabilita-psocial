@@ -23,10 +23,28 @@ List<Tab> _tabs = [
 ];
 
 class _MenuProjetosState extends State<MenuProjetos> with TickerProviderStateMixin {
+  final TextEditingController _searchController = TextEditingController();
+  String _query = '';
+
   @override
   void initState() {
     super.initState();
     _controller = TabController(length: 2, vsync: this);
+    _searchController.addListener(_onSearchChanged);
+  }
+
+  void _onSearchChanged() {
+    setState(() {
+      print(_query);
+      _query = _searchController.text;
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    _searchController.dispose();
+    super.dispose();
   }
 
   @override
@@ -54,7 +72,7 @@ class _MenuProjetosState extends State<MenuProjetos> with TickerProviderStateMix
                 ),
               ),
               const SizedBox(height: 16),
-              const TextSearch(hintText: 'Procure o nome do paciente'),
+              TextSearch(hintText: 'Procure o nome do paciente', controller: _searchController),
               const SizedBox(height: 16),
               MenuTab(tabs: _tabs, controller: _controller!),
               const SizedBox(height: 60),
@@ -62,7 +80,10 @@ class _MenuProjetosState extends State<MenuProjetos> with TickerProviderStateMix
                 child: TabBarView(
                   physics: const NeverScrollableScrollPhysics(),
                   controller: _controller,
-                  children: [ProjetosScreen(titulo: 'cadastrado'), ProjetosScreen(titulo: 'novo')],
+                  children: [
+                    ProjetosScreen(titulo: 'cadastrado', pesquisa: _query),
+                    ProjetosScreen(titulo: 'novo', pesquisa: _query)
+                  ],
                 ),
               ),
             ],

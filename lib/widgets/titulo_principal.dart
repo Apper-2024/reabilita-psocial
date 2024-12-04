@@ -53,9 +53,8 @@ class _TituloPrincipalState extends State<TituloPrincipal> {
                 child: SizedBox(
                   width: searchWidth.clamp(200, 380),
                   height: 50,
-                  child: TextSearch(
+                  child: const TextSearch(
                     hintText: 'Procure o nome do profissional',
-                    onChanged: widget.onChanged,
                   ),
                 ),
               ),

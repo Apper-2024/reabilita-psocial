@@ -14,7 +14,7 @@ class EvolucaoScreen extends StatelessWidget {
       backgroundColor: background,
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -23,8 +23,8 @@ class EvolucaoScreen extends StatelessWidget {
                 //     'https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
                 notificationCount: 3,
               ),
-              SizedBox(height: 16),
-              Text(
+              const SizedBox(height: 16),
+              const Text(
                 'Tenha acesso aos projetos criados',
                 style: TextStyle(
                   fontSize: 20,
@@ -32,9 +32,9 @@ class EvolucaoScreen extends StatelessWidget {
                   color: preto1,
                 ),
               ),
-              SizedBox(height: 16),
-              CardEvolucao(),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
+              const CardEvolucao(),
+              const SizedBox(height: 16),
             ],
           ),
         ),

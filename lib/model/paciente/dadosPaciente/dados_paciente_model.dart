@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:reabilita_social/model/endereco_model.dart';
 
 class DadosPacienteModel {
@@ -15,6 +16,7 @@ class DadosPacienteModel {
   String uidProfisional;
   String? uidPaciente;
   String urlFoto;
+  Timestamp dataCriacao;
 
   OutrasInformacoesModel outrasInformacoes;
 
@@ -33,6 +35,7 @@ class DadosPacienteModel {
     required this.uidProfisional,
     this.uidPaciente,
     required this.urlFoto,
+    required this.dataCriacao,
     required this.outrasInformacoes,
   });
 
@@ -52,6 +55,7 @@ class DadosPacienteModel {
       'uidProfisional': uidProfisional,
       'uidPaciente': uidPaciente,
       'urlFoto': urlFoto,
+      'dataCriacao': dataCriacao,
       'outrasInformacoes': outrasInformacoes.toMap(),
     };
   }
@@ -72,6 +76,7 @@ class DadosPacienteModel {
       uidProfisional: map['uidProfisional'],
       uidPaciente: map['uidPaciente'],
       urlFoto: map['urlFoto'],
+      dataCriacao: map['dataCriacao'],
       outrasInformacoes: OutrasInformacoesModel.fromMap(map['outrasInformacoes']),
     );
   }

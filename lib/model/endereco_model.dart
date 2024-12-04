@@ -15,8 +15,7 @@ class EnderecoModel {
     required this.estado,
     required this.cidade,
     required this.cep,
-
-     this.complemento,
+    this.complemento,
   });
 
   factory EnderecoModel.fromMap(Map<String, dynamic> data) {
@@ -27,7 +26,6 @@ class EnderecoModel {
       estado: data['estado'] ?? '',
       cidade: data['cidade'] ?? '',
       cep: data['cep'] ?? '',
-
       complemento: data['complemento'] ?? '',
     );
   }
@@ -40,7 +38,6 @@ class EnderecoModel {
       'estado': estado,
       'cidade': cidade,
       'cep': cep,
-
       'complemento': complemento,
     };
   }
