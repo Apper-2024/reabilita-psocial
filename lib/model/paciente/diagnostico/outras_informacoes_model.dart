@@ -1,10 +1,10 @@
-class OutrasInformacoesModel {
+class OutrasInformacoesDiagnosticoModel {
   List<String>? outrasInformacoes;
 
-  OutrasInformacoesModel({this.outrasInformacoes});
+  OutrasInformacoesDiagnosticoModel({this.outrasInformacoes});
 
-  factory OutrasInformacoesModel.fromMap(Map<String, dynamic> map) {
-    return OutrasInformacoesModel(
+  factory OutrasInformacoesDiagnosticoModel.fromMap(Map<String, dynamic> map) {
+    return OutrasInformacoesDiagnosticoModel(
       outrasInformacoes: map['outrasInformacoes'] != null
           ? List<String>.from(map['outrasInformacoes'])
           : null,

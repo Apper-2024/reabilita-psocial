@@ -63,6 +63,7 @@ class _CadastroProjetoScreenState extends State<CadastroProjetoScreen> {
       uidProfisional: "",
       urlFoto: "",
       uidPaciente: "",
+      uidDocumento: ""
     ),
   );
   final _formKey = GlobalKey<FormState>();

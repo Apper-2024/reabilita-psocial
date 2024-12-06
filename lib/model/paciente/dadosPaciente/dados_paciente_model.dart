@@ -15,16 +15,16 @@ class DadosPacienteModel {
   String dataNascimento;
   String uidProfisional;
   String? uidPaciente;
+  String uidDocumento;
   String urlFoto;
   Timestamp dataCriacao;
-
   OutrasInformacoesModel outrasInformacoes;
 
   DadosPacienteModel({
     required this.nome,
     required this.email,
     required this.telefone,
-    required this.genero,
+    this.genero,
     required this.cns,
     required this.profissao,
     required this.rendaMensal,
@@ -34,10 +34,33 @@ class DadosPacienteModel {
     required this.dataNascimento,
     required this.uidProfisional,
     this.uidPaciente,
+    required this.uidDocumento,
     required this.urlFoto,
     required this.dataCriacao,
     required this.outrasInformacoes,
   });
+
+  factory DadosPacienteModel.fromMap(Map<String, dynamic> data) {
+    return DadosPacienteModel(
+      nome: data['nome'] ?? '',
+      email: data['email'] ?? '',
+      telefone: data['telefone'] ?? '',
+      genero: data['genero'] ?? '',
+      cns: data['cns'] ?? '',
+      profissao: data['profissao'] ?? '',
+      rendaMensal: data['rendaMensal'] ?? '',
+      endereco: EnderecoModel.fromMap(data['endereco'] ?? {}),
+      tipoUsuario: data['tipoUsuario'] ?? '',
+      statusConta: data['statusConta'] ?? '',
+      dataNascimento: data['dataNascimento'] ?? '',
+      uidProfisional: data['uidProfisional'] ?? '',
+      uidPaciente: data['uidPaciente'] ?? '',
+      uidDocumento: data['uidDocumento'] ?? '',
+      urlFoto: data['urlFoto'] ?? '',
+      dataCriacao: data['dataCriacao'] ?? Timestamp.now(),
+      outrasInformacoes: OutrasInformacoesModel.fromMap(data['outrasInformacoes'] ?? {}),
+    );
+  }
 
   Map<String, dynamic> toMap() {
     return {
@@ -54,31 +77,11 @@ class DadosPacienteModel {
       'dataNascimento': dataNascimento,
       'uidProfisional': uidProfisional,
       'uidPaciente': uidPaciente,
+      'uidDocumento': uidDocumento,
       'urlFoto': urlFoto,
       'dataCriacao': dataCriacao,
       'outrasInformacoes': outrasInformacoes.toMap(),
     };
-  }
-
-  factory DadosPacienteModel.fromMap(Map<String, dynamic> map) {
-    return DadosPacienteModel(
-      nome: map['nome'],
-      email: map['email'],
-      telefone: map['telefone'],
-      genero: map['genero'],
-      cns: map['cns'],
-      profissao: map['profissao'],
-      rendaMensal: map['rendaMensal'],
-      endereco: EnderecoModel.fromMap(map['endereco']),
-      tipoUsuario: map['tipoUsuario'],
-      statusConta: map['statusConta'],
-      dataNascimento: map['dataNascimento'],
-      uidProfisional: map['uidProfisional'],
-      uidPaciente: map['uidPaciente'],
-      urlFoto: map['urlFoto'],
-      dataCriacao: map['dataCriacao'],
-      outrasInformacoes: OutrasInformacoesModel.fromMap(map['outrasInformacoes']),
-    );
   }
 }
 
@@ -106,10 +109,10 @@ class OutrasInformacoesModel {
 
   factory OutrasInformacoesModel.fromMap(Map<String, dynamic> map) {
     return OutrasInformacoesModel(
-      observacao: map['observacao'],
-      tecnicoReferencia: map['tecnicoReferencia'],
-      outrasInformacoes: map['outrasInformacoes'],
-      pacienteCuratelado: map['pacienteCuratelado'],
+      observacao: map['observacao'] ?? '',
+      tecnicoReferencia: map['tecnicoReferencia'] ?? '',
+      outrasInformacoes: map['outrasInformacoes'] ?? '',
+      pacienteCuratelado: map['pacienteCuratelado'] ?? false,
     );
   }
 }

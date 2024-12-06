@@ -1,4 +1,3 @@
-import 'package:reabilita_social/model/endereco_model.dart';
 import 'package:reabilita_social/model/paciente/agenda/agenda_model.dart';
 import 'package:reabilita_social/model/paciente/dadosPaciente/dados_paciente_model.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/diagnostico_modal.dart';
@@ -25,24 +24,7 @@ class PacienteModel {
 
   factory PacienteModel.fromMap(Map<String, dynamic> json) {
     return PacienteModel(
-      dadosPacienteModel: DadosPacienteModel(
-        nome: json['nome']!,
-        dataNascimento: json['dataNascimento']!,
-        cns: json['cns']!,
-        email: json['email']!,
-        telefone: json['telefone']!,
-        genero: json['genero']!,
-        profissao: json['profissao']!,
-        rendaMensal: json['rendaMensal']!,
-        tipoUsuario: json['tipoUsuario']!,
-        statusConta: json['statusConta']!,
-        endereco: EnderecoModel.fromMap(json['endereco'] as Map<String, dynamic>),
-        outrasInformacoes: OutrasInformacoesModel.fromMap(json['outrasInformacoes'] as Map<String, dynamic>),
-        uidProfisional: json['uidProfisional']!,
-        urlFoto: json['urlFoto']!,
-        uidPaciente: json['uidPaciente']!,
-        dataCriacao: json['dataCriacao']!,
-      ),
+      dadosPacienteModel: DadosPacienteModel.fromMap(json['dadosPacienteModel']),
       metas: json['metas'] != null ? MetaModel.fromMap(json['metas']) : null,
       intervencoesModel:
           json['intervencoesModel'] != null ? IntervencoesModel.fromMap(json['intervencoesModel']) : null,

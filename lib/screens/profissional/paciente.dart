@@ -9,12 +9,15 @@ import 'package:reabilita_social/model/paciente/diagnostico/diagnostico_modal.da
 import 'package:reabilita_social/model/paciente/diagnostico/diagnostico_multiprofissional_model.dart';
 import 'package:reabilita_social/provider/imagem_provider.dart';
 import 'package:reabilita_social/provider/paciente_provider.dart';
+import 'package:reabilita_social/repository/paciente/gerencia_paciente_repository.dart';
 import 'package:reabilita_social/screens/profissional/detalhes_paciente.dart';
 import 'package:reabilita_social/screens/profissional/form_categoria.dart';
 import 'package:reabilita_social/utils/colors.dart';
 import 'package:reabilita_social/utils/formaters/formater_data.dart';
 import 'package:reabilita_social/utils/listas.dart';
 import 'package:reabilita_social/utils/snack/snack_atencao.dart';
+import 'package:reabilita_social/utils/snack/snack_erro.dart';
+import 'package:reabilita_social/utils/snack/snack_sucesso.dart';
 import 'package:reabilita_social/widgets/botao/botaoPrincipal.dart';
 import 'package:reabilita_social/widgets/dropdown_custom.dart';
 import 'package:reabilita_social/widgets/text_field_custom.dart';
@@ -26,21 +29,26 @@ class PacienteScreen extends StatefulWidget {
   _PacienteScreenState createState() => _PacienteScreenState();
 }
 
-List<DiagnosticoMultiprofissionaisModel> diagnosticoMultiprofissionaisModelk = [];
-
 class _PacienteScreenState extends State<PacienteScreen> {
-  final List<Uint8List> _images = [];
+  Future<void> _dialogDiagnosticoMultiprofissional() async {
+    final List<Uint8List> images = [];
 
-  Future<void> _dialogDiagnosticoMultiprofissional(PacienteProvider pacienteProvider) async {
-    DiagnosticoMultiprofissionaisModel? diagnosticoMultiprofissionaisModel = DiagnosticoMultiprofissionaisModel(
+    HistoriaCasoModel historiaCasoModel = HistoriaCasoModel(
+      historia: null,
+      diagnosticos: [],
+      foto: [],
+      dataCriacao: null,
+    );
+    DiagnosticoMultiprofissionaisModel diagnosticoMultiprofissionaisModel = DiagnosticoMultiprofissionaisModel(
       diagnosticos: '',
-      dataCriacao: Timestamp.now(),
+      dataCriacao: null,
       nomeResponsavel: '',
       profissaoResponsavel: null,
       cpf: '',
     );
-    final formKey = GlobalKey<FormState>();
 
+    final formKey = GlobalKey<FormState>();
+    PacienteProvider pacienteProvider = PacienteProvider.instance;
     return showDialog<void>(
       context: context,
       barrierDismissible: true,
@@ -51,118 +59,183 @@ class _PacienteScreenState extends State<PacienteScreen> {
           ),
           child: StatefulBuilder(
             builder: (BuildContext context, StateSetter setStateDialog) {
-              return Form(
-                key: formKey,
-                child: Container(
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  decoration: const BoxDecoration(
-                    color: background,
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                  ),
-                  padding: const EdgeInsets.all(26),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Cadastro de Diagnóstico Multiprofissional',
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 16),
-                      TextFieldCustom(
-                        tipoTexto: TextInputType.text,
-                        hintText: "ex. Depressão",
-                        labelText: "Diagnostico",
-                        senha: false,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Campo obrigatório';
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          diagnosticoMultiprofissionaisModel.diagnosticos = value!;
-                        },
-                      ),
-                      const SizedBox(height: 16),
-                      TextFieldCustom(
-                        tipoTexto: TextInputType.text,
-                        hintText: "ex. 111.111.111-11",
-                        labelText: "Digite o cpf",
-                        senha: false,
-                        inputFormatters: [cpfFormater],
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Campo obrigatório';
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          diagnosticoMultiprofissionaisModel.cpf = value!;
-                        },
-                      ),
-                      const SizedBox(height: 16),
-                      TextFieldCustom(
-                        tipoTexto: TextInputType.text,
-                        hintText: "ex. João da Silva",
-                        labelText: "Nome do responsavel",
-                        senha: false,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Campo obrigatório';
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          diagnosticoMultiprofissionaisModel.nomeResponsavel = value!;
-                        },
-                      ),
-                      const SizedBox(height: 16),
-                      CustomDropdownButton(
-                        hint: "Profissão",
-                        dropdownValue: diagnosticoMultiprofissionaisModel.profissaoResponsavel,
-                        items: profissoes,
-                        onChanged: (value) {
-                          setStateDialog(() {
-                            diagnosticoMultiprofissionaisModel.profissaoResponsavel = value!;
-                          });
-                        },
-                      ),
-                      const Spacer(),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Botaoprincipal(
-                              text: "Cancelar",
-                              cor: vermelho,
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
+              return SingleChildScrollView(
+                child: Form(
+                  key: formKey,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    decoration: const BoxDecoration(
+                      color: background,
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                    padding: const EdgeInsets.all(26),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Cadastro de Diagnóstico Multiprofissional',
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 16),
+                        TextFieldCustom(
+                          tipoTexto: TextInputType.text,
+                          hintText: "....",
+                          labelText: "História do caso",
+                          senha: false,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Campo obrigatório';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            historiaCasoModel.historia = value!;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        TextFieldCustom(
+                          tipoTexto: TextInputType.text,
+                          hintText: "ex. Depressão",
+                          labelText: "Diagnostico",
+                          senha: false,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Campo obrigatório';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            diagnosticoMultiprofissionaisModel.diagnosticos = value!;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        TextFieldCustom(
+                          tipoTexto: TextInputType.text,
+                          hintText: "ex. 111.111.111-11",
+                          labelText: "Digite o cpf",
+                          senha: false,
+                          inputFormatters: [cpfFormater],
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Campo obrigatório';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            diagnosticoMultiprofissionaisModel.cpf = value!;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        TextFieldCustom(
+                          tipoTexto: TextInputType.text,
+                          hintText: "ex. João da Silva",
+                          labelText: "Nome do responsavel",
+                          senha: false,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Campo obrigatório';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            diagnosticoMultiprofissionaisModel.nomeResponsavel = value!;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        CustomDropdownButton(
+                          hint: "Profissão",
+                          dropdownValue: diagnosticoMultiprofissionaisModel.profissaoResponsavel,
+                          items: profissoes,
+                          onChanged: (value) {
+                            setStateDialog(() {
+                              diagnosticoMultiprofissionaisModel.profissaoResponsavel = value!;
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        Wrap(
+                          alignment: WrapAlignment.center,
+                          spacing: 12,
+                          children: [
+                            if (images.isNotEmpty)
+                              ...images.map((image) => Container(
+                                    width: MediaQuery.of(context).size.width * 0.22,
+                                    height: MediaQuery.of(context).size.width * 0.22,
+                                    color: Colors.grey[300],
+                                    child: Image.memory(image, fit: BoxFit.cover),
+                                  )),
+                            if ((images.length ?? 0) < 3)
+                              InkWell(
+                                onTap: () {
+                                  ImagePickerUtil.pegarFoto(context, (foto) {
+                                    setStateDialog(() {
+                                      images.add(foto);
+                                    });
+                                  });
+                                },
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width * 0.22,
+                                  height: MediaQuery.of(context).size.width * 0.22,
+                                  color: Colors.grey[300],
+                                  child: const Icon(Icons.add_a_photo),
+                                ),
+                              ),
+                          ],
+                        ),
+                        const SizedBox(height: 32),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Botaoprincipal(
+                                text: "Cancelar",
+                                cor: vermelho,
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
                             ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Botaoprincipal(
-                              text: "Cadastrar",
-                              onPressed: () {
-                                if (!formKey.currentState!.validate()) {
-                                  snackAtencao(context, "Preencha todos os campos");
-                                  return;
-                                }
-                                formKey.currentState!.save();
-                                diagnosticoMultiprofissionaisModel.dataCriacao = Timestamp.now();
-                                print(diagnosticoMultiprofissionaisModel.toMap());
-                                setState(() {
-                                  diagnosticoMultiprofissionaisModelk.add(diagnosticoMultiprofissionaisModel);
-                                });
-                                // pacienteProvider.adicionaDiagnostico(diagnosticoMultiprofissionaisModel);
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Botaoprincipal(
+                                text: "Cadastrar",
+                                onPressed: () async {
+                                  try {
+                                    if (!formKey.currentState!.validate()) {
+                                      snackAtencao(context, "Preencha todos os campos");
+                                      return;
+                                    }
+                                    if (images.isEmpty) {
+                                      snackAtencao(context, "Adicione uma imagem");
+                                      return;
+                                    }
+                                    formKey.currentState!.save();
+                                    diagnosticoMultiprofissionaisModel.dataCriacao = Timestamp.now();
+                                    historiaCasoModel.dataCriacao = Timestamp.now();
 
-                                Navigator.pop(context);
-                              },
+                                    historiaCasoModel.diagnosticos?.add(diagnosticoMultiprofissionaisModel);
+
+                                    await GerenciaPacienteRepository().cadastrarHistoria(
+                                      historiaCasoModel,
+                                      images,
+                                      pacienteProvider.paciente!.dadosPacienteModel.uidDocumento,
+                                    );
+
+                                    pacienteProvider.setHistoria(historiaCasoModel);
+
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                    snackSucesso(context, "Cadastrado com sucesso");
+                                  } catch (e) {
+                                    snackErro(context, "Erro ao cadastrar diagnóstico multiprofissional");
+                                    return;
+                                  }
+                                },
+                              ),
                             ),
-                          ),
-                        ],
-                      )
-                    ],
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
               );
@@ -319,50 +392,59 @@ class _PacienteScreenState extends State<PacienteScreen> {
           conteudos: [
             ItemConteudo(
                 titulo: 'História do caso e Diagnósticos Multiprofissionais',
-                onTap: ()  =>  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => FormCategoria(
-                        fields: [
-                          FieldConfig(
-                              label: 'História do Caso',
-                              hintText: 'Descreva a história do caso',
-                              valorInicial: diagnosticoPacienteModel?.historiaCasoModel.historia,
-                              widthFactor: 1.0,
-                              isDoubleHeight: true),
-                          if (diagnosticoPacienteModel?.historiaCasoModel.diagnosticos == null &&
-                              diagnosticoMultiprofissionaisModelk.isEmpty)
-                            FieldConfig(
-                                textBotao: "Adicionar Diagnóstico Multiprofissional",
-                                onTapBotao: () async {
-                                  await _dialogDiagnosticoMultiprofissional(pacienteProvider);
-                                },
-                                isButtonField: true,
-                                hintText: "",
-                                label: "")
-                          else
-                            ...diagnosticoMultiprofissionaisModelk.map((diagnostico) {
-                              return FieldConfig(
-                                label: 'Diagnóstico Multiprofissional',
-                                hintText: 'Diagnósticos Multiprofissionais do paciente',
-                                valorInicial: diagnostico.diagnosticos,
-                                widthFactor: 1.0,
-                                subtopico:
-                                    '${diagnostico.nomeResponsavel} - ${diagnostico.profissaoResponsavel} - ${'DPF:${diagnostico.cpf}'}',
-                                data: formatTimesTamp(diagnostico.dataCriacao),
-                              );
-                            }),
-                          FieldConfig(
-                              label: 'Imagens do Paciente',
-                              hintText: '',
-                              isImageField: true,
-                              onTapContainer: () {
-                                ImagePickerUtil.pegarFoto(context, (foto) {
-                                  context.read<ImageProviderCustom>().addImage(foto);
-                                });
-                              },
-                              images: diagnosticoPacienteModel?.historiaCasoModel.foto)
-                        ],
-                        titulo: 'História do caso e Diagnósticos Multiprofissionais',
-                      ),
+                onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => diagnosticoPacienteModel?.historiaCasoModel == null
+                          ? Scaffold(
+                            backgroundColor: background,
+                              body: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 32),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Text("Não há diagnóstico multiprofissional cadastrado",
+                                        style: TextStyle(fontSize: 20, color: preto1)),
+                                    Botaoprincipal(
+                                      text: "Adicionar Diagnóstico Multiprofissional",
+                                      onPressed: () {
+                                        _dialogDiagnosticoMultiprofissional();
+                                      },
+                                    )
+                                  ],
+                                ),
+                              ),
+                            )
+                          : FormCategoria(
+                              fields: [
+                                FieldConfig(
+                                    label: 'História do Caso',
+                                    hintText: 'Descreva a história do caso',
+                                    valorInicial: diagnosticoPacienteModel?.historiaCasoModel!.historia,
+                                    widthFactor: 1.0,
+                                    isDoubleHeight: true),
+                                ...diagnosticoPacienteModel!.historiaCasoModel!.diagnosticos!.map((diagnostico) {
+                                  return FieldConfig(
+                                    label: 'Diagnóstico Multiprofissional',
+                                    hintText: 'Diagnósticos Multiprofissionais do paciente',
+                                    valorInicial: diagnostico.diagnosticos,
+                                    widthFactor: 1.0,
+                                    subtopico:
+                                        '${diagnostico.nomeResponsavel} - ${diagnostico.profissaoResponsavel} - ${'CPF:${diagnostico.cpf}'}',
+                                    data: formatTimesTamp(diagnostico.dataCriacao),
+                                  );
+                                }),
+                                FieldConfig(
+                                    label: 'Imagens do Paciente',
+                                    hintText: '',
+                                    isImageField: true,
+                                    onTapContainer: () {
+                                      ImagePickerUtil.pegarFoto(context, (foto) {
+                                        context.read<ImageProviderCustom>().addImage(foto);
+                                      });
+                                    },
+                                    images: diagnosticoPacienteModel.historiaCasoModel!.foto)
+                              ],
+                              titulo: 'História do caso e Diagnósticos Multiprofissionais',
+                            ),
                     )),
                 onTap2: () {
                   print("oi");

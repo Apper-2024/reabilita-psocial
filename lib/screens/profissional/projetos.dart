@@ -32,15 +32,15 @@ class _ProjetosScreenState extends State<ProjetosScreen> {
   @override
   void initState() {
     super.initState();
-
     _baseQuery = db
         .collection("Pacientes")
-        .where('uidProfisional', isEqualTo: profissionalProvider.profissional!.uidProfissional);
+        .where('dadosPacienteModel.uidProfisional', isEqualTo: profissionalProvider.profissional!.uidProfissional)
+        .orderBy('dadosPacienteModel.dataCriacao', descending: true);
 
     if (widget.titulo == 'cadastrado') {
-      _baseQuery = _baseQuery.where('statusConta', isEqualTo: EnumStatusConta.ativo.name);
+      _baseQuery = _baseQuery.where('dadosPacienteModel.statusConta', isEqualTo: EnumStatusConta.ativo.name);
     } else {
-      _baseQuery = _baseQuery.where('statusConta', isEqualTo: EnumStatusConta.naoCadastrada.name);
+      _baseQuery = _baseQuery.where('dadosPacienteModel.statusConta', isEqualTo: EnumStatusConta.naoCadastrada.name);
     }
   }
 
@@ -72,9 +72,11 @@ class _ProjetosScreenState extends State<ProjetosScreen> {
             if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
               return const Center(child: Text("Nenhum usuário encontrado"));
             }
+
             snapshot.data!.docs.map((doc) {
               print(doc.data() as Map<String, dynamic>);
             }).toList();
+
             final List<PacienteModel> pacientes = snapshot.data!.docs.map((doc) {
               return PacienteModel.fromMap(doc.data() as Map<String, dynamic>);
             }).toList();

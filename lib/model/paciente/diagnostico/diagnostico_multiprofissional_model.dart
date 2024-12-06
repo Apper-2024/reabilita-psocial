@@ -40,11 +40,13 @@ class HistoriaCasoModel {
   String? historia;
   List<DiagnosticoMultiprofissionaisModel>? diagnosticos;
   List<String>? foto;
+  Timestamp? dataCriacao;
 
   HistoriaCasoModel({
     this.historia,
     this.diagnosticos,
     this.foto,
+    this.dataCriacao,
   });
 
   factory HistoriaCasoModel.fromMap(Map<String, dynamic> map) {
@@ -56,6 +58,7 @@ class HistoriaCasoModel {
             )
           : [],
       foto: map['foto'] != null ? List<String>.from(map['foto']) : [],
+      dataCriacao: map['dataCriacao'],
     );
   }
 
@@ -64,6 +67,7 @@ class HistoriaCasoModel {
       'historia': historia,
       'diagnosticos': diagnosticos?.map((item) => item.toMap()).toList(),
       'foto': foto,
+      'dataCriacao': dataCriacao,
     };
   }
 }

@@ -1,14 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AgendaList {
-  Timestamp data;
-  String pauta;
-  String participantes;
+  Timestamp? data;
+  String? pauta;
+  String? participantes;
 
   AgendaList({
-    required this.data,
-    required this.pauta,
-    required this.participantes,
+    this.data,
+    this.pauta,
+    this.participantes,
   });
 
   Map<String, dynamic> toMap() {
@@ -29,13 +29,13 @@ class AgendaList {
 }
 
 class AgendaModel {
-  List<AgendaList> agendas;
+  List<AgendaList>? agendas;
 
-  AgendaModel({required this.agendas});
+  AgendaModel({this.agendas});
 
   Map<String, dynamic> toMap() {
     return {
-      'agendas': agendas.map((agenda) => agenda.toMap()).toList(),
+      'agendas': agendas?.map((agenda) => agenda.toMap()).toList(),
     };
   }
 

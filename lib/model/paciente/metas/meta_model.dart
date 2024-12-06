@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MetaList {
-  String meta;
-  Timestamp dataCriacao;
-  String tipo;
+  String? meta;
+  Timestamp? dataCriacao;
+  String? tipo;
 
-  MetaList({required this.meta, required this.dataCriacao, required this.tipo});
+  MetaList({this.meta, this.dataCriacao, this.tipo});
 
   factory MetaList.fromMap(Map<String, dynamic> map) {
     return MetaList(
@@ -25,21 +25,23 @@ class MetaList {
 }
 
 class MetaModel {
-  List<MetaList> metas;
+  List<MetaList>? metas;
 
-  MetaModel({required this.metas});
+  MetaModel({this.metas});
 
-  factory MetaModel.fromMap(Map<String, dynamic> map) {
+  factory MetaModel.fromMap(Map<String, dynamic> data) {
     return MetaModel(
-      metas: List<MetaList>.from(
-        map['metas']?.map((item) => MetaList.fromMap(item)) ?? [],
-      ),
+      metas: data['metas'] != null
+          ? List<MetaList>.from(
+              data['metas'].map((item) => MetaList.fromMap(item)),
+            )
+          : null,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'metas': metas.map((meta) => meta.toMap()).toList(),
+      'metas': metas?.map((meta) => meta.toMap()).toList(),
     };
   }
 }

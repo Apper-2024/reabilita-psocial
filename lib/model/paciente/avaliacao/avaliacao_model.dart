@@ -1,20 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AvaliacaoModel {
-  String intervencao;
-  String responsavel;
-  String avaliacao;
-  String observacao;
-  String foto;
-  Timestamp data;
+  String? intervencao;
+  String? responsavel;
+  String? avaliacao;
+  String? observacao;
+  String? foto;
+  Timestamp? data;
 
   AvaliacaoModel({
-    required this.intervencao,
-    required this.responsavel,
-    required this.avaliacao,
-    required this.observacao,
-    required this.foto,
-    required this.data,
+    this.intervencao,
+    this.responsavel,
+    this.avaliacao,
+    this.observacao,
+    this.foto,
+    this.data,
   });
 
   Map<String, dynamic> toMap() {

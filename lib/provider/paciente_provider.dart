@@ -18,8 +18,8 @@ class PacienteProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void adicionaDiagnostico(DiagnosticoMultiprofissionaisModel u) {
-    _paciente?.diagnosticoModal?.historiaCasoModel.diagnosticos?.add(u);
+  void setHistoria(HistoriaCasoModel u) {
+    _paciente?.diagnosticoModal?.historiaCasoModel = u;
     notifyListeners();
   }
 }

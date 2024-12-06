@@ -1,42 +1,44 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class IntervencoesModel {
-  List<ListIntervencoesModel> listIntervencoes;
+  List<ListIntervencoesModel>? listIntervencoes;
 
-  IntervencoesModel({ required this.listIntervencoes});
+  IntervencoesModel({this.listIntervencoes});
 
-  factory IntervencoesModel.fromMap(Map<String, dynamic> map) {
+  factory IntervencoesModel.fromMap(Map<String, dynamic> data) {
     return IntervencoesModel(
-      listIntervencoes: List<ListIntervencoesModel>.from(
-        map['listIntervencoes'].map((item) => ListIntervencoesModel.fromMap(item)),
-      ),
+      listIntervencoes: data['listIntervencoes'] != null
+          ? List<ListIntervencoesModel>.from(
+              data['listIntervencoes'].map((item) => ListIntervencoesModel.fromMap(item)),
+            )
+          : null,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'listIntervencoes': listIntervencoes.map((item) => item.toMap()).toList(),
+      'listIntervencoes': listIntervencoes?.map((item) => item.toMap()).toList(),
     };
   }
 }
 
 class ListIntervencoesModel {
-  String problema;
-  String intervencoes;
-  Timestamp dataCriacao;
-  String nomeResponsavel;
-  String meta;
-  String prazo;
-  Timestamp data;
+  String? problema;
+  String? intervencoes;
+  Timestamp? dataCriacao;
+  String? nomeResponsavel;
+  String? meta;
+  String? prazo;
+  Timestamp? data;
 
   ListIntervencoesModel({
-    required this.problema,
-    required this.intervencoes,
-    required this.dataCriacao,
-    required this.nomeResponsavel,
-    required this.meta,
-    required this.prazo,
-    required this.data,
+    this.problema,
+    this.intervencoes,
+    this.dataCriacao,
+    this.nomeResponsavel,
+    this.meta,
+    this.prazo,
+    this.data,
   });
 
   factory ListIntervencoesModel.fromMap(Map<String, dynamic> map) {

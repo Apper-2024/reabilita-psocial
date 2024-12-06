@@ -7,45 +7,45 @@ import 'package:reabilita_social/model/paciente/diagnostico/potencialidade_model
 import 'package:reabilita_social/model/paciente/diagnostico/recurso_individuais_model.dart';
 
 class DiagnosticoModal {
-  DesejoModel desejoModel;
-  HistoriaCasoModel historiaCasoModel;
-  DoencaClinicaModel doencasClinicas;
-  MedicacoesModel medicacoesModel;
-  OutrasInformacoesModel outrasInformacoesModel;
-  PotencialidadeModel potencialidadeModel;
-  RecursoIndividuaisModel recursoIndividuaisModel;
+  DesejoModel? desejoModel;
+  HistoriaCasoModel? historiaCasoModel;
+  DoencaClinicaModel? doencasClinicas;
+  MedicacoesModel? medicacoesModel;
+  OutrasInformacoesDiagnosticoModel? outrasInformacoesModel;
+  PotencialidadeModel? potencialidadeModel;
+  RecursoIndividuaisModel? recursoIndividuaisModel;
 
   DiagnosticoModal({
-    required this.desejoModel,
-    required this.historiaCasoModel,
-    required this.doencasClinicas,
-    required this.medicacoesModel,
-    required this.outrasInformacoesModel,
-    required this.potencialidadeModel,
-    required this.recursoIndividuaisModel,
+    this.desejoModel,
+    this.historiaCasoModel,
+    this.doencasClinicas,
+    this.medicacoesModel,
+    this.outrasInformacoesModel,
+    this.potencialidadeModel,
+    this.recursoIndividuaisModel,
   });
 
-  factory DiagnosticoModal.fromMap(Map<String, dynamic> json) {
+  factory DiagnosticoModal.fromMap(Map<String, dynamic> data) {
     return DiagnosticoModal(
-      desejoModel: DesejoModel.fromMap(json['desejoModel']),
-      historiaCasoModel: HistoriaCasoModel.fromMap(json['historiaCasoModel']),
-      doencasClinicas: DoencaClinicaModel.fromMap(json['doencasClinicas']),
-      medicacoesModel: MedicacoesModel.fromMap(json['medicacoesModel']),
-      outrasInformacoesModel: OutrasInformacoesModel.fromMap(json['outrasInformacoesModel']),
-      potencialidadeModel: PotencialidadeModel.fromMap(json['potencialidadeModel']),
-      recursoIndividuaisModel: RecursoIndividuaisModel.fromMap(json['recursoIndividuaisModel']),
+      desejoModel: data['desejoModel'] != null ? DesejoModel.fromMap(data['desejoModel']) : null,
+      historiaCasoModel: data['historiaCasoModel'] != null ? HistoriaCasoModel.fromMap(data['historiaCasoModel']) : null,
+      doencasClinicas: data['doencasClinicas'] != null ? DoencaClinicaModel.fromMap(data['doencasClinicas']) : null,
+      medicacoesModel: data['medicacoesModel'] != null ? MedicacoesModel.fromMap(data['medicacoesModel']) : null,
+      outrasInformacoesModel: data['outrasInformacoesModel'] != null ? OutrasInformacoesDiagnosticoModel.fromMap(data['outrasInformacoesModel']) : null,
+      potencialidadeModel: data['potencialidadeModel'] != null ? PotencialidadeModel.fromMap(data['potencialidadeModel']) : null,
+      recursoIndividuaisModel: data['recursoIndividuaisModel'] != null ? RecursoIndividuaisModel.fromMap(data['recursoIndividuaisModel']) : null,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'desejoModel': desejoModel.toMap(),
-      'historiaCasoModel': historiaCasoModel.toMap(),
-      'doencasClinicas': doencasClinicas.toMap(),
-      'medicacoesModel': medicacoesModel.toMap(),
-      'outrasInformacoesModel': outrasInformacoesModel.toMap(),
-      'potencialidadeModel': potencialidadeModel.toMap(),
-      'recursoIndividuaisModel': recursoIndividuaisModel.toMap(),
+      'desejoModel': desejoModel?.toMap(),
+      'historiaCasoModel': historiaCasoModel?.toMap(),
+      'doencasClinicas': doencasClinicas?.toMap(),
+      'medicacoesModel': medicacoesModel?.toMap(),
+      'outrasInformacoesModel': outrasInformacoesModel?.toMap(),
+      'potencialidadeModel': potencialidadeModel?.toMap(),
+      'recursoIndividuaisModel': recursoIndividuaisModel?.toMap(),
     };
   }
 }

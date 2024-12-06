@@ -2,6 +2,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:reabilita_social/enum/enum_status_conta.dart';
 import 'package:reabilita_social/model/paciente/dadosPaciente/dados_paciente_model.dart';
+import 'package:reabilita_social/model/paciente/paciente_model.dart';
 import 'package:reabilita_social/repository/auth/auth_repository.dart';
 import 'package:reabilita_social/repository/paciente/gerencia_paciente_repository.dart';
 import 'package:reabilita_social/utils/colors.dart';
@@ -185,15 +186,15 @@ class _LoginPrimeiroAcessoState extends State<LoginPrimeiroAcesso> {
                           final paciente = await gerencia.verificaSenha(
                               senhaAcessoController.text, emailController.text, cnsController.text);
 
-                          final pacient = paciente!['paciente'] as DadosPacienteModel;
+                          final pacient = paciente!['paciente'] as PacienteModel;
                           final uid = paciente['uidColletion'];
 
                           final user = await AuthRepository().criarUsuario(emailController.text, senhaController.text);
 
-                          pacient.statusConta = EnumStatusConta.ativo.name;
-                          pacient.uidPaciente = user.user!.uid;
+                          pacient.dadosPacienteModel.statusConta = EnumStatusConta.ativo.name;
+                          pacient.dadosPacienteModel.uidPaciente = user.user!.uid;
 
-                          await gerencia.editarPaciente(pacient, uid.toString());
+                          await gerencia.editarPaciente(pacient.dadosPacienteModel, uid.toString());
 
                           snackSucesso(context, "Sua conta foi criada com sucesso!, faça login para acessar");
                           Navigator.pop(context);

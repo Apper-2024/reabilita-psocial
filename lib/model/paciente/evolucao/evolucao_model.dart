@@ -1,16 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class EvolucaoModel {
-  String comentario;
-  String nome;
-  String foto;
-  Timestamp dataCriancao;
+  String? comentario;
+  String? nome;
+  String? foto;
+  Timestamp? dataCriancao;
 
   EvolucaoModel({
-    required this.nome,
-    required this.comentario,
-    required this.foto,
-    required this.dataCriancao,
+    this.nome,
+    this.comentario,
+    this.foto,
+    this.dataCriancao,
   });
 
   Map<String, dynamic> toMap() {
@@ -22,12 +22,12 @@ class EvolucaoModel {
     };
   }
 
-  factory EvolucaoModel.fromMap(Map<String, dynamic> map) {
+  factory EvolucaoModel.fromMap(Map<String, dynamic> data) {
     return EvolucaoModel(
-      nome: map['nome'],
-      comentario: map['comentario'],
-      foto: map['foto'],
-      dataCriancao: map['dataCriancao'],
+      nome: data['nome'],
+      comentario: data['comentario'],
+      foto: data['foto'],
+      dataCriancao: data['dataCriancao'],
     );
   }
 }
