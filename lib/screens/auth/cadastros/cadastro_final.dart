@@ -7,6 +7,7 @@ import 'package:reabilita_social/repository/auth/auth_repository.dart';
 import 'package:reabilita_social/repository/profissional/gerencia_profissional_repository.dart';
 import 'package:reabilita_social/utils/colors.dart';
 import 'package:reabilita_social/utils/formaters/formater_data.dart';
+import 'package:reabilita_social/utils/listas.dart';
 import 'package:reabilita_social/utils/snack/snack_atencao.dart';
 import 'package:reabilita_social/utils/snack/snack_erro.dart';
 import 'package:reabilita_social/utils/snack/snack_sucesso.dart';
@@ -33,38 +34,7 @@ class _CadastroFinalScreenState extends State<CadastroFinalScreen> {
     final profissional = args['profissional'] as ProfissionalModel;
     final senha = args['senha'];
 
-    List<String> profissoes = [
-      "Enfermeiro",
-      "Fisioterapeuta",
-      "Psicólogo",
-      "Profissional de Educação Física",
-      "Nutricionista",
-      "Dentista",
-      "Farmacêutico",
-      "Biomédico",
-      "Fonoaudiólogo",
-      "Pedagogo",
-      "Musicoterapeuta",
-      "Médico",
-      "Médico Psiquiatra",
-      "Psicólogo Clínico",
-      "Psicólogo de Saúde Mental",
-      "Enfermeiro Psiquiátrico/Saúde Mental"
-    ];
-    List<String> locaisDeTrabalho = [
-      "CAPS I",
-      "CAPS II",
-      "CAPS III",
-      "CAPS AD I",
-      "CAPS AD II",
-      "CAPS AD III",
-      "Leitos de Saúde Mental em Hospitais Gerais",
-      "Hospital - Dia",
-      "Consultório na Rua",
-      "Equipe Especializada em Saúde Mental"
-    ];
-
-    List<String> raca = ['Branco', 'Preto', 'Pardo', 'Outro'];
+   
     return Scaffold(
       backgroundColor: background,
       appBar: AppBar(

@@ -1,11 +1,13 @@
 class PotencialidadeModel {
-  List<String> potencialidade;
+  List<String>? potencialidade;
 
-  PotencialidadeModel({required this.potencialidade});
+  PotencialidadeModel({this.potencialidade});
 
   factory PotencialidadeModel.fromMap(Map<String, dynamic> map) {
     return PotencialidadeModel(
-      potencialidade: List<String>.from(map['potencialidade']),
+      potencialidade: map['potencialidade'] != null
+          ? List<String>.from(map['potencialidade'])
+          : null,
     );
   }
 

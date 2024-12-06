@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reabilita_social/model/paciente/dadosPaciente/dados_paciente_model.dart';
 import 'package:reabilita_social/provider/paciente_provider.dart';
+import 'package:reabilita_social/provider/profissional_provider.dart';
 import 'package:reabilita_social/utils/colors.dart';
 import 'package:reabilita_social/utils/formaters/formater_data.dart';
 
@@ -15,16 +16,19 @@ class ItemConteudo {
 
 class DetalhesPaciente extends StatelessWidget {
   final List<ItemConteudo> conteudos;
+  final bool visible;
 
   const DetalhesPaciente({
     super.key,
     required this.conteudos,
+    required this.visible,
   });
 
   @override
   Widget build(BuildContext context) {
     final pacienteProvider = Provider.of<PacienteProvider>(context, listen: true);
     DadosPacienteModel pacienteModel = pacienteProvider.paciente!.dadosPacienteModel;
+    ProfissionalProvider profissionalProvider = ProfissionalProvider.instance;
 
     return Scaffold(
       backgroundColor: background,
@@ -39,15 +43,6 @@ class DetalhesPaciente extends StatelessWidget {
           onPressed: () => Navigator.of(context).pop(),
         ),
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.arrow_forward, color: Colors.black),
-            onPressed: () {
-              // Coloque a lógica desejada para o botão da AppBar
-              print("teste");
-            },
-          ),
-        ],
 
         toolbarHeight: 100.0, // Define a altura desejada da AppBar
       ),
@@ -74,7 +69,7 @@ class DetalhesPaciente extends StatelessWidget {
             ),
             Center(
               child: Text(
-                'Paciente criada no dia ${formatTimesTamp(pacienteModel.dataCriacao)} pelo Dr. Lorem Ipsum',
+                'Paciente criada no dia ${formatTimesTamp(pacienteModel.dataCriacao)} pelo ${profissionalProvider.profissional!.nome}',
                 style: const TextStyle(color: Colors.grey),
                 textAlign: TextAlign.center,
               ),
@@ -94,13 +89,16 @@ class DetalhesPaciente extends StatelessWidget {
       ),
 
       // FloatingActionButton para adicionar novas ações
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          print('Floating Action Button pressionado');
-          // Adicione a lógica para a ação do botão
-        },
-        backgroundColor: Colors.green[900],
-        child: const Icon(Icons.add, color: Colors.white),
+      floatingActionButton: Visibility(
+        visible: visible,
+        child: FloatingActionButton(
+          onPressed: () {
+            print('Floating Action Button pressionado');
+            // Adicione a lógica para a ação do botão
+          },
+          backgroundColor: Colors.green[900],
+          child: const Icon(Icons.add, color: Colors.white),
+        ),
       ),
     );
   }

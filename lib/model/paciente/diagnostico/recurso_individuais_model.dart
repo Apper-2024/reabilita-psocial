@@ -1,15 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RecursoIndividuaisModel {
-  String recursoIndividual;
-  List<String> habilidades;
+  String? recursoIndividual;
+  List<String>? habilidades;
 
-  RecursoIndividuaisModel({required this.recursoIndividual, required this.habilidades});
+  RecursoIndividuaisModel({this.recursoIndividual, this.habilidades});
 
   factory RecursoIndividuaisModel.fromMap(Map<String, dynamic> map) {
     return RecursoIndividuaisModel(
       recursoIndividual: map['recursoIndividual'],
-      habilidades: List<String>.from(map['habilidades']),
+      habilidades: map['habilidades'] != null ? List<String>.from(map['habilidades']) : null,
     );
   }
 
@@ -22,10 +22,10 @@ class RecursoIndividuaisModel {
 }
 
 class Habilidades {
-  String habilidades;
-  Timestamp dataCriacao;
+  String? habilidades;
+  Timestamp? dataCriacao;
 
-  Habilidades({required this.habilidades, required this.dataCriacao});
+  Habilidades({this.habilidades, this.dataCriacao});
 
   factory Habilidades.fromMap(Map<String, dynamic> map) {
     return Habilidades(

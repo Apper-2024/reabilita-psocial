@@ -1,12 +1,23 @@
+import 'dart:typed_data';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reabilita_social/controller/image_controller.dart';
 import 'package:reabilita_social/model/paciente/dadosPaciente/dados_paciente_model.dart';
+import 'package:reabilita_social/model/paciente/diagnostico/diagnostico_modal.dart';
+import 'package:reabilita_social/model/paciente/diagnostico/diagnostico_multiprofissional_model.dart';
+import 'package:reabilita_social/provider/imagem_provider.dart';
 import 'package:reabilita_social/provider/paciente_provider.dart';
 import 'package:reabilita_social/screens/profissional/detalhes_paciente.dart';
 import 'package:reabilita_social/screens/profissional/form_categoria.dart';
 import 'package:reabilita_social/utils/colors.dart';
 import 'package:reabilita_social/utils/formaters/formater_data.dart';
+import 'package:reabilita_social/utils/listas.dart';
+import 'package:reabilita_social/utils/snack/snack_atencao.dart';
 import 'package:reabilita_social/widgets/botao/botaoPrincipal.dart';
+import 'package:reabilita_social/widgets/dropdown_custom.dart';
+import 'package:reabilita_social/widgets/text_field_custom.dart';
 
 class PacienteScreen extends StatefulWidget {
   const PacienteScreen({super.key});
@@ -15,12 +26,163 @@ class PacienteScreen extends StatefulWidget {
   _PacienteScreenState createState() => _PacienteScreenState();
 }
 
+List<DiagnosticoMultiprofissionaisModel> diagnosticoMultiprofissionaisModelk = [];
+
 class _PacienteScreenState extends State<PacienteScreen> {
+  final List<Uint8List> _images = [];
+
+  Future<void> _dialogDiagnosticoMultiprofissional(PacienteProvider pacienteProvider) async {
+    DiagnosticoMultiprofissionaisModel? diagnosticoMultiprofissionaisModel = DiagnosticoMultiprofissionaisModel(
+      diagnosticos: '',
+      dataCriacao: Timestamp.now(),
+      nomeResponsavel: '',
+      profissaoResponsavel: null,
+      cpf: '',
+    );
+    final formKey = GlobalKey<FormState>();
+
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setStateDialog) {
+              return Form(
+                key: formKey,
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  decoration: const BoxDecoration(
+                    color: background,
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
+                  padding: const EdgeInsets.all(26),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Cadastro de Diagnóstico Multiprofissional',
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 16),
+                      TextFieldCustom(
+                        tipoTexto: TextInputType.text,
+                        hintText: "ex. Depressão",
+                        labelText: "Diagnostico",
+                        senha: false,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Campo obrigatório';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          diagnosticoMultiprofissionaisModel.diagnosticos = value!;
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      TextFieldCustom(
+                        tipoTexto: TextInputType.text,
+                        hintText: "ex. 111.111.111-11",
+                        labelText: "Digite o cpf",
+                        senha: false,
+                        inputFormatters: [cpfFormater],
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Campo obrigatório';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          diagnosticoMultiprofissionaisModel.cpf = value!;
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      TextFieldCustom(
+                        tipoTexto: TextInputType.text,
+                        hintText: "ex. João da Silva",
+                        labelText: "Nome do responsavel",
+                        senha: false,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Campo obrigatório';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          diagnosticoMultiprofissionaisModel.nomeResponsavel = value!;
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      CustomDropdownButton(
+                        hint: "Profissão",
+                        dropdownValue: diagnosticoMultiprofissionaisModel.profissaoResponsavel,
+                        items: profissoes,
+                        onChanged: (value) {
+                          setStateDialog(() {
+                            diagnosticoMultiprofissionaisModel.profissaoResponsavel = value!;
+                          });
+                        },
+                      ),
+                      const Spacer(),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Botaoprincipal(
+                              text: "Cancelar",
+                              cor: vermelho,
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Botaoprincipal(
+                              text: "Cadastrar",
+                              onPressed: () {
+                                if (!formKey.currentState!.validate()) {
+                                  snackAtencao(context, "Preencha todos os campos");
+                                  return;
+                                }
+                                formKey.currentState!.save();
+                                diagnosticoMultiprofissionaisModel.dataCriacao = Timestamp.now();
+                                print(diagnosticoMultiprofissionaisModel.toMap());
+                                setState(() {
+                                  diagnosticoMultiprofissionaisModelk.add(diagnosticoMultiprofissionaisModel);
+                                });
+                                // pacienteProvider.adicionaDiagnostico(diagnosticoMultiprofissionaisModel);
+
+                                Navigator.pop(context);
+                              },
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final pacienteProvider = Provider.of<PacienteProvider>(context, listen: true);
-
+    PacienteProvider pacienteProvider = Provider.of<PacienteProvider>(context, listen: true);
     DadosPacienteModel dadosPacienteModel = pacienteProvider.paciente!.dadosPacienteModel;
+    DiagnosticoModal? diagnosticoPacienteModel = pacienteProvider.paciente!.diagnosticoModal;
+
+    // EvolucaoModel? evolucoesPacienteModel = pacienteProvider.paciente!.evolucoes;
+    // IntervencoesModel? intervencoesPacienteModel = pacienteProvider.paciente!.intervencoesModel;
+    // AgendaModel? agendaPacienteModel = pacienteProvider.paciente!.listaAgenda;
+    // MetaModel? metasPacienteModel = pacienteProvider.paciente!.metas;
 
     List<Widget> listaCard = [
       buildCardPaciente(
@@ -28,27 +190,80 @@ class _PacienteScreenState extends State<PacienteScreen> {
         icon: Icons.person,
         text: 'Dados do Paciente',
         detalhesPaciente: DetalhesPaciente(
+          visible: false,
           conteudos: [
             ItemConteudo(
               titulo: 'Dados Pessoais',
               onTap: () => Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => FormCategoria(
                   fields: [
-                    FieldConfig(label: 'Nome Completo', hintText: dadosPacienteModel.nome, widthFactor: 1.0),
+                    FieldConfig(
+                        label: 'Nome Completo',
+                        hintText: dadosPacienteModel.nome,
+                        widthFactor: 1.0,
+                        valorInicial: dadosPacienteModel.nome),
                     FieldConfig(
                         label: 'Idade',
                         hintText: calculaIdade(dadosPacienteModel.dataNascimento).toString(),
+                        valorInicial: calculaIdade(dadosPacienteModel.dataNascimento).toString(),
                         widthFactor: 0.5),
-                    FieldConfig(label: 'Gênero', hintText: dadosPacienteModel.genero!, widthFactor: 0.5),
-                    FieldConfig(label: 'CNS', hintText: dadosPacienteModel.cns, widthFactor: 1.0),
-                    FieldConfig(label: 'Profissão', hintText: dadosPacienteModel.profissao, widthFactor: 0.5),
-                    FieldConfig(label: 'Renda Mensal', hintText: dadosPacienteModel.rendaMensal, widthFactor: 0.5),
-                    FieldConfig(label: 'CEP', hintText: dadosPacienteModel.endereco.cep, widthFactor: 0.5),
-                    FieldConfig(label: 'Bairro', hintText: dadosPacienteModel.endereco.bairro, widthFactor: 0.5),
-                    FieldConfig(label: 'Logradouro', hintText: dadosPacienteModel.endereco.rua, widthFactor: 0.5),
-                    FieldConfig(label: 'Número', hintText: dadosPacienteModel.endereco.numero, widthFactor: 0.5),
-                    FieldConfig(label: 'Cidade', hintText: dadosPacienteModel.endereco.cidade, widthFactor: 0.5),
-                    FieldConfig(label: 'Estado', hintText: dadosPacienteModel.endereco.estado, widthFactor: 0.5),
+                    FieldConfig(
+                        label: 'Gênero',
+                        dropdownItems: generos,
+                        isDropdownField: true,
+                        onChangedDropdown: (value) {
+                          setState(() {
+                            dadosPacienteModel.genero = value!;
+                          });
+                        },
+                        hintText: dadosPacienteModel.genero!,
+                        widthFactor: 0.5,
+                        valorInicial: dadosPacienteModel.genero),
+                    FieldConfig(
+                        label: 'CNS',
+                        hintText: dadosPacienteModel.cns,
+                        widthFactor: 1.0,
+                        valorInicial: dadosPacienteModel.cns),
+                    FieldConfig(
+                        label: 'Profissão',
+                        hintText: dadosPacienteModel.profissao,
+                        widthFactor: 0.5,
+                        valorInicial: dadosPacienteModel.profissao),
+                    FieldConfig(
+                        label: 'Renda Mensal',
+                        hintText: dadosPacienteModel.rendaMensal,
+                        widthFactor: 0.5,
+                        valorInicial: dadosPacienteModel.rendaMensal),
+                    FieldConfig(
+                        label: 'CEP',
+                        hintText: dadosPacienteModel.endereco.cep,
+                        widthFactor: 0.5,
+                        valorInicial: dadosPacienteModel.endereco.cep),
+                    FieldConfig(
+                        label: 'Bairro',
+                        hintText: dadosPacienteModel.endereco.bairro,
+                        widthFactor: 0.5,
+                        valorInicial: dadosPacienteModel.endereco.bairro),
+                    FieldConfig(
+                        label: 'Logradouro',
+                        hintText: dadosPacienteModel.endereco.rua,
+                        widthFactor: 0.5,
+                        valorInicial: dadosPacienteModel.endereco.rua),
+                    FieldConfig(
+                        label: 'Número',
+                        hintText: dadosPacienteModel.endereco.numero,
+                        widthFactor: 0.5,
+                        valorInicial: dadosPacienteModel.endereco.numero),
+                    FieldConfig(
+                        label: 'Cidade',
+                        hintText: dadosPacienteModel.endereco.cidade,
+                        widthFactor: 0.5,
+                        valorInicial: dadosPacienteModel.endereco.cidade),
+                    FieldConfig(
+                        label: 'Estado',
+                        hintText: dadosPacienteModel.endereco.estado,
+                        widthFactor: 0.5,
+                        valorInicial: dadosPacienteModel.endereco.estado),
                   ],
                   titulo: 'Dados Pessoais',
                 ),
@@ -66,6 +281,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
                         label: 'Principal Rede de Apoio/Suporte do Paciente',
                         hintText: dadosPacienteModel.outrasInformacoes.outrasInformacoes,
                         widthFactor: 1.0,
+                        valorInicial: dadosPacienteModel.outrasInformacoes.outrasInformacoes,
                         isDoubleHeight: true),
                     FieldConfig(
                         label: 'Paciente Curatelado?',
@@ -75,12 +291,14 @@ class _PacienteScreenState extends State<PacienteScreen> {
                     FieldConfig(
                         label: 'Técnico de Referência',
                         hintText: dadosPacienteModel.outrasInformacoes.tecnicoReferencia,
-                        widthFactor: 1.0),
+                        widthFactor: 1.0,
+                        valorInicial: dadosPacienteModel.outrasInformacoes.tecnicoReferencia),
                     FieldConfig(
                         label: 'Outras Informações',
                         hintText: dadosPacienteModel.outrasInformacoes.observacao,
                         widthFactor: 1.0,
-                        isDoubleHeight: true),
+                        isDoubleHeight: true,
+                        valorInicial: dadosPacienteModel.outrasInformacoes.observacao),
                   ],
                   titulo: 'Outras Informações',
                 ),
@@ -97,32 +315,51 @@ class _PacienteScreenState extends State<PacienteScreen> {
         icon: Icons.assignment,
         text: 'Diagnóstico situacional em saúde mental',
         detalhesPaciente: DetalhesPaciente(
+          visible: false,
           conteudos: [
             ItemConteudo(
                 titulo: 'História do caso e Diagnósticos Multiprofissionais',
-                onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                onTap: ()  =>  Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => FormCategoria(
                         fields: [
                           FieldConfig(
                               label: 'História do Caso',
                               hintText: 'Descreva a história do caso',
+                              valorInicial: diagnosticoPacienteModel?.historiaCasoModel.historia,
                               widthFactor: 1.0,
                               isDoubleHeight: true),
+                          if (diagnosticoPacienteModel?.historiaCasoModel.diagnosticos == null &&
+                              diagnosticoMultiprofissionaisModelk.isEmpty)
+                            FieldConfig(
+                                textBotao: "Adicionar Diagnóstico Multiprofissional",
+                                onTapBotao: () async {
+                                  await _dialogDiagnosticoMultiprofissional(pacienteProvider);
+                                },
+                                isButtonField: true,
+                                hintText: "",
+                                label: "")
+                          else
+                            ...diagnosticoMultiprofissionaisModelk.map((diagnostico) {
+                              return FieldConfig(
+                                label: 'Diagnóstico Multiprofissional',
+                                hintText: 'Diagnósticos Multiprofissionais do paciente',
+                                valorInicial: diagnostico.diagnosticos,
+                                widthFactor: 1.0,
+                                subtopico:
+                                    '${diagnostico.nomeResponsavel} - ${diagnostico.profissaoResponsavel} - ${'DPF:${diagnostico.cpf}'}',
+                                data: formatTimesTamp(diagnostico.dataCriacao),
+                              );
+                            }),
                           FieldConfig(
-                              label: 'Diagnósticos Multiprofissionais',
-                              hintText: 'Diagnósticos Multiprofissionais do paciente',
-                              widthFactor: 1.0),
-                          FieldConfig(
-                            label: 'Imagens do Paciente',
-                            hintText: '',
-                            isImageField: true,
-                            images: [
-                              const AssetImage(''),
-                              const AssetImage(''),
-                              const NetworkImage(''),
-                              const NetworkImage(''),
-                            ],
-                          ),
+                              label: 'Imagens do Paciente',
+                              hintText: '',
+                              isImageField: true,
+                              onTapContainer: () {
+                                ImagePickerUtil.pegarFoto(context, (foto) {
+                                  context.read<ImageProviderCustom>().addImage(foto);
+                                });
+                              },
+                              images: diagnosticoPacienteModel?.historiaCasoModel.foto)
                         ],
                         titulo: 'História do caso e Diagnósticos Multiprofissionais',
                       ),
@@ -246,6 +483,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
         icon: Icons.flag,
         text: 'Metas de cuidado em saúde mental',
         detalhesPaciente: DetalhesPaciente(
+          visible: false,
           conteudos: [
             ItemConteudo(
                 titulo: 'Metas a Curto Prazo (Inferiores a 2 meses)',
@@ -300,6 +538,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
         icon: Icons.medical_services,
         text: 'Intervenções em saúde mental',
         detalhesPaciente: DetalhesPaciente(
+          visible: true,
           conteudos: [
             ItemConteudo(
                 titulo: 'Intervenção - 01/05/2013',
@@ -339,6 +578,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
         icon: Icons.people,
         text: 'Pactuações',
         detalhesPaciente: DetalhesPaciente(
+          visible: true,
           conteudos: [
             ItemConteudo(
                 titulo: 'Pactuação realizada em 01/05/2013',
@@ -362,9 +602,9 @@ class _PacienteScreenState extends State<PacienteScreen> {
                             label: 'Ata da Pactuação',
                             hintText: '',
                             isImageField: true,
-                            images: [
-                              const AssetImage(''),
-                            ],
+                            // images: [
+                            //   const AssetImage(''),
+                            // ],
                           ),
                         ],
                         titulo: 'Pactuação realizada em 01/05/2013',
@@ -381,6 +621,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
         icon: Icons.calendar_today,
         text: 'Agenda de Estudo de Caso',
         detalhesPaciente: DetalhesPaciente(
+          visible: true,
           conteudos: [
             ItemConteudo(
                 titulo: 'Agenda de estudo realizada em 01/05/2013',
@@ -409,6 +650,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
         icon: Icons.assessment,
         text: 'Avaliação do Projeto de Reabilitação Psicossocial',
         detalhesPaciente: DetalhesPaciente(
+          visible: true,
           conteudos: [
             ItemConteudo(
                 titulo: 'Avaliação Programada do PRP (A CADA 2 MESES) - 01/05/2013',
@@ -442,12 +684,12 @@ class _PacienteScreenState extends State<PacienteScreen> {
                             label: 'Imagens do Paciente',
                             hintText: '',
                             isImageField: true,
-                            images: [
-                              const AssetImage(''),
-                              const AssetImage(''),
-                              const NetworkImage(''),
-                              const NetworkImage(''),
-                            ],
+                            // images: [
+                            //   const AssetImage(''),
+                            //   const AssetImage(''),
+                            //   const NetworkImage(''),
+                            //   const NetworkImage(''),
+                            // ],
                           ),
                         ],
                         titulo: 'Avaliação Programada do PRP (A CADA 2 MESES) - 01/05/2013',
@@ -494,7 +736,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
                 },
               ),
               Botaoprincipal(text: 'Compartilhar Projeto', onPressed: () {}),
-              SizedBox(height: 32),
+              const SizedBox(height: 32),
             ],
           ),
         ),
@@ -505,7 +747,11 @@ class _PacienteScreenState extends State<PacienteScreen> {
   Widget buildCardPaciente(BuildContext context,
       {required IconData icon, required String text, required DetalhesPaciente detalhesPaciente}) {
     return InkWell(
-      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => DetalhesPaciente(conteudos: detalhesPaciente.conteudos))),
+      onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  DetalhesPaciente(conteudos: detalhesPaciente.conteudos, visible: detalhesPaciente.visible))),
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 8.0),
         padding: const EdgeInsets.all(16.0),

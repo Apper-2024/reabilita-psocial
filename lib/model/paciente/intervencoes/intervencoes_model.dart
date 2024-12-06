@@ -1,14 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class IntervencoesModel {
-  String problema;
   List<ListIntervencoesModel> listIntervencoes;
 
-  IntervencoesModel({required this.problema, required this.listIntervencoes});
+  IntervencoesModel({ required this.listIntervencoes});
 
   factory IntervencoesModel.fromMap(Map<String, dynamic> map) {
     return IntervencoesModel(
-      problema: map['problema'],
       listIntervencoes: List<ListIntervencoesModel>.from(
         map['listIntervencoes'].map((item) => ListIntervencoesModel.fromMap(item)),
       ),
@@ -17,13 +15,13 @@ class IntervencoesModel {
 
   Map<String, dynamic> toMap() {
     return {
-      'problema': problema,
       'listIntervencoes': listIntervencoes.map((item) => item.toMap()).toList(),
     };
   }
 }
 
 class ListIntervencoesModel {
+  String problema;
   String intervencoes;
   Timestamp dataCriacao;
   String nomeResponsavel;
@@ -32,6 +30,7 @@ class ListIntervencoesModel {
   Timestamp data;
 
   ListIntervencoesModel({
+    required this.problema,
     required this.intervencoes,
     required this.dataCriacao,
     required this.nomeResponsavel,
@@ -42,6 +41,7 @@ class ListIntervencoesModel {
 
   factory ListIntervencoesModel.fromMap(Map<String, dynamic> map) {
     return ListIntervencoesModel(
+      problema: map['problema'],
       intervencoes: map['intervencoes'],
       dataCriacao: map['dataCriacao'],
       nomeResponsavel: map['nomeResponsavel'],
@@ -53,6 +53,7 @@ class ListIntervencoesModel {
 
   Map<String, dynamic> toMap() {
     return {
+      'problema': problema,
       'intervencoes': intervencoes,
       'dataCriacao': dataCriacao,
       'nomeResponsavel': nomeResponsavel,

@@ -1,37 +1,39 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DesejoModel {
-  String desejos;
-  List<SonhoVidaModel> sonhoVida;
+  String? desejos;
+  List<SonhoVidaModel>? sonhoVida;
 
-  DesejoModel({required this.desejos, required this.sonhoVida});
+  DesejoModel({this.desejos, this.sonhoVida});
 
   factory DesejoModel.fromMap(Map<String, dynamic> map) {
     return DesejoModel(
       desejos: map['desejos'],
-      sonhoVida: List<SonhoVidaModel>.from(
-        map['sonhoVida'].map((item) => SonhoVidaModel.fromMap(item)),
-      ),
+      sonhoVida: map['sonhoVida'] != null
+          ? List<SonhoVidaModel>.from(
+              map['sonhoVida'].map((item) => SonhoVidaModel.fromMap(item)),
+            )
+          : null,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'desejos': desejos,
-      'sonhoVida': sonhoVida.map((item) => item.toMap()).toList(),
+      'sonhoVida': sonhoVida?.map((item) => item.toMap()).toList(),
     };
   }
 }
 
 class SonhoVidaModel {
-  List<String> sonhoVida;
-  Timestamp dataCriacao;
+  List<String>? sonhoVida;
+  Timestamp? dataCriacao;
 
-  SonhoVidaModel({required this.sonhoVida, required this.dataCriacao});
+  SonhoVidaModel({this.sonhoVida, this.dataCriacao});
 
   factory SonhoVidaModel.fromMap(Map<String, dynamic> map) {
     return SonhoVidaModel(
-      sonhoVida: List<String>.from(map['sonhoVida']),
+      sonhoVida: map['sonhoVida'] != null ? List<String>.from(map['sonhoVida']) : null,
       dataCriacao: map['dataCriacao'],
     );
   }

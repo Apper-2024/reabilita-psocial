@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:reabilita_social/firebase_options.dart';
 import 'package:reabilita_social/presentation/theme__manager.dart';
 import 'package:reabilita_social/provider/administrador_provider.dart';
+import 'package:reabilita_social/provider/imagem_provider.dart';
 import 'package:reabilita_social/provider/paciente_provider.dart';
 import 'package:reabilita_social/provider/profissional_provider.dart';
 import 'package:reabilita_social/screens/administrador/menu_profissionais.dart';
@@ -19,6 +20,7 @@ import 'package:reabilita_social/widgets/bottomMenu/botom_menu_profissional.dart
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
   try {
     await Firebase.initializeApp(options: DefaultFirebaseOptions.web);
     print("Firebase initialized successfully");
@@ -34,6 +36,7 @@ void main() async {
         ChangeNotifierProvider.value(value: ProfissionalProvider.instance),
         ChangeNotifierProvider.value(value: AdministradorProvider.instance),
         ChangeNotifierProvider.value(value: PacienteProvider.instance),
+        ChangeNotifierProvider.value(value: ImageProviderCustom.instance),
       ],
       child: const MyApp(),
     ),

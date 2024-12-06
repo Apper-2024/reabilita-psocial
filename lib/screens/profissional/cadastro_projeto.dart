@@ -11,6 +11,7 @@ import 'package:reabilita_social/model/paciente/paciente_model.dart';
 import 'package:reabilita_social/repository/paciente/gerencia_paciente_repository.dart';
 import 'package:reabilita_social/utils/colors.dart';
 import 'package:reabilita_social/utils/formaters/formater_data.dart';
+import 'package:reabilita_social/utils/listas.dart';
 import 'package:reabilita_social/utils/snack/snack_atencao.dart';
 import 'package:reabilita_social/utils/snack/snack_erro.dart';
 import 'package:reabilita_social/utils/snack/snack_sucesso.dart';
@@ -69,7 +70,6 @@ class _CadastroProjetoScreenState extends State<CadastroProjetoScreen> {
   bool? pacienteCuratelado = false;
   @override
   Widget build(BuildContext context) {
-    List<String> generos = ['Masculino', 'Feminino', 'Outro'];
 
     return Scaffold(
       backgroundColor: background,

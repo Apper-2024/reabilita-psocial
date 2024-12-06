@@ -1,14 +1,14 @@
 class MedicacoesModel {
-  String medicacao;
-  String quantidade;
-  String via;
-  String frequencia;
+  String? medicacao;
+  String? quantidade;
+  String? via;
+  String? frequencia;
 
   MedicacoesModel({
-    required this.medicacao,
-    required this.quantidade,
-    required this.via,
-    required this.frequencia,
+    this.medicacao,
+    this.quantidade,
+    this.via,
+    this.frequencia,
   });
 
   factory MedicacoesModel.fromMap(Map<String, dynamic> map) {

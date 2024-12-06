@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:reabilita_social/model/paciente/diagnostico/diagnostico_multiprofissional_model.dart';
 import 'package:reabilita_social/model/paciente/paciente_model.dart';
 
 class PacienteProvider with ChangeNotifier {
@@ -14,6 +15,11 @@ class PacienteProvider with ChangeNotifier {
 
   void setPaciente(PacienteModel u) {
     _paciente = u;
+    notifyListeners();
+  }
+
+  void adicionaDiagnostico(DiagnosticoMultiprofissionaisModel u) {
+    _paciente?.diagnosticoModal?.historiaCasoModel.diagnosticos?.add(u);
     notifyListeners();
   }
 }

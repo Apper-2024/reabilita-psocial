@@ -8,7 +8,7 @@ import 'package:reabilita_social/model/paciente/metas/meta_model.dart';
 
 class PacienteModel {
   DadosPacienteModel dadosPacienteModel;
-  List<MetaModel>? metas;
+  MetaModel? metas;
   IntervencoesModel? intervencoesModel;
   DiagnosticoModal? diagnosticoModal;
   EvolucaoModel? evolucoes;
@@ -43,7 +43,7 @@ class PacienteModel {
         uidPaciente: json['uidPaciente']!,
         dataCriacao: json['dataCriacao']!,
       ),
-      metas: json['metas'] != null ? (json['metas'] as List).map((i) => MetaModel.fromMap(i)).toList() : null,
+      metas: json['metas'] != null ? MetaModel.fromMap(json['metas']) : null,
       intervencoesModel:
           json['intervencoesModel'] != null ? IntervencoesModel.fromMap(json['intervencoesModel']) : null,
       diagnosticoModal: json['diagnosticoModal'] != null ? DiagnosticoModal.fromMap(json['diagnosticoModal']) : null,
@@ -55,7 +55,7 @@ class PacienteModel {
   Map<String, dynamic> toMap() {
     return {
       'dadosPacienteModel': dadosPacienteModel.toMap(),
-      'metas': metas?.map((i) => i.toMap()).toList(),
+      'metas': metas?.toMap(),
       'intervencoesModel': intervencoesModel?.toMap(),
       'diagnosticoModal': diagnosticoModal?.toMap(),
       'evolucoes': evolucoes?.toMap(),

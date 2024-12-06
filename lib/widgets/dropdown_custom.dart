@@ -9,8 +9,8 @@ class CustomDropdownButton extends StatefulWidget {
 
   const CustomDropdownButton({
     super.key,
-     this.dropdownValue,
-     required this.hint,
+    this.dropdownValue,
+    required this.hint,
     required this.items,
     required this.onChanged,
   });
@@ -20,6 +20,14 @@ class CustomDropdownButton extends StatefulWidget {
 }
 
 class _CustomDropdownButtonState extends State<CustomDropdownButton> {
+  String? _currentValue;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentValue = widget.dropdownValue;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -39,10 +47,17 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
         ),
         icon: const Icon(Icons.keyboard_arrow_down),
         dropdownColor: Colors.white,
-        value: widget.dropdownValue,
+        value: _currentValue,
         isExpanded: true,
         underline: Container(),
-        onChanged: widget.onChanged,
+        onChanged: (value) {
+          setState(() {
+            _currentValue = value;
+          });
+          if (widget.onChanged != null) {
+            widget.onChanged!(value);
+          }
+        },
         items: widget.items.map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
             value: value,

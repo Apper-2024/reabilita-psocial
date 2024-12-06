@@ -8,7 +8,7 @@ import 'package:reabilita_social/model/paciente/diagnostico/recurso_individuais_
 
 class DiagnosticoModal {
   DesejoModel desejoModel;
-  DiagnosticoMultiprofissionaisModel diagnosticoMultiprofissionais;
+  HistoriaCasoModel historiaCasoModel;
   DoencaClinicaModel doencasClinicas;
   MedicacoesModel medicacoesModel;
   OutrasInformacoesModel outrasInformacoesModel;
@@ -17,7 +17,7 @@ class DiagnosticoModal {
 
   DiagnosticoModal({
     required this.desejoModel,
-    required this.diagnosticoMultiprofissionais,
+    required this.historiaCasoModel,
     required this.doencasClinicas,
     required this.medicacoesModel,
     required this.outrasInformacoesModel,
@@ -28,7 +28,7 @@ class DiagnosticoModal {
   factory DiagnosticoModal.fromMap(Map<String, dynamic> json) {
     return DiagnosticoModal(
       desejoModel: DesejoModel.fromMap(json['desejoModel']),
-      diagnosticoMultiprofissionais: DiagnosticoMultiprofissionaisModel.fromMap(json['diagnosticoMultiprofissionais']),
+      historiaCasoModel: HistoriaCasoModel.fromMap(json['historiaCasoModel']),
       doencasClinicas: DoencaClinicaModel.fromMap(json['doencasClinicas']),
       medicacoesModel: MedicacoesModel.fromMap(json['medicacoesModel']),
       outrasInformacoesModel: OutrasInformacoesModel.fromMap(json['outrasInformacoesModel']),
@@ -40,7 +40,7 @@ class DiagnosticoModal {
   Map<String, dynamic> toMap() {
     return {
       'desejoModel': desejoModel.toMap(),
-      'diagnosticoMultiprofissionais': diagnosticoMultiprofissionais.toMap(),
+      'historiaCasoModel': historiaCasoModel.toMap(),
       'doencasClinicas': doencasClinicas.toMap(),
       'medicacoesModel': medicacoesModel.toMap(),
       'outrasInformacoesModel': outrasInformacoesModel.toMap(),

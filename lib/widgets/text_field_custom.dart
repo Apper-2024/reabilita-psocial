@@ -64,7 +64,6 @@ class TextFieldCustom extends StatelessWidget {
             hintStyle: const TextStyle(color: cinza1, fontWeight: FontWeight.w600, fontSize: 12),
             suffixIcon: suffixIcon,
             prefixIcon: prefixIcon,
-            
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: const BorderSide(color: verde1, width: 2),

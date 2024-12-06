@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DoencaClinicaModel {
-  String doencaClinica;
-  Timestamp dataCriacao;
+  String? doencaClinica;
+  Timestamp? dataCriacao;
 
-  DoencaClinicaModel({required this.doencaClinica, required this.dataCriacao});
+  DoencaClinicaModel({this.doencaClinica, this.dataCriacao});
 
   factory DoencaClinicaModel.fromMap(Map<String, dynamic> map) {
     return DoencaClinicaModel(
@@ -22,21 +22,23 @@ class DoencaClinicaModel {
 }
 
 class ListaDoencaClinica {
-  List<DoencaClinicaModel> doencasClinicas;
+  List<DoencaClinicaModel>? doencasClinicas;
 
-  ListaDoencaClinica({required this.doencasClinicas});
+  ListaDoencaClinica({this.doencasClinicas});
 
   factory ListaDoencaClinica.fromMap(Map<String, dynamic> map) {
     return ListaDoencaClinica(
-      doencasClinicas: List<DoencaClinicaModel>.from(
-        map['doencasClinicas'].map((item) => DoencaClinicaModel.fromMap(item)),
-      ),
+      doencasClinicas: map['doencasClinicas'] != null
+          ? List<DoencaClinicaModel>.from(
+              map['doencasClinicas'].map((item) => DoencaClinicaModel.fromMap(item)),
+            )
+          : null,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'doencasClinicas': doencasClinicas.map((item) => item.toMap()).toList(),
+      'doencasClinicas': doencasClinicas?.map((item) => item.toMap()).toList(),
     };
   }
 }
