@@ -2,21 +2,21 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RecursoIndividuaisModel {
   String? recursoIndividual;
-  List<String>? habilidades;
+  List<Habilidades>? habilidades;
 
   RecursoIndividuaisModel({this.recursoIndividual, this.habilidades});
 
   factory RecursoIndividuaisModel.fromMap(Map<String, dynamic> map) {
     return RecursoIndividuaisModel(
       recursoIndividual: map['recursoIndividual'],
-      habilidades: map['habilidades'] != null ? List<String>.from(map['habilidades']) : null,
+      habilidades: map['habilidades'] != null ? List<Habilidades>.from(map['habilidades'].map((item) => Habilidades.fromMap(item))) : null,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'recursoIndividual': recursoIndividual,
-      'habilidades': habilidades,
+      'habilidades': habilidades?.map((habilidade) => habilidade.toMap()).toList(), // Converte cada item da lista para um mapa
     };
   }
 }

@@ -5,6 +5,8 @@ import 'package:reabilita_social/model/paciente/agenda/agenda_model.dart';
 import 'package:reabilita_social/model/paciente/dadosPaciente/dados_paciente_model.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/diagnostico_modal.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/diagnostico_multiprofissional_model.dart';
+import 'package:reabilita_social/model/paciente/diagnostico/potencialidade_model.dart';
+import 'package:reabilita_social/model/paciente/diagnostico/recurso_individuais_model.dart';
 import 'package:reabilita_social/model/paciente/evolucao/evolucao_model.dart';
 import 'package:reabilita_social/model/paciente/intervencoes/intervencoes_model.dart';
 import 'package:reabilita_social/model/paciente/metas/meta_model.dart';
@@ -74,14 +76,10 @@ class GerenciaPacienteRepository {
       if (senhaDoc.docs.isEmpty) {
         throw 'Email ou CNS inválidos';
       }
-    final pacienteData = senhaDoc.docs.first.data();
-    final pacienteModel = PacienteModel.fromMap(pacienteData);
-      
+      final pacienteData = senhaDoc.docs.first.data();
+      final pacienteModel = PacienteModel.fromMap(pacienteData);
 
-      return {
-        'paciente': pacienteModel,
-        'uidColletion': senhaDoc.docs.first.reference.id
-      };
+      return {'paciente': pacienteModel, 'uidColletion': senhaDoc.docs.first.reference.id};
     } on FirebaseException catch (e) {
       throw FirebaseErrorRepository.handleFirebaseException(e);
     } catch (e) {
@@ -141,47 +139,144 @@ class GerenciaPacienteRepository {
       throw 'Ops, algo deu errado. Tente novamente mais tarde!';
     }
   }
+
+  Future<String> cadastrarFotoDiagnostico(HistoriaCasoModel historia, Uint8List arquivo, String uidPaciente) async {
+    final uuid = const UuidV4().generate();
+    final batch = db.batch();
+
+    try {
+      final imagesRef = storageRef.child("DiagnosticoMultiprofissional/$uuid.jpg");
+      await imagesRef.putData(arquivo);
+      String imageUrl = await imagesRef.getDownloadURL();
+
+      historia.foto!.add(imageUrl);
+
+      final pacienteRef = db.collection("Pacientes").doc(uidPaciente);
+
+      batch.update(pacienteRef, {
+        'diagnosticoModal.historiaCasoModel.foto': historia.foto,
+      });
+
+      // Commit do batch
+      await batch.commit();
+      return imageUrl;
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorRepository.handleFirebaseException(e);
+    } catch (e) {
+      print(e);
+      throw 'Ops, algo deu errado. Tente novamente mais tarde!';
+    }
+  }
+
+  Future<void> updateDiagnostico(List<DiagnosticoMultiprofissionaisModel>? diagnosticos, String uidPaciente) async {
+    final batch = db.batch();
+
+    try {
+      final pacienteRef = db.collection("Pacientes").doc(uidPaciente);
+
+      // Converte a lista de DiagnosticoMultiprofissionaisModel para uma lista de mapas
+      List<Map<String, dynamic>> diagnosticosMap =
+          diagnosticos?.map((diagnostico) => diagnostico.toMap()).toList() ?? [];
+
+      batch.update(pacienteRef, {
+        'diagnosticoModal.historiaCasoModel.diagnosticos': diagnosticosMap,
+      });
+
+      // Commit do batch
+      await batch.commit();
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorRepository.handleFirebaseException(e);
+    } catch (e) {
+      print(e);
+      throw 'Ops, algo deu errado. Tente novamente mais tarde!';
+    }
+  }
+
+  Future<void> updateRecursoIndividual(
+      List<DiagnosticoMultiprofissionaisModel>? diagnosticos, String uidPaciente) async {
+    final batch = db.batch();
+
+    try {
+      final pacienteRef = db.collection("Pacientes").doc(uidPaciente);
+
+      // Converte a lista de DiagnosticoMultiprofissionaisModel para uma lista de mapas
+      List<Map<String, dynamic>> diagnosticosMap =
+          diagnosticos?.map((diagnostico) => diagnostico.toMap()).toList() ?? [];
+
+      batch.update(pacienteRef, {
+        'diagnosticoModal.historiaCasoModel.diagnosticos': diagnosticosMap,
+      });
+
+      // Commit do batch
+      await batch.commit();
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorRepository.handleFirebaseException(e);
+    } catch (e) {
+      print(e);
+      throw 'Ops, algo deu errado. Tente novamente mais tarde!';
+    }
+  }
+
+  Future<void> cadastraRecursoIndividual(RecursoIndividuaisModel recurso, String uidPaciente) async {
+    final batch = db.batch();
+    Map<String, dynamic> recursoMap = recurso.toMap();
+
+    try {
+      final pacienteRef = db.collection("Pacientes").doc(uidPaciente);
+
+      batch.update(pacienteRef, {'diagnosticoModal.recursoIndividuaisModel': recursoMap});
+
+      // Commit do batch
+      await batch.commit();
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorRepository.handleFirebaseException(e);
+    } catch (e) {
+      print(e);
+      throw 'Ops, algo deu errado. Tente novamente mais tarde!';
+    }
+  }
+
+  Future<void> cadastraHabilidades(List<Habilidades> habilidades, String uidPaciente) async {
+    final batch = db.batch();
+
+    try {
+      final pacienteRef = db.collection("Pacientes").doc(uidPaciente);
+
+      // Converta a lista de Habilidades para uma lista de mapas
+      List<Map<String, dynamic>> habilidadesMap = habilidades.map((habilidade) => habilidade.toMap()).toList();
+
+      batch.update(pacienteRef, {
+        'diagnosticoModal.recursoIndividuaisModel.habilidades': habilidadesMap,
+      });
+
+      // Commit do batch
+      await batch.commit();
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorRepository.handleFirebaseException(e);
+    } catch (e) {
+      print(e);
+      throw 'Ops, algo deu errado. Tente novamente mais tarde!';
+    }
+  }
+
+  Future<void> cadastraPotencialidade(PotencialidadeModel potencialidade, String uidPaciente) async {
+    final batch = db.batch();
+    Map<String, dynamic> potencialidadeMap = potencialidade.toMap();
+
+    try {
+      final pacienteRef = db.collection("Pacientes").doc(uidPaciente);
+
+      batch.update(pacienteRef, {
+        'diagnosticoModal.potencialidadeModel': potencialidadeMap,
+      });
+
+      // Commit do batch
+      await batch.commit();
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorRepository.handleFirebaseException(e);
+    } catch (e) {
+      print(e);
+      throw 'Ops, algo deu errado. Tente novamente mais tarde!';
+    }
+  }
 }
-
-  // Future<void> excluirFoto(String uuid) async {
-  //   try {
-  //     final imagesRef = storageRef.child("PacientesNovos/$uuid.jpg");
-  //     await imagesRef.delete();
-  //   } on FirebaseException catch (e) {
-  //     throw FirebaseErrorRepository.handleFirebaseException(e);
-  //   } catch (e) {
-  //     print(e);
-  //     throw 'Ops, algo deu errado. Tente novamente mais tarde!';
-  //   }
-  // }
-
-  // Future<void> cadastrarPaciente(DadosPacienteModel paciente, Uint8List arquivo, String senha) async {
-  //   final uuid = const UuidV4().generate();
-
-  //   try {
-  //     final imagesRef = storageRef.child("PacientesNovos/$uuid.jpg");
-  //     await imagesRef.putData(arquivo);
-
-  //     String imageUrl = await imagesRef.getDownloadURL();
-
-  //     paciente.urlFoto = imageUrl;
-
-  //     final pacienteRef = db.collection("PacientesNova").doc();
-
-  //     final batch = db.batch();
-
-  //     batch.set(pacienteRef, {
-  //       ...paciente.toMap(),
-  //       "uidFoto": uuid,
-  //       "senha": senha,
-  //     });
-
-  //     // Commit do batch
-  //     await batch.commit();
-  //   } on FirebaseException catch (e) {
-  //     throw FirebaseErrorRepository.handleFirebaseException(e);
-  //   } catch (e) {
-  //     print(e);
-  //     throw 'Ops, algo deu errado. Tente novamente mais tarde!';
-  //   }
-  // }

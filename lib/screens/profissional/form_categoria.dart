@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -26,6 +25,9 @@ class FieldConfig {
   final void Function()? onTapContainer;
   final bool isButtonField;
   final String? textBotao;
+  final bool botaoAdicionar;
+  final void Function()? onTapbotaoAdicionar;
+
   final void Function()? onTapBotao;
 
   FieldConfig({
@@ -46,6 +48,8 @@ class FieldConfig {
     this.onTapContainer,
     this.isButtonField = false,
     this.textBotao,
+    this.botaoAdicionar = false,
+    this.onTapbotaoAdicionar,
     this.onTapBotao,
   });
 }
@@ -99,7 +103,9 @@ class _FormCategoriaState extends State<FormCategoria> {
     List<Widget> rows = [];
     List<Widget> tempRow = [];
 
-    for (var field in widget.fields) {
+    for (int i = 0; i < widget.fields.length; i++) {
+      final field = widget.fields[i];
+
       if (field.isImageField) {
         if (tempRow.isNotEmpty) {
           rows.add(Row(children: tempRow));
@@ -109,10 +115,10 @@ class _FormCategoriaState extends State<FormCategoria> {
           Padding(
             padding: const EdgeInsets.only(bottom: 16.0),
             child: ImageField(
-                label: field.label,
-                images: field.images,
-                onTapContainer: field.onTapContainer,
-               ),
+              label: field.label,
+              images: field.images,
+              onTapContainer: field.onTapContainer,
+            ),
           ),
         );
       } else if (field.isRadioField) {
@@ -160,6 +166,22 @@ class _FormCategoriaState extends State<FormCategoria> {
             ),
           ),
         );
+        if (field.botaoAdicionar) {
+          if (i == widget.fields.length - 1 || !widget.fields[i + 1].isDoubleHeight) {
+            rows.add(
+              Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 64),
+                  child: Botaoprincipal(
+                    onPressed: field.onTapbotaoAdicionar!,
+                    text: 'Criar novo diagnóstico',
+                  ),
+                ),
+              ),
+            );
+          }
+        }
       } else if (field.isButtonField) {
         if (tempRow.isNotEmpty) {
           rows.add(Row(children: tempRow));
@@ -167,7 +189,7 @@ class _FormCategoriaState extends State<FormCategoria> {
         }
         rows.add(
           Padding(
-            padding: const EdgeInsets.only(bottom: 16.0),
+            padding: const EdgeInsets.only(bottom: 16.0, top: 16.0),
             child: Botaoprincipal(text: field.textBotao!, onPressed: field.onTapBotao!),
           ),
         );
@@ -455,7 +477,7 @@ class ImageField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-      final imagesLista = context.watch<ImageProviderCustom>().images;
+    final imagesLista = context.watch<ImageProviderCustom>().images;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

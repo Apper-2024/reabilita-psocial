@@ -34,44 +34,42 @@ class _CadastroProjetoScreenState extends State<CadastroProjetoScreen> {
 
   final paciente = PacienteModel(
     dadosPacienteModel: DadosPacienteModel(
-      nome: "",
-      dataNascimento: "",
-      cns: "",
-      email: "",
-      telefone: "",
-      genero: null,
-      profissao: "",
-      rendaMensal: "",
-      tipoUsuario: EnumTipoUsuario.paciente.name,
-      statusConta: EnumStatusConta.naoCadastrada.name,
-      endereco: EnderecoModel(
-        cep: "",
-        rua: "",
-        bairro: "",
-        cidade: "",
-        estado: "",
-        complemento: "",
-        numero: "",
-      ),
-      outrasInformacoes: OutrasInformacoesModel(
-        observacao: "",
-        outrasInformacoes: "",
-        pacienteCuratelado: false,
-        tecnicoReferencia: "",
-      ),
-      dataCriacao: Timestamp.now(),
-      uidProfisional: "",
-      urlFoto: "",
-      uidPaciente: "",
-      uidDocumento: ""
-    ),
+        nome: "",
+        dataNascimento: "",
+        cns: "",
+        email: "",
+        telefone: "",
+        genero: null,
+        profissao: "",
+        rendaMensal: "",
+        tipoUsuario: EnumTipoUsuario.paciente.name,
+        statusConta: EnumStatusConta.naoCadastrada.name,
+        endereco: EnderecoModel(
+          cep: "",
+          rua: "",
+          bairro: "",
+          cidade: "",
+          estado: "",
+          complemento: "",
+          numero: "",
+        ),
+        outrasInformacoes: OutrasInformacoesModel(
+          observacao: "",
+          outrasInformacoes: "",
+          pacienteCuratelado: false,
+          tecnicoReferencia: "",
+        ),
+        dataCriacao: Timestamp.now(),
+        uidProfisional: "",
+        urlFoto: "",
+        uidPaciente: "",
+        uidDocumento: ""),
   );
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _dataNascimento = TextEditingController();
   bool? pacienteCuratelado = false;
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: background,
       appBar: AppBar(

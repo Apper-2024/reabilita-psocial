@@ -47,6 +47,7 @@ class TextFieldCustom extends StatelessWidget {
         maxLength: caracterMax,
         obscureText: senha ?? false,
         maxLines: maxLines ?? 1,
+        
         minLines: minLines ?? 1,
         initialValue: valorInicial,
         buildCounter: (context, {required currentLength, required isFocused, required maxLength}) {
