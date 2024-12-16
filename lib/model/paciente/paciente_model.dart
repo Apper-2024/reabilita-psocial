@@ -7,41 +7,41 @@ import 'package:reabilita_social/model/paciente/metas/meta_model.dart';
 
 class PacienteModel {
   DadosPacienteModel dadosPacienteModel;
-  MetaModel? metas;
+  MetaModel? metasModel;
   IntervencoesModel? intervencoesModel;
   DiagnosticoModal? diagnosticoModal;
-  EvolucaoModel? evolucoes;
-  AgendaModel? listaAgenda;
+  EvolucaoModel? evolucoesModel;
+  AgendaModel? listaAgendaModel;
 
   PacienteModel({
     required this.dadosPacienteModel,
-    this.metas,
+    this.metasModel,
     this.intervencoesModel,
     this.diagnosticoModal,
-    this.evolucoes,
-    this.listaAgenda,
+    this.evolucoesModel,
+    this.listaAgendaModel,
   });
 
   factory PacienteModel.fromMap(Map<String, dynamic> json) {
     return PacienteModel(
       dadosPacienteModel: DadosPacienteModel.fromMap(json['dadosPacienteModel']),
-      metas: json['metas'] != null ? MetaModel.fromMap(json['metas']) : null,
+      metasModel: json['metasModel'] != null ? MetaModel.fromMap(json['metasModel']) : null,
       intervencoesModel:
           json['intervencoesModel'] != null ? IntervencoesModel.fromMap(json['intervencoesModel']) : null,
       diagnosticoModal: json['diagnosticoModal'] != null ? DiagnosticoModal.fromMap(json['diagnosticoModal']) : null,
-      evolucoes: json['evolucoes'] != null ? EvolucaoModel.fromMap(json['evolucoes']) : null,
-      listaAgenda: json['listaAgenda'] != null ? AgendaModel.fromMap(json['listaAgenda']) : null,
+      evolucoesModel: json['evolucoesModel'] != null ? EvolucaoModel.fromMap(json['evolucoesModel']) : null,
+      listaAgendaModel: json['listaAgendaModel'] != null ? AgendaModel.fromMap(json['listaAgendaModel']) : null,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'dadosPacienteModel': dadosPacienteModel.toMap(),
-      'metas': metas?.toMap(),
+      'metasModel': metasModel?.toMap(),
       'intervencoesModel': intervencoesModel?.toMap(),
       'diagnosticoModal': diagnosticoModal?.toMap(),
-      'evolucoes': evolucoes?.toMap(),
-      'listaAgenda': listaAgenda?.toMap(),
+      'evolucoesModel': evolucoesModel?.toMap(),
+      'listaAgendaModel': listaAgendaModel?.toMap(),
     };
   }
 }

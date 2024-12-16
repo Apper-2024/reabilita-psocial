@@ -29,7 +29,6 @@ class ListIntervencoesModel {
   String? nomeResponsavel;
   String? meta;
   String? prazo;
-  Timestamp? data;
 
   ListIntervencoesModel({
     this.problema,
@@ -38,7 +37,6 @@ class ListIntervencoesModel {
     this.nomeResponsavel,
     this.meta,
     this.prazo,
-    this.data,
   });
 
   factory ListIntervencoesModel.fromMap(Map<String, dynamic> map) {
@@ -49,7 +47,6 @@ class ListIntervencoesModel {
       nomeResponsavel: map['nomeResponsavel'],
       meta: map['meta'],
       prazo: map['prazo'],
-      data: map['data'],
     );
   }
 
@@ -61,7 +58,6 @@ class ListIntervencoesModel {
       'nomeResponsavel': nomeResponsavel,
       'meta': meta,
       'prazo': prazo,
-      'data': data,
     };
   }
 }

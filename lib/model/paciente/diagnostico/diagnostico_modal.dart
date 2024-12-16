@@ -9,16 +9,16 @@ import 'package:reabilita_social/model/paciente/diagnostico/recurso_individuais_
 class DiagnosticoModal {
   DesejoModel? desejoModel;
   HistoriaCasoModel? historiaCasoModel;
-  DoencaClinicaModel? doencasClinicas;
-  MedicacoesModel? medicacoesModel;
-  OutrasInformacoesDiagnosticoModel? outrasInformacoesModel;
+  ListaDoencaClinica? doencasClinicasModel;
+  ListaDeMedicacoes? medicacoesModel;
+  ListaOutrasInformacoes? outrasInformacoesModel;
   PotencialidadeModel? potencialidadeModel;
   RecursoIndividuaisModel? recursoIndividuaisModel;
 
   DiagnosticoModal({
     this.desejoModel,
     this.historiaCasoModel,
-    this.doencasClinicas,
+    this.doencasClinicasModel,
     this.medicacoesModel,
     this.outrasInformacoesModel,
     this.potencialidadeModel,
@@ -28,12 +28,18 @@ class DiagnosticoModal {
   factory DiagnosticoModal.fromMap(Map<String, dynamic> data) {
     return DiagnosticoModal(
       desejoModel: data['desejoModel'] != null ? DesejoModel.fromMap(data['desejoModel']) : null,
-      historiaCasoModel: data['historiaCasoModel'] != null ? HistoriaCasoModel.fromMap(data['historiaCasoModel']) : null,
-      doencasClinicas: data['doencasClinicas'] != null ? DoencaClinicaModel.fromMap(data['doencasClinicas']) : null,
-      medicacoesModel: data['medicacoesModel'] != null ? MedicacoesModel.fromMap(data['medicacoesModel']) : null,
-      outrasInformacoesModel: data['outrasInformacoesModel'] != null ? OutrasInformacoesDiagnosticoModel.fromMap(data['outrasInformacoesModel']) : null,
-      potencialidadeModel: data['potencialidadeModel'] != null ? PotencialidadeModel.fromMap(data['potencialidadeModel']) : null,
-      recursoIndividuaisModel: data['recursoIndividuaisModel'] != null ? RecursoIndividuaisModel.fromMap(data['recursoIndividuaisModel']) : null,
+      historiaCasoModel:
+          data['historiaCasoModel'] != null ? HistoriaCasoModel.fromMap(data['historiaCasoModel']) : null,
+      doencasClinicasModel: data['doencasClinicasModel'] != null ? ListaDoencaClinica.fromMap(data['doencasClinicasModel']) : null,
+      medicacoesModel: data['medicacoesModel'] != null ? ListaDeMedicacoes.fromMap(data['medicacoesModel']) : null,
+      outrasInformacoesModel: data['outrasInformacoesModel'] != null
+          ? ListaOutrasInformacoes.fromMap(data['outrasInformacoesModel'])
+          : null,
+      potencialidadeModel:
+          data['potencialidadeModel'] != null ? PotencialidadeModel.fromMap(data['potencialidadeModel']) : null,
+      recursoIndividuaisModel: data['recursoIndividuaisModel'] != null
+          ? RecursoIndividuaisModel.fromMap(data['recursoIndividuaisModel'])
+          : null,
     );
   }
 
@@ -41,7 +47,7 @@ class DiagnosticoModal {
     return {
       'desejoModel': desejoModel?.toMap(),
       'historiaCasoModel': historiaCasoModel?.toMap(),
-      'doencasClinicas': doencasClinicas?.toMap(),
+      'doencasClinicasModel': doencasClinicasModel?.toMap(),
       'medicacoesModel': medicacoesModel?.toMap(),
       'outrasInformacoesModel': outrasInformacoesModel?.toMap(),
       'potencialidadeModel': potencialidadeModel?.toMap(),

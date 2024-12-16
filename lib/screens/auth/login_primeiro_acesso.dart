@@ -1,7 +1,6 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:reabilita_social/enum/enum_status_conta.dart';
-import 'package:reabilita_social/model/paciente/dadosPaciente/dados_paciente_model.dart';
 import 'package:reabilita_social/model/paciente/paciente_model.dart';
 import 'package:reabilita_social/repository/auth/auth_repository.dart';
 import 'package:reabilita_social/repository/paciente/gerencia_paciente_repository.dart';

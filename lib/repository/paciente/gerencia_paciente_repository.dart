@@ -3,8 +3,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:reabilita_social/model/paciente/agenda/agenda_model.dart';
 import 'package:reabilita_social/model/paciente/dadosPaciente/dados_paciente_model.dart';
+import 'package:reabilita_social/model/paciente/diagnostico/desejo_model.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/diagnostico_modal.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/diagnostico_multiprofissional_model.dart';
+import 'package:reabilita_social/model/paciente/diagnostico/doencas_clinicas_model.dart';
+import 'package:reabilita_social/model/paciente/diagnostico/medicacoes_model.dart';
+import 'package:reabilita_social/model/paciente/diagnostico/outras_informacoes_model.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/potencialidade_model.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/recurso_individuais_model.dart';
 import 'package:reabilita_social/model/paciente/evolucao/evolucao_model.dart';
@@ -37,15 +41,15 @@ class GerenciaPacienteRepository {
           diagnosticoModal: DiagnosticoModal(
               desejoModel: null,
               historiaCasoModel: null,
-              doencasClinicas: null,
+              doencasClinicasModel: null,
               medicacoesModel: null,
               outrasInformacoesModel: null,
               potencialidadeModel: null,
               recursoIndividuaisModel: null),
-          evolucoes: EvolucaoModel(comentario: null, dataCriancao: null, foto: null, nome: null),
+          evolucoesModel: EvolucaoModel(comentario: null, dataCriancao: null, foto: null, nome: null),
           intervencoesModel: IntervencoesModel(listIntervencoes: null),
-          listaAgenda: AgendaModel(agendas: null),
-          metas: MetaModel(metas: null));
+          listaAgendaModel: AgendaModel(agendas: null),
+          metasModel: MetaModel(metas: null));
 
       batch.set(pacienteRef, {
         ...pacienteModel.toMap(),
@@ -128,6 +132,146 @@ class GerenciaPacienteRepository {
 
       batch.update(pacienteRef, {
         'diagnosticoModal.historiaCasoModel': historia.toMap(),
+      });
+
+      // Commit do batch
+      await batch.commit();
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorRepository.handleFirebaseException(e);
+    } catch (e) {
+      print(e);
+      throw 'Ops, algo deu errado. Tente novamente mais tarde!';
+    }
+  }
+
+  Future<void> cadastrarDesejosSonhos(DesejoModel desejo, String uidPaciente) async {
+    final batch = db.batch();
+
+    try {
+      final pacienteRef = db.collection("Pacientes").doc(uidPaciente);
+
+      batch.update(pacienteRef, {
+        'diagnosticoModal.desejoModel': desejo.toMap(),
+      });
+
+      // Commit do batch
+      await batch.commit();
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorRepository.handleFirebaseException(e);
+    } catch (e) {
+      print(e);
+      throw 'Ops, algo deu errado. Tente novamente mais tarde!';
+    }
+  }
+
+  Future<void> cadastrarMedicacoes(ListaDeMedicacoes medicacoes, String uidPaciente) async {
+    final batch = db.batch();
+
+    try {
+      final pacienteRef = db.collection("Pacientes").doc(uidPaciente);
+
+      batch.update(pacienteRef, {
+        'diagnosticoModal.medicacoesModel': medicacoes.toMap(),
+      });
+
+      // Commit do batch
+      await batch.commit();
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorRepository.handleFirebaseException(e);
+    } catch (e) {
+      print(e);
+      throw 'Ops, algo deu errado. Tente novamente mais tarde!';
+    }
+  }
+
+  Future<void> cadastrarDoenca(ListaDoencaClinica doenca, String uidPaciente) async {
+    final batch = db.batch();
+
+    try {
+      final pacienteRef = db.collection("Pacientes").doc(uidPaciente);
+
+      batch.update(pacienteRef, {
+        'diagnosticoModal.doencasClinicasModel': doenca.toMap(),
+      });
+
+      // Commit do batch
+      await batch.commit();
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorRepository.handleFirebaseException(e);
+    } catch (e) {
+      print(e);
+      throw 'Ops, algo deu errado. Tente novamente mais tarde!';
+    }
+  }
+
+  Future<void> cadastrarOutrasInformacoes(ListaOutrasInformacoes outrasInfo, String uidPaciente) async {
+    final batch = db.batch();
+
+    try {
+      final pacienteRef = db.collection("Pacientes").doc(uidPaciente);
+
+      batch.update(pacienteRef, {
+        'diagnosticoModal.outrasInformacoesModel': outrasInfo.toMap(),
+      });
+
+      // Commit do batch
+      await batch.commit();
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorRepository.handleFirebaseException(e);
+    } catch (e) {
+      print(e);
+      throw 'Ops, algo deu errado. Tente novamente mais tarde!';
+    }
+  }
+
+  Future<void> cadastrarMetas(MetaModel meta, String uidPaciente) async {
+    final batch = db.batch();
+
+    try {
+      final pacienteRef = db.collection("Pacientes").doc(uidPaciente);
+
+      batch.update(pacienteRef, {
+        'metasModel': meta.toMap(),
+      });
+
+      // Commit do batch
+      await batch.commit();
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorRepository.handleFirebaseException(e);
+    } catch (e) {
+      print(e);
+      throw 'Ops, algo deu errado. Tente novamente mais tarde!';
+    }
+  }
+Future<void> cadastrarIntervencao(IntervencoesModel intervencao,String uidPaciente) async {
+    final batch = db.batch();
+
+    try {
+      final pacienteRef = db.collection("Pacientes").doc(uidPaciente);
+
+      batch.update(pacienteRef, {
+        'IntervencoesModel': intervencao.toMap(),
+      });
+
+      // Commit do batch
+      await batch.commit();
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorRepository.handleFirebaseException(e);
+    } catch (e) {
+      print(e);
+      throw 'Ops, algo deu errado. Tente novamente mais tarde!';
+    }
+  }
+
+  Future<void> cadastrarSonhos(DesejoModel desejo, String uidPaciente) async {
+    final batch = db.batch();
+
+    try {
+      final pacienteRef = db.collection("Pacientes").doc(uidPaciente);
+      List<Map<String, dynamic>> sonhosVidaMap = desejo.sonhoVida?.map((sonho) => sonho.toMap()).toList() ?? [];
+
+      batch.update(pacienteRef, {
+        'diagnosticoModal.desejoModel.sonhosVida': sonhosVidaMap,
       });
 
       // Commit do batch

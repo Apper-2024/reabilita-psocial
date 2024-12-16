@@ -26,14 +26,14 @@ class DesejoModel {
 }
 
 class SonhoVidaModel {
-  List<String>? sonhoVida;
+  String? sonhoVida;
   Timestamp? dataCriacao;
 
   SonhoVidaModel({this.sonhoVida, this.dataCriacao});
 
   factory SonhoVidaModel.fromMap(Map<String, dynamic> map) {
     return SonhoVidaModel(
-      sonhoVida: map['sonhoVida'] != null ? List<String>.from(map['sonhoVida']) : null,
+      sonhoVida: map['sonhoVida'],
       dataCriacao: map['dataCriacao'],
     );
   }

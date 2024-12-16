@@ -17,11 +17,12 @@ class ItemConteudo {
 class DetalhesPaciente extends StatelessWidget {
   final List<ItemConteudo> conteudos;
   final bool visible;
-
+  final void Function()? onPressed;
   const DetalhesPaciente({
     super.key,
     required this.conteudos,
     required this.visible,
+    this.onPressed,
   });
 
   @override
@@ -32,6 +33,15 @@ class DetalhesPaciente extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: background,
+      floatingActionButton: Visibility(
+        visible: visible,
+        child: FloatingActionButton(
+          onPressed: onPressed,
+          backgroundColor: Colors.green[900],
+          child: const Icon(Icons.add, color: Colors.white),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       appBar: AppBar(
         backgroundColor: background,
         title: Text(
@@ -89,17 +99,6 @@ class DetalhesPaciente extends StatelessWidget {
       ),
 
       // FloatingActionButton para adicionar novas ações
-      floatingActionButton: Visibility(
-        visible: visible,
-        child: FloatingActionButton(
-          onPressed: () {
-            print('Floating Action Button pressionado');
-            // Adicione a lógica para a ação do botão
-          },
-          backgroundColor: Colors.green[900],
-          child: const Icon(Icons.add, color: Colors.white),
-        ),
-      ),
     );
   }
 }

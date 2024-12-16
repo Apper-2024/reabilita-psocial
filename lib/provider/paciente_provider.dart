@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:reabilita_social/model/paciente/diagnostico/desejo_model.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/diagnostico_multiprofissional_model.dart';
+import 'package:reabilita_social/model/paciente/diagnostico/doencas_clinicas_model.dart';
+import 'package:reabilita_social/model/paciente/diagnostico/medicacoes_model.dart';
+import 'package:reabilita_social/model/paciente/diagnostico/outras_informacoes_model.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/potencialidade_model.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/recurso_individuais_model.dart';
+import 'package:reabilita_social/model/paciente/intervencoes/intervencoes_model.dart';
+import 'package:reabilita_social/model/paciente/metas/meta_model.dart';
 import 'package:reabilita_social/model/paciente/paciente_model.dart';
 
 class PacienteProvider with ChangeNotifier {
@@ -30,17 +36,53 @@ class PacienteProvider with ChangeNotifier {
     notifyListeners();
   }
 
-    void setUpdateRecursoIndividual(RecursoIndividuaisModel u) {
+  void setUpdateDiagnostico(DiagnosticoMultiprofissionaisModel u) {
+    _paciente?.diagnosticoModal?.historiaCasoModel!.diagnosticos!.add(u);
+    notifyListeners();
+  }
+
+  void setUpdateRecursoIndividual(RecursoIndividuaisModel u) {
     _paciente?.diagnosticoModal?.recursoIndividuaisModel = u;
     notifyListeners();
   }
-    void setUpdateHabilidade(Habilidades u) {
+
+  void setUpdateHabilidade(Habilidades u) {
     _paciente?.diagnosticoModal?.recursoIndividuaisModel!.habilidades!.add(u);
     notifyListeners();
   }
 
   void setUpdatePotencialidade(PotencialidadeModel u) {
     _paciente?.diagnosticoModal?.potencialidadeModel = u;
+    notifyListeners();
+  }
+
+  void setUpdateDesejo(DesejoModel u) {
+    _paciente?.diagnosticoModal?.desejoModel = u;
+    notifyListeners();
+  }
+
+  void setUpdateMedicacoes(ListaDeMedicacoes u) {
+    _paciente?.diagnosticoModal?.medicacoesModel = u;
+    notifyListeners();
+  }
+
+  void setUpdateDoenca(ListaDoencaClinica u) {
+    _paciente?.diagnosticoModal?.doencasClinicasModel = u;
+    notifyListeners();
+  }
+
+  void setUpdateOutrasInformacoes(ListaOutrasInformacoes u) {
+    _paciente?.diagnosticoModal?.outrasInformacoesModel = u;
+    notifyListeners();
+  }
+
+  void setUpdateMeta(MetaModel u) {
+    _paciente?.metasModel = u;
+    notifyListeners();
+  }
+
+    void setUpdateIntervencao(IntervencoesModel u) {
+    _paciente?.intervencoesModel = u;
     notifyListeners();
   }
 }

@@ -29,6 +29,8 @@ class FieldConfig {
   final void Function()? onTapbotaoAdicionar;
 
   final void Function()? onTapBotao;
+  final int? maxLine;
+  final int? minLine;
 
   FieldConfig({
     required this.label,
@@ -51,6 +53,8 @@ class FieldConfig {
     this.botaoAdicionar = false,
     this.onTapbotaoAdicionar,
     this.onTapBotao,
+    this.maxLine,
+    this.minLine,
   });
 }
 
@@ -72,6 +76,7 @@ class _FormCategoriaState extends State<FormCategoria> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: background,
+     
       appBar: AppBar(
         title: Text(
           widget.titulo,
@@ -163,6 +168,8 @@ class _FormCategoriaState extends State<FormCategoria> {
               hintText: field.hintText,
               width: MediaQuery.of(context).size.width,
               hasDate: field.hasDate,
+              maxLines: field.maxLine,
+              minLines: field.minLine,
             ),
           ),
         );
@@ -337,6 +344,8 @@ class DoubleHeightInput extends StatelessWidget {
   final String? valorInicial;
   final double width;
   final bool hasDate;
+  final int? maxLines;
+  final int? minLines;
 
   const DoubleHeightInput({
     super.key,
@@ -347,6 +356,8 @@ class DoubleHeightInput extends StatelessWidget {
     this.valorInicial,
     required this.width,
     this.hasDate = false,
+    this.maxLines,
+    this.minLines,
   });
 
   @override
@@ -373,6 +384,8 @@ class DoubleHeightInput extends StatelessWidget {
             senha: false,
             tipoTexto: TextInputType.text,
             hintText: hintText,
+            maxLines: maxLines,
+            minLines: minLines,
           ),
           if (subtopico != null)
             Text(subtopico!,

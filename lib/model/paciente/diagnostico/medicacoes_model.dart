@@ -1,14 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class MedicacoesModel {
   String? medicacao;
   String? quantidade;
   String? via;
   String? frequencia;
-
+  Timestamp? dataCriacao;
   MedicacoesModel({
     this.medicacao,
     this.quantidade,
     this.via,
     this.frequencia,
+    this.dataCriacao,
   });
 
   factory MedicacoesModel.fromMap(Map<String, dynamic> map) {
@@ -17,6 +20,7 @@ class MedicacoesModel {
       quantidade: map['quantidade'],
       via: map['via'],
       frequencia: map['frequencia'],
+      dataCriacao: map['dataCriacao'],
     );
   }
 
@@ -26,6 +30,7 @@ class MedicacoesModel {
       'quantidade': quantidade,
       'via': via,
       'frequencia': frequencia,
+      'dataCriacao': dataCriacao,
     };
   }
 }

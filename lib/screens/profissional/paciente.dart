@@ -4,12 +4,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reabilita_social/controller/image_controller.dart';
+import 'package:reabilita_social/enum/enum_meta.dart';
 import 'package:reabilita_social/model/paciente/dadosPaciente/dados_paciente_model.dart';
+import 'package:reabilita_social/model/paciente/diagnostico/desejo_model.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/diagnostico_modal.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/diagnostico_multiprofissional_model.dart';
+import 'package:reabilita_social/model/paciente/diagnostico/doencas_clinicas_model.dart';
+import 'package:reabilita_social/model/paciente/diagnostico/medicacoes_model.dart';
+import 'package:reabilita_social/model/paciente/diagnostico/outras_informacoes_model.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/potencialidade_model.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/recurso_individuais_model.dart';
-import 'package:reabilita_social/provider/imagem_provider.dart';
+import 'package:reabilita_social/model/paciente/intervencoes/intervencoes_model.dart';
+import 'package:reabilita_social/model/paciente/metas/meta_model.dart';
 import 'package:reabilita_social/provider/paciente_provider.dart';
 import 'package:reabilita_social/repository/paciente/gerencia_paciente_repository.dart';
 import 'package:reabilita_social/screens/profissional/detalhes_paciente.dart';
@@ -22,6 +28,7 @@ import 'package:reabilita_social/utils/snack/snack_erro.dart';
 import 'package:reabilita_social/utils/snack/snack_sucesso.dart';
 import 'package:reabilita_social/widgets/botao/botaoPrincipal.dart';
 import 'package:reabilita_social/widgets/dropdown_custom.dart';
+import 'package:reabilita_social/widgets/nao_encontrado.dart';
 import 'package:reabilita_social/widgets/text_field_custom.dart';
 
 class PacienteScreen extends StatefulWidget {
@@ -254,7 +261,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
       profissaoResponsavel: null,
       cpf: '',
     );
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
     return showDialog<void>(
       context: context,
       barrierDismissible: true,
@@ -267,7 +274,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
             builder: (BuildContext context, StateSetter setStateDialog) {
               return SingleChildScrollView(
                 child: Form(
-                  key: _formKey,
+                  key: formKey,
                   child: Container(
                     width: MediaQuery.of(context).size.width * 0.9,
                     decoration: const BoxDecoration(
@@ -360,11 +367,11 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                 text: "Cadastrar",
                                 onPressed: () async {
                                   try {
-                                    if (!_formKey.currentState!.validate()) {
+                                    if (!formKey.currentState!.validate()) {
                                       snackAtencao(context, "Preencha todos os campos");
                                       return;
                                     }
-                                    _formKey.currentState!.save();
+                                    formKey.currentState!.save();
                                     diagnosticoMultiprofissionaisModel.dataCriacao = Timestamp.now();
 
                                     historia.diagnosticos?.add(diagnosticoMultiprofissionaisModel);
@@ -372,7 +379,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                       historia.diagnosticos,
                                       pacienteProvider.paciente!.dadosPacienteModel.uidDocumento,
                                     );
-
+                                    pacienteProvider.setHistoria(historia);
                                     Navigator.pop(context);
                                     snackSucesso(context, "Cadastrado com sucesso");
                                   } catch (e) {
@@ -402,7 +409,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
       habilidades: [],
       recursoIndividual: '',
     );
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
     return showDialog<void>(
       context: context,
       barrierDismissible: true,
@@ -415,7 +422,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
             builder: (BuildContext context, StateSetter setStateDialog) {
               return SingleChildScrollView(
                 child: Form(
-                  key: _formKey,
+                  key: formKey,
                   child: Container(
                     width: MediaQuery.of(context).size.width * 0.9,
                     decoration: const BoxDecoration(
@@ -480,11 +487,11 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                 text: "Cadastrar",
                                 onPressed: () async {
                                   try {
-                                    if (!_formKey.currentState!.validate()) {
+                                    if (!formKey.currentState!.validate()) {
                                       snackAtencao(context, "Preencha todos os campos");
                                       return;
                                     }
-                                    _formKey.currentState!.save();
+                                    formKey.currentState!.save();
                                     habilidade.dataCriacao = Timestamp.now();
 
                                     recursoIndividuaisModel.habilidades?.add(habilidade);
@@ -522,7 +529,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
   Future<void> _dialogAdicionarHabilidade(
       PacienteProvider pacienteProvider, RecursoIndividuaisModel recursoIndividuaisModel) async {
     Habilidades habilidade = Habilidades(dataCriacao: Timestamp.now(), habilidades: '');
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
     return showDialog<void>(
       context: context,
       barrierDismissible: true,
@@ -535,7 +542,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
             builder: (BuildContext context, StateSetter setStateDialog) {
               return SingleChildScrollView(
                 child: Form(
-                  key: _formKey,
+                  key: formKey,
                   child: Container(
                     width: MediaQuery.of(context).size.width * 0.9,
                     decoration: const BoxDecoration(
@@ -584,11 +591,11 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                 text: "Cadastrar",
                                 onPressed: () async {
                                   try {
-                                    if (!_formKey.currentState!.validate()) {
+                                    if (!formKey.currentState!.validate()) {
                                       snackAtencao(context, "Preencha todos os campos");
                                       return;
                                     }
-                                    _formKey.currentState!.save();
+                                    formKey.currentState!.save();
                                     habilidade.dataCriacao = Timestamp.now();
 
                                     recursoIndividuaisModel.habilidades?.add(habilidade);
@@ -597,6 +604,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                       recursoIndividuaisModel.habilidades!,
                                       pacienteProvider.paciente!.dadosPacienteModel.uidDocumento,
                                     );
+
+                                    pacienteProvider.setUpdateHabilidade(habilidade);
 
                                     Navigator.pop(context);
                                     snackSucesso(context, "Cadastrado com sucesso");
@@ -624,7 +633,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
   Future<void> _dialogAdicionarPotencialidade(
       PacienteProvider pacienteProvider, PotencialidadeModel? potencialidadeModel) async {
     Potencialidade potencialidade = Potencialidade(dataCriacao: Timestamp.now(), potencialidade: '');
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
     return showDialog<void>(
       context: context,
       barrierDismissible: true,
@@ -637,7 +646,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
             builder: (BuildContext context, StateSetter setStateDialog) {
               return SingleChildScrollView(
                 child: Form(
-                  key: _formKey,
+                  key: formKey,
                   child: Container(
                     width: MediaQuery.of(context).size.width * 0.9,
                     decoration: const BoxDecoration(
@@ -686,17 +695,15 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                 text: "Cadastrar",
                                 onPressed: () async {
                                   try {
-                                    if (!_formKey.currentState!.validate()) {
+                                    if (!formKey.currentState!.validate()) {
                                       snackAtencao(context, "Preencha todos os campos");
                                       return;
                                     }
-                                    _formKey.currentState!.save();
+                                    formKey.currentState!.save();
                                     potencialidade.dataCriacao = Timestamp.now();
 
                                     // Inicialize a lista de potencialidades se estiver nula
-                                    if (potencialidadeModel == null) {
-                                      potencialidadeModel = PotencialidadeModel(potencialidades: []);
-                                    }
+                                    potencialidadeModel ??= PotencialidadeModel(potencialidades: []);
                                     potencialidadeModel?.potencialidades ??= [];
 
                                     // Adicione a nova potencialidade à lista
@@ -713,6 +720,909 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                     snackSucesso(context, "Cadastrado com sucesso");
                                   } catch (e) {
                                     snackErro(context, "Erro ao cadastrar, tente novamente mais tarde");
+                                  }
+                                },
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _dialogDesejosSonhos(PacienteProvider pacienteProvider) async {
+    DesejoModel desejoModel = DesejoModel(
+      desejos: '',
+      sonhoVida: [],
+    );
+
+    SonhoVidaModel sonhoVidaModel = SonhoVidaModel(sonhoVida: '', dataCriacao: Timestamp.now());
+
+    final formKey = GlobalKey<FormState>();
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setStateDialog) {
+              return SingleChildScrollView(
+                child: Form(
+                  key: formKey,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    decoration: const BoxDecoration(
+                      color: background,
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                    padding: const EdgeInsets.all(26),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Cadastro de Diagnóstico Multiprofissional',
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 16),
+                        TextFieldCustom(
+                          tipoTexto: TextInputType.text,
+                          hintText: "....",
+                          labelText: "Desejo",
+                          senha: false,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Campo obrigatório';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            desejoModel.desejos = value!;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        TextFieldCustom(
+                          tipoTexto: TextInputType.text,
+                          hintText: "ex. Viajar",
+                          labelText: "Sonho de vida",
+                          senha: false,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Campo obrigatório';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            sonhoVidaModel.sonhoVida = value!;
+                          },
+                        ),
+                        const SizedBox(height: 32),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Botaoprincipal(
+                                text: "Cancelar",
+                                cor: vermelho,
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Botaoprincipal(
+                                text: "Cadastrar",
+                                onPressed: () async {
+                                  try {
+                                    if (!formKey.currentState!.validate()) {
+                                      snackAtencao(context, "Preencha todos os campos");
+                                      return;
+                                    }
+
+                                    formKey.currentState!.save();
+                                    sonhoVidaModel.dataCriacao = Timestamp.now();
+                                    desejoModel.sonhoVida?.add(sonhoVidaModel);
+
+                                    await GerenciaPacienteRepository().cadastrarDesejosSonhos(
+                                      desejoModel,
+                                      pacienteProvider.paciente!.dadosPacienteModel.uidDocumento,
+                                    );
+
+                                    pacienteProvider.setUpdateDesejo(desejoModel);
+
+                                    Navigator.pop(context);
+                                    snackSucesso(context, "Cadastrado com sucesso");
+                                  } catch (e) {
+                                    snackErro(context, "Erro ao cadastrar diagnóstico multiprofissional");
+                                    return;
+                                  }
+                                },
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _dialogAdicionarSonhos(PacienteProvider pacienteProvider, DesejoModel desejo) async {
+    SonhoVidaModel sonhoVidaModel = SonhoVidaModel(sonhoVida: '', dataCriacao: Timestamp.now());
+
+    final formKey = GlobalKey<FormState>();
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setStateDialog) {
+              return SingleChildScrollView(
+                child: Form(
+                  key: formKey,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    decoration: const BoxDecoration(
+                      color: background,
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                    padding: const EdgeInsets.all(26),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Cadastro de Diagnóstico Multiprofissional',
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 16),
+                        TextFieldCustom(
+                          tipoTexto: TextInputType.text,
+                          hintText: "ex. Viajar",
+                          labelText: "Sonho de vida",
+                          senha: false,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Campo obrigatório';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            sonhoVidaModel.sonhoVida = value!;
+                          },
+                        ),
+                        const SizedBox(height: 32),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Botaoprincipal(
+                                text: "Cancelar",
+                                cor: vermelho,
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Botaoprincipal(
+                                text: "Cadastrar",
+                                onPressed: () async {
+                                  try {
+                                    if (!formKey.currentState!.validate()) {
+                                      snackAtencao(context, "Preencha todos os campos");
+                                      return;
+                                    }
+
+                                    formKey.currentState!.save();
+                                    sonhoVidaModel.dataCriacao = Timestamp.now();
+                                    desejo.sonhoVida?.add(sonhoVidaModel);
+                                    await GerenciaPacienteRepository().cadastrarSonhos(
+                                      desejo,
+                                      pacienteProvider.paciente!.dadosPacienteModel.uidDocumento,
+                                    );
+
+                                    pacienteProvider.setUpdateDesejo(desejo);
+
+                                    Navigator.pop(context);
+                                    snackSucesso(context, "Cadastrado com sucesso");
+                                  } catch (e) {
+                                    snackErro(context, "Erro ao cadastrar diagnóstico multiprofissional");
+                                    return;
+                                  }
+                                },
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _dialogAdicionarMedicamento(PacienteProvider pacienteProvider, ListaDeMedicacoes? medicacoes) async {
+    MedicacoesModel medicacoesModel =
+        MedicacoesModel(frequencia: "", medicacao: "", quantidade: "", via: "", dataCriacao: Timestamp.now());
+
+    final formKey = GlobalKey<FormState>();
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setStateDialog) {
+              return SingleChildScrollView(
+                child: Form(
+                  key: formKey,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    decoration: const BoxDecoration(
+                      color: background,
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                    padding: const EdgeInsets.all(26),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Cadastro de Diagnóstico Multiprofissional',
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 16),
+                        TextFieldCustom(
+                          tipoTexto: TextInputType.text,
+                          hintText: "ex. remédio tal",
+                          labelText: "Nome da medicação",
+                          senha: false,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Campo obrigatório';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            medicacoesModel.medicacao = value!;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        TextFieldCustom(
+                          tipoTexto: TextInputType.text,
+                          hintText: "ex. Viajar",
+                          labelText: "Sonho de vida",
+                          senha: false,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Campo obrigatório';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            medicacoesModel.frequencia = value!;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        TextFieldCustom(
+                          tipoTexto: TextInputType.text,
+                          hintText: "ex. 3 vezes ao dia",
+                          labelText: "Quantidade",
+                          senha: false,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Campo obrigatório';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            medicacoesModel.quantidade = value!;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        TextFieldCustom(
+                          tipoTexto: TextInputType.text,
+                          hintText: "ex. Oral",
+                          labelText: "Via de administração",
+                          senha: false,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Campo obrigatório';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            medicacoesModel.via = value!;
+                          },
+                        ),
+                        const SizedBox(height: 32),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Botaoprincipal(
+                                text: "Cancelar",
+                                cor: vermelho,
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Botaoprincipal(
+                                text: "Cadastrar",
+                                onPressed: () async {
+                                  try {
+                                    if (!formKey.currentState!.validate()) {
+                                      snackAtencao(context, "Preencha todos os campos");
+                                      return;
+                                    }
+
+                                    formKey.currentState!.save();
+                                    medicacoesModel.dataCriacao = Timestamp.now();
+
+                                    medicacoes ??= ListaDeMedicacoes(medicacoes: []);
+
+                                    medicacoes!.medicacoes.add(medicacoesModel);
+                                    print("Medicações: ${medicacoes!.medicacoes}");
+
+                                    await GerenciaPacienteRepository().cadastrarMedicacoes(
+                                      medicacoes!,
+                                      pacienteProvider.paciente!.dadosPacienteModel.uidDocumento,
+                                    );
+
+                                    pacienteProvider.setUpdateMedicacoes(medicacoes!);
+
+                                    Navigator.pop(context);
+                                    snackSucesso(context, "Cadastrado com sucesso");
+                                  } catch (e) {
+                                    print("Erro: $e");
+                                    snackErro(context, "Erro ao cadastrar medicações");
+                                    return;
+                                  }
+                                },
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _dialogAdicionarDoencaClinica(PacienteProvider pacienteProvider, ListaDoencaClinica? doencas) async {
+    DoencaClinicaModel doencaClinicaModel = DoencaClinicaModel(
+      doencaClinica: "",
+      dataCriacao: Timestamp.now(),
+    );
+
+    final formKey = GlobalKey<FormState>();
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setStateDialog) {
+              return SingleChildScrollView(
+                child: Form(
+                  key: formKey,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    decoration: const BoxDecoration(
+                      color: background,
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                    padding: const EdgeInsets.all(26),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Cadastro de Doença Clínica',
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 16),
+                        TextFieldCustom(
+                          tipoTexto: TextInputType.text,
+                          hintText: "ex. Depressão",
+                          labelText: "Doença Clínica",
+                          senha: false,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Campo obrigatório';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            doencaClinicaModel.doencaClinica = value!;
+                          },
+                        ),
+                        const SizedBox(height: 32),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Botaoprincipal(
+                                text: "Cancelar",
+                                cor: vermelho,
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Botaoprincipal(
+                                text: "Cadastrar",
+                                onPressed: () async {
+                                  try {
+                                    if (!formKey.currentState!.validate()) {
+                                      snackAtencao(context, "Preencha todos os campos");
+                                      return;
+                                    }
+
+                                    formKey.currentState!.save();
+                                    doencaClinicaModel.dataCriacao = Timestamp.now();
+
+                                    doencas ??= ListaDoencaClinica(doencasClinicas: []);
+
+                                    doencas!.doencasClinicas?.add(doencaClinicaModel);
+
+                                    await GerenciaPacienteRepository().cadastrarDoenca(
+                                      doencas!,
+                                      pacienteProvider.paciente!.dadosPacienteModel.uidDocumento,
+                                    );
+
+                                    pacienteProvider.setUpdateDoenca(doencas!);
+
+                                    Navigator.pop(context);
+                                    snackSucesso(context, "Cadastrado com sucesso");
+                                  } catch (e) {
+                                    print("Erro: $e");
+                                    snackErro(context, "Erro ao cadastrar doença clínica");
+                                    return;
+                                  }
+                                },
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _dialogAdicionarOutrasInformacoes(
+      PacienteProvider pacienteProvider, ListaOutrasInformacoes? outrasInformacoes) async {
+    OutrasInformacoesDiagnosticoModel outrasInformacoesModel =
+        OutrasInformacoesDiagnosticoModel(dataCriacao: Timestamp.now(), outrasInformacoes: '');
+
+    final formKey = GlobalKey<FormState>();
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setStateDialog) {
+              return SingleChildScrollView(
+                child: Form(
+                  key: formKey,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    decoration: const BoxDecoration(
+                      color: background,
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                    padding: const EdgeInsets.all(26),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Cadastro de Doença Clínica',
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 16),
+                        TextFieldCustom(
+                          tipoTexto: TextInputType.text,
+                          hintText: ".......",
+                          labelText: "Outras Informações",
+                          senha: false,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Campo obrigatório';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            outrasInformacoesModel.outrasInformacoes = value!;
+                          },
+                        ),
+                        const SizedBox(height: 32),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Botaoprincipal(
+                                text: "Cancelar",
+                                cor: vermelho,
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Botaoprincipal(
+                                text: "Cadastrar",
+                                onPressed: () async {
+                                  try {
+                                    if (!formKey.currentState!.validate()) {
+                                      snackAtencao(context, "Preencha todos os campos");
+                                      return;
+                                    }
+
+                                    formKey.currentState!.save();
+                                    outrasInformacoesModel.dataCriacao = Timestamp.now();
+
+                                    outrasInformacoes ??= ListaOutrasInformacoes(listaOutrasInformacoes: []);
+
+                                    outrasInformacoes!.listaOutrasInformacoes?.add(outrasInformacoesModel);
+
+                                    await GerenciaPacienteRepository().cadastrarOutrasInformacoes(
+                                      outrasInformacoes!,
+                                      pacienteProvider.paciente!.dadosPacienteModel.uidDocumento,
+                                    );
+
+                                    pacienteProvider.setUpdateOutrasInformacoes(outrasInformacoes!);
+
+                                    Navigator.pop(context);
+                                    snackSucesso(context, "Cadastrado com sucesso");
+                                  } catch (e) {
+                                    print("Erro: $e");
+                                    snackErro(context, "Erro ao cadastrar doença clínica");
+                                    return;
+                                  }
+                                },
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _dialogAdicionaMeta(PacienteProvider pacienteProvider, MetaModel? meta) async {
+    MetaList metaModel = MetaList(dataCriacao: Timestamp.now(), meta: '', tipo: null);
+
+    final formKey = GlobalKey<FormState>();
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setStateDialog) {
+              return SingleChildScrollView(
+                child: Form(
+                  key: formKey,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    decoration: const BoxDecoration(
+                      color: background,
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                    padding: const EdgeInsets.all(26),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Cadastro de Doença Clínica',
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 16),
+                        TextFieldCustom(
+                          tipoTexto: TextInputType.text,
+                          hintText: "ex. Fazer tal coisa",
+                          labelText: "Meta",
+                          senha: false,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Campo obrigatório';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            metaModel.meta = value!;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        CustomDropdownButton(
+                          hint: "Tipo de meta",
+                          dropdownValue: metaModel.tipo,
+                          items: EnumMeta.values.map((e) => e.toString().split('.').last).toList(),
+                          onChanged: (value) {
+                            setStateDialog(() {
+                              metaModel.tipo = value!;
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 32),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Botaoprincipal(
+                                text: "Cancelar",
+                                cor: vermelho,
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Botaoprincipal(
+                                text: "Cadastrar",
+                                onPressed: () async {
+                                  try {
+                                    if (!formKey.currentState!.validate()) {
+                                      snackAtencao(context, "Preencha todos os campos");
+                                      return;
+                                    }
+                                    formKey.currentState!.save();
+                                    if (metaModel.tipo == null) {
+                                      snackAtencao(context, "Selecione o tipo de meta");
+                                      return;
+                                    }
+
+                                    metaModel.dataCriacao = Timestamp.now();
+
+                                    meta ??= MetaModel(metas: []);
+
+                                    meta!.metas?.add(metaModel);
+
+                                    await GerenciaPacienteRepository().cadastrarMetas(
+                                      meta!,
+                                      pacienteProvider.paciente!.dadosPacienteModel.uidDocumento,
+                                    );
+
+                                    pacienteProvider.setUpdateMeta(meta!);
+
+                                    Navigator.pop(context);
+                                    snackSucesso(context, "Cadastrado com sucesso");
+                                  } catch (e) {
+                                    print("Erro: $e");
+                                    snackErro(context, "Erro ao cadastrar Metas");
+                                    return;
+                                  }
+                                },
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _dialogAdicionaIntervencao(PacienteProvider pacienteProvider, IntervencoesModel? intervencao) async {
+    ListIntervencoesModel intervencaoModel = ListIntervencoesModel(
+        dataCriacao: Timestamp.now(), intervencoes: '', meta: "", nomeResponsavel: '', prazo: '', problema: '');
+
+    final formKey = GlobalKey<FormState>();
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setStateDialog) {
+              return SingleChildScrollView(
+                child: Form(
+                  key: formKey,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    decoration: const BoxDecoration(
+                      color: background,
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                    padding: const EdgeInsets.all(26),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Cadastro de Intervenções',
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 16),
+                        TextFieldCustom(
+                          tipoTexto: TextInputType.text,
+                          hintText: "ex. Acorreu tal coisa",
+                          labelText: "Problema",
+                          senha: false,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Campo obrigatório';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            intervencaoModel.problema = value!;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        TextFieldCustom(
+                          tipoTexto: TextInputType.text,
+                          hintText: "....",
+                          labelText: "Intervenção",
+                          senha: false,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Campo obrigatório';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            intervencaoModel.intervencoes = value!;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        TextFieldCustom(
+                          tipoTexto: TextInputType.text,
+                          hintText: "ex. João",
+                          labelText: "Responsavel pela intervenção",
+                          senha: false,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Campo obrigatório';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            intervencaoModel.nomeResponsavel = value!;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        TextFieldCustom(
+                          tipoTexto: TextInputType.text,
+                          hintText: "ex. Melhorar tal coisa",
+                          labelText: "Meta",
+                          senha: false,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Campo obrigatório';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            intervencaoModel.meta = value!;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        TextFieldCustom(
+                          tipoTexto: TextInputType.text,
+                          hintText: "ex. 11 dias",
+                          labelText: "Prazo",
+                          senha: false,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Campo obrigatório';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            intervencaoModel.prazo = value!;
+                          },
+                        ),
+                        const SizedBox(height: 32),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Botaoprincipal(
+                                text: "Cancelar",
+                                cor: vermelho,
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Botaoprincipal(
+                                text: "Cadastrar",
+                                onPressed: () async {
+                                  try {
+                                    if (!formKey.currentState!.validate()) {
+                                      snackAtencao(context, "Preencha todos os campos");
+                                      return;
+                                    }
+                                    formKey.currentState!.save();
+
+                                    intervencaoModel.dataCriacao = Timestamp.now();
+
+                                    intervencao ??= IntervencoesModel(listIntervencoes: []);
+
+                                    intervencao!.listIntervencoes?.add(intervencaoModel);
+
+                                    await GerenciaPacienteRepository().cadastrarIntervencao(
+                                      intervencao!,
+                                      pacienteProvider.paciente!.dadosPacienteModel.uidDocumento,
+                                    );
+
+                                    pacienteProvider.setUpdateIntervencao(intervencao!);
+
+                                    Navigator.pop(context);
+                                    snackSucesso(context, "Cadastrado com sucesso");
+                                  } catch (e) {
+                                    print("Erro: $e");
+                                    snackErro(context, "Erro ao cadastrar intervenção");
+                                    return;
                                   }
                                 },
                               ),
@@ -891,24 +1801,10 @@ class _PacienteScreenState extends State<PacienteScreen> {
                             DiagnosticoModal? diagnosticoPacienteModel = pacienteProvider.paciente!.diagnosticoModal;
 
                             if (diagnosticoPacienteModel?.historiaCasoModel == null) {
-                              return Scaffold(
-                                backgroundColor: background,
-                                body: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 32),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const Text("Não há diagnóstico multiprofissional cadastrado",
-                                          style: TextStyle(fontSize: 20, color: preto1)),
-                                      Botaoprincipal(
-                                        text: "Adicionar Diagnóstico Multiprofissional",
-                                        onPressed: () {
-                                          _dialogDiagnosticoMultiprofissional(pacienteProvider);
-                                        },
-                                      )
-                                    ],
-                                  ),
-                                ),
+                              return NaoEncontrado(
+                                titulo: "Não há diagnóstico multiprofissional cadastrado",
+                                textButton: "Adicionar Diagnóstico Multiprofissional",
+                                onPressed: () => _dialogDiagnosticoMultiprofissional(pacienteProvider),
                               );
                             } else {
                               return FormCategoria(
@@ -934,30 +1830,33 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                           '${diagnostico.nomeResponsavel} - ${diagnostico.profissaoResponsavel} - ${'CPF:${diagnostico.cpf}'}',
                                       data: formatTimesTamp(diagnostico.dataCriacao),
                                     );
-                                  }).toList(),
+                                  }),
                                   FieldConfig(
                                       label: 'Imagens do Paciente',
                                       hintText: '',
                                       isImageField: true,
                                       onTapContainer: () async {
                                         await ImagePickerUtil.pegarFoto(context, (foto) async {
-                                          await GerenciaPacienteRepository().cadastrarFotoDiagnostico(
+                                          final urlImagem = await GerenciaPacienteRepository().cadastrarFotoDiagnostico(
                                             diagnosticoPacienteModel.historiaCasoModel!,
                                             foto,
                                             dadosPacienteModel.uidDocumento,
                                           );
+                                          // diagnosticoPacienteModel.historiaCasoModel!.foto!.add(urlImagem);
+                                          // pacienteProvider.setHistoria(diagnosticoPacienteModel.historiaCasoModel!);
+
                                           Navigator.pop(context);
                                           snackSucesso(context, "Salvo com sucesso");
                                         });
                                       },
                                       images: diagnosticoPacienteModel.historiaCasoModel!.foto),
-                                  FieldConfig(
-                                    label: "Editar",
-                                    hintText: "Editar",
-                                    isButtonField: true,
-                                    textBotao: "Editar Diagnóstico Multiprofissional",
-                                    onTapBotao: () {},
-                                  ),
+                                  // FieldConfig(
+                                  //   label: "Editar",
+                                  //   hintText: "Editar",
+                                  //   isButtonField: true,
+                                  //   textBotao: "Editar Diagnóstico Multiprofissional",
+                                  //   onTapBotao: () {},
+                                  // ),
                                 ],
                                 titulo: 'História do caso e Diagnósticos Multiprofissionais',
                               );
@@ -980,24 +1879,10 @@ class _PacienteScreenState extends State<PacienteScreen> {
 
                             if (recursoIndividuaisModel?.habilidades == null ||
                                 recursoIndividuaisModel!.habilidades!.isEmpty) {
-                              return Scaffold(
-                                backgroundColor: background,
-                                body: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 32),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const Text("Não há Recursos Individuais cadastrado",
-                                          style: TextStyle(fontSize: 20, color: preto1)),
-                                      Botaoprincipal(
-                                        text: "Adicionar Recursos Individuais",
-                                        onPressed: () {
-                                          _dialogAdicionarRecursoIndividual(pacienteProvider);
-                                        },
-                                      )
-                                    ],
-                                  ),
-                                ),
+                              return NaoEncontrado(
+                                titulo: "Não há Recursos Individuais cadastrado",
+                                textButton: "Adicionar Recursos Individuais",
+                                onPressed: () => _dialogAdicionarRecursoIndividual(pacienteProvider),
                               );
                             } else {
                               return FormCategoria(
@@ -1020,14 +1905,14 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                       },
                                       data: formatTimesTamp(diagnostico.dataCriacao),
                                     );
-                                  }).toList(),
-                                  FieldConfig(
-                                    label: "Editar",
-                                    hintText: "Editar",
-                                    isButtonField: true,
-                                    textBotao: "Editar Recursos Individuais",
-                                    onTapBotao: () {},
-                                  ),
+                                  }),
+                                  // FieldConfig(
+                                  //   label: "Editar",
+                                  //   hintText: "Editar",
+                                  //   isButtonField: true,
+                                  //   textBotao: "Editar Recursos Individuais",
+                                  //   onTapBotao: () {},
+                                  // ),
                                 ],
                                 titulo: 'Recursos Individuais e Habilidades',
                               );
@@ -1049,24 +1934,10 @@ class _PacienteScreenState extends State<PacienteScreen> {
 
                           if (potencialidadeModel?.potencialidades == null ||
                               potencialidadeModel!.potencialidades!.isEmpty) {
-                            return Scaffold(
-                              backgroundColor: background,
-                              body: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 32),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const Text("Não há potencialidades cadastradas",
-                                        style: TextStyle(fontSize: 20, color: preto1)),
-                                    Botaoprincipal(
-                                      text: "Adicionar Potencialidades",
-                                      onPressed: () {
-                                        _dialogAdicionarPotencialidade(pacienteProvider, potencialidadeModel);
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
+                            return NaoEncontrado(
+                              titulo: "Não há potencialidades cadastradas",
+                              textButton: "Adicionar Potencialidades",
+                              onPressed: () => _dialogAdicionarPotencialidade(pacienteProvider, potencialidadeModel),
                             );
                           } else {
                             return FormCategoria(
@@ -1083,7 +1954,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                       _dialogAdicionarPotencialidade(pacienteProvider, potencialidadeModel);
                                     },
                                   );
-                                }).toList(),
+                                }),
                               ],
                               titulo: 'Potencialidades',
                             );
@@ -1096,15 +1967,49 @@ class _PacienteScreenState extends State<PacienteScreen> {
                 }),
             ItemConteudo(
                 titulo: 'Desejo e Sonhos de Vida',
-                onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => FormCategoria(
-                        fields: [
-                          FieldConfig(label: 'Desejos', hintText: 'Desejos do paciente', widthFactor: 1.0),
-                          FieldConfig(label: 'Sonhos de Vida', hintText: 'Sonhos de Vida do paciente', widthFactor: 1.0)
-                        ],
-                        titulo: 'Desejos e Sonhos de Vida',
+                onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => Consumer<PacienteProvider>(
+                          builder: (context, pacienteProvider, child) {
+                            DesejoModel? desejoModel = pacienteProvider.paciente!.diagnosticoModal?.desejoModel;
+
+                            if (desejoModel == null ||
+                                desejoModel.sonhoVida == null ||
+                                desejoModel.sonhoVida!.isEmpty) {
+                              return NaoEncontrado(
+                                titulo: "Não há desejos cadastrados!",
+                                textButton: "Adicionar Desejos e Sonhos de vida",
+                                onPressed: () => _dialogDesejosSonhos(pacienteProvider),
+                              );
+                            } else {
+                              return FormCategoria(
+                                fields: [
+                                  FieldConfig(
+                                      label: 'Desejos',
+                                      hintText: 'Desejos do paciente',
+                                      isDoubleHeight: true,
+                                      valorInicial: desejoModel.desejos),
+                                  ...desejoModel.sonhoVida!.map((sonhos) {
+                                    return FieldConfig(
+                                      label: 'Sonhos',
+                                      hintText: 'Sonho do paciente',
+                                      valorInicial: sonhos.sonhoVida,
+                                      isDoubleHeight: true,
+                                      data: formatTimesTamp(sonhos.dataCriacao),
+                                      botaoAdicionar: true,
+                                      onTapbotaoAdicionar: () {
+                                        _dialogAdicionarSonhos(pacienteProvider, desejoModel);
+                                      },
+                                    );
+                                  }),
+                                ],
+                                titulo: 'Potencialidades',
+                              );
+                            }
+                          },
+                        ),
                       ),
-                    )),
+                    ),
                 onTap2: () {
                   print("oi");
                 }),
@@ -1128,13 +2033,53 @@ class _PacienteScreenState extends State<PacienteScreen> {
             ItemConteudo(
                 titulo: 'Medicação em Uso',
                 onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => FormCategoria(
-                        fields: [
-                          FieldConfig(label: 'Medicações', hintText: 'Medicações em Uso', widthFactor: 1.0),
-                          FieldConfig(label: 'ML', hintText: '', widthFactor: 0.5),
-                          FieldConfig(label: 'Uso', hintText: '', widthFactor: 0.5),
-                        ],
-                        titulo: 'Medicação em Uso',
+                      builder: (context) => Consumer<PacienteProvider>(
+                        builder: (context, pacienteProvider, child) {
+                          ListaDeMedicacoes? medicacoesModel =
+                              pacienteProvider.paciente!.diagnosticoModal?.medicacoesModel;
+
+                          if (medicacoesModel == null || medicacoesModel.medicacoes.isEmpty) {
+                            return NaoEncontrado(
+                                titulo: "Não há medicações em uso!",
+                                textButton: "Adicionar Medicamentos em Uso",
+                                onPressed: () => _dialogAdicionarMedicamento(pacienteProvider, medicacoesModel));
+                          } else {
+                            return FormCategoria(
+                              fields: [
+                                ...medicacoesModel.medicacoes.map((medicacao) {
+                                  return [
+                                    FieldConfig(
+                                      label: 'Medicações',
+                                      hintText: 'Medicações em Uso',
+                                      widthFactor: 1.0,
+                                      valorInicial: medicacao.medicacao,
+                                    ),
+                                    FieldConfig(
+                                        label: 'ML',
+                                        hintText: medicacao.quantidade!,
+                                        widthFactor: 0.5,
+                                        valorInicial: medicacao.quantidade),
+                                    FieldConfig(
+                                      label: 'Uso',
+                                      hintText: medicacao.via!,
+                                      widthFactor: 0.5,
+                                      valorInicial: medicacao.via,
+                                    ),
+                                  ];
+                                }).expand((element) => element),
+                                FieldConfig(
+                                    hintText: '',
+                                    label: '',
+                                    textBotao: "Adicionar Medicamento",
+                                    onTapBotao: () {
+                                      _dialogAdicionarMedicamento(pacienteProvider, medicacoesModel);
+                                    },
+                                    isButtonField: true),
+                              ],
+                              titulo: 'Medicações em Uso',
+                            );
+                          }
+                        },
                       ),
                     )),
                 onTap2: () {
@@ -1143,12 +2088,39 @@ class _PacienteScreenState extends State<PacienteScreen> {
             ItemConteudo(
                 titulo: 'Doenças Clínicas',
                 onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => FormCategoria(
-                        fields: [
-                          FieldConfig(
-                              label: 'Doenças Clínicas', hintText: 'Doenças Clínicas do paciente', widthFactor: 1.0),
-                        ],
-                        titulo: 'Doenças Clínicas',
+                      builder: (context) => Consumer<PacienteProvider>(
+                        builder: (context, pacienteProvider, child) {
+                          ListaDoencaClinica? doencaClinicaModel =
+                              pacienteProvider.paciente!.diagnosticoModal?.doencasClinicasModel;
+
+                          if (doencaClinicaModel == null || doencaClinicaModel.doencasClinicas!.isEmpty) {
+                            return NaoEncontrado(
+                                titulo: "Não há doenças clínicas cadastradas",
+                                textButton: "Adicionar Doenças Clínicas",
+                                onPressed: () => _dialogAdicionarDoencaClinica(pacienteProvider, doencaClinicaModel));
+                          } else {
+                            return FormCategoria(
+                              fields: [
+                                ...doencaClinicaModel.doencasClinicas!.map((doenca) {
+                                  return [
+                                    FieldConfig(
+                                      label: 'Doença Clínica',
+                                      hintText: doenca.doencaClinica!,
+                                      isDoubleHeight: true,
+                                      valorInicial: doenca.doencaClinica,
+                                      data: formatTimesTamp(doenca.dataCriacao),
+                                      botaoAdicionar: true,
+                                      onTapbotaoAdicionar: () {
+                                        _dialogAdicionarDoencaClinica(pacienteProvider, doencaClinicaModel);
+                                      },
+                                    ),
+                                  ];
+                                }).expand((element) => element),
+                              ],
+                              titulo: 'Doenças Clínicas',
+                            );
+                          }
+                        },
                       ),
                     )),
                 onTap2: () {
@@ -1157,15 +2129,43 @@ class _PacienteScreenState extends State<PacienteScreen> {
             ItemConteudo(
                 titulo: 'Outras Informações',
                 onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => FormCategoria(
-                        fields: [
-                          FieldConfig(
-                              label: 'Informações',
-                              hintText: 'Informações do paciente',
-                              widthFactor: 1.0,
-                              isDoubleHeight: true),
-                        ],
-                        titulo: 'Outras Informações',
+                      builder: (context) => Consumer<PacienteProvider>(
+                        builder: (context, pacienteProvider, child) {
+                          ListaOutrasInformacoes? outrasInformacoesModel =
+                              pacienteProvider.paciente!.diagnosticoModal?.outrasInformacoesModel;
+
+                          if (outrasInformacoesModel == null ||
+                              outrasInformacoesModel.listaOutrasInformacoes!.isEmpty) {
+                            return NaoEncontrado(
+                                titulo: "Não há outras informações cadastradas",
+                                textButton: "Adicionar Outras Informações",
+                                onPressed: () =>
+                                    _dialogAdicionarOutrasInformacoes(pacienteProvider, outrasInformacoesModel));
+                          } else {
+                            return FormCategoria(
+                              fields: [
+                                ...outrasInformacoesModel.listaOutrasInformacoes!.map((doenca) {
+                                  return [
+                                    FieldConfig(
+                                      label: 'Informações',
+                                      hintText: doenca.outrasInformacoes!,
+                                      isDoubleHeight: true,
+                                      valorInicial: doenca.outrasInformacoes,
+                                      data: formatTimesTamp(doenca.dataCriacao),
+                                      botaoAdicionar: true,
+                                      maxLine: 5,
+                                      minLine: 1,
+                                      onTapbotaoAdicionar: () {
+                                        _dialogAdicionarOutrasInformacoes(pacienteProvider, outrasInformacoesModel);
+                                      },
+                                    ),
+                                  ];
+                                }).expand((element) => element),
+                              ],
+                              titulo: 'Doenças Clínicas',
+                            );
+                          }
+                        },
                       ),
                     )),
                 onTap2: () {
@@ -1174,107 +2174,203 @@ class _PacienteScreenState extends State<PacienteScreen> {
           ],
         ),
       ),
-      buildCardPaciente(
-        context,
-        icon: Icons.flag,
-        text: 'Metas de cuidado em saúde mental',
-        detalhesPaciente: DetalhesPaciente(
-          visible: false,
-          conteudos: [
-            ItemConteudo(
-                titulo: 'Metas a Curto Prazo (Inferiores a 2 meses)',
-                onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => FormCategoria(
-                        fields: [
-                          FieldConfig(label: 'Meta 1', hintText: 'Meta 1 do paciente', widthFactor: 1.0),
-                          FieldConfig(label: 'Meta 2', hintText: 'Meta 2 do paciente', widthFactor: 1.0),
-                          FieldConfig(label: 'Meta 3', hintText: 'Meta 3 do paciente', widthFactor: 1.0),
-                        ],
-                        titulo: 'Metas a Curto Prazo (Inferiores a 2 meses)',
+      Consumer<PacienteProvider>(
+        builder: (context, value, child) {
+          MetaModel? metaModel = value.paciente!.metasModel;
+          return buildCardPaciente(
+            context,
+            icon: Icons.flag,
+            text: 'Metas de cuidado em saúde mental',
+            detalhesPaciente: DetalhesPaciente(
+              visible: true,
+              onPressed: () {
+                _dialogAdicionaMeta(pacienteProvider, pacienteProvider.paciente!.metasModel);
+              },
+              conteudos: [
+                ItemConteudo(
+                  titulo: 'Metas a Curto Prazo (Inferiores a 2 meses)',
+                  onTap: () {
+                    List<MetaList>? listaCurta =
+                        metaModel?.metas!.where((element) => element.tipo == EnumMeta.curta.name).toList();
+
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => listaCurta!.isEmpty
+                            ? const NaoEncontrado(
+                                titulo: "Metas a Curto Prazo Não Encontradas",
+                              )
+                            : FormCategoria(
+                                fields: [
+                                  ...listaCurta.map((meta) {
+                                    return FieldConfig(
+                                      label: 'Meta',
+                                      hintText: meta.meta!,
+                                      widthFactor: 1.0,
+                                      valorInicial: meta.meta,
+                                      data: formatTimesTamp(meta.dataCriacao),
+                                    );
+                                  }),
+                                ],
+                                titulo: 'Metas a Curto Prazo (Inferiores a 2 meses)',
+                              ),
                       ),
-                    )),
-                onTap2: () {
-                  print("oi");
-                }),
-            ItemConteudo(
-                titulo: 'Metas a Médio Prazo (Até 6 meses)',
-                onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => FormCategoria(
-                        fields: [
-                          FieldConfig(label: 'Meta 1', hintText: 'Meta 1 do paciente', widthFactor: 1.0),
-                          FieldConfig(label: 'Meta 2', hintText: 'Meta 2 do paciente', widthFactor: 1.0),
-                          FieldConfig(label: 'Meta 3', hintText: 'Meta 3 do paciente', widthFactor: 1.0),
-                        ],
-                        titulo: 'Metas a Médio Prazo (Até 6 meses)',
+                    );
+                  },
+                  onTap2: () {
+                    print('l');
+                  },
+                ),
+                ItemConteudo(
+                  titulo: 'Metas a Médio Prazo (Até 6 meses)',
+                  onTap: () {
+                    List<MetaList>? listaMedia =
+                        metaModel?.metas!.where((element) => element.tipo == EnumMeta.media.name).toList();
+
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => listaMedia!.isEmpty
+                            ? const NaoEncontrado(
+                                titulo: "Metas a Médio Prazo Não Encontradas",
+                              )
+                            : FormCategoria(
+                                fields: [
+                                  ...listaMedia.map((meta) {
+                                    return FieldConfig(
+                                      label: 'Meta',
+                                      hintText: meta.meta!,
+                                      widthFactor: 1.0,
+                                      valorInicial: meta.meta,
+                                      data: formatTimesTamp(meta.dataCriacao),
+                                    );
+                                  }),
+                                ],
+                                titulo: 'Metas a Médio Prazo (Até 6 meses)',
+                              ),
                       ),
-                    )),
-                onTap2: () {
-                  print("oi");
-                }),
-            ItemConteudo(
-                titulo: 'Metas a Longo Prazo (Até 12 meses)',
-                onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => FormCategoria(
-                        fields: [
-                          FieldConfig(label: 'Meta 1', hintText: 'Meta 1 do paciente', widthFactor: 1.0),
-                          FieldConfig(label: 'Meta 2', hintText: 'Meta 2 do paciente', widthFactor: 1.0),
-                          FieldConfig(label: 'Meta 3', hintText: 'Meta 3 do paciente', widthFactor: 1.0),
-                        ],
-                        titulo: 'Metas a Longo Prazo (Até 12 meses)',
+                    );
+                  },
+                  onTap2: () {
+                    print('l');
+                  },
+                ),
+                ItemConteudo(
+                  titulo: 'Metas a Longo Prazo (Até 12 meses)',
+                  onTap: () {
+                    List<MetaList>? listaLonga =
+                        metaModel?.metas!.where((element) => element.tipo == EnumMeta.longa.name).toList();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => listaLonga!.isEmpty
+                            ? const NaoEncontrado(
+                                titulo: "Metas a Longo Prazo Não Encontradas",
+                              )
+                            : FormCategoria(
+                                fields: [
+                                  ...listaLonga.map((meta) {
+                                    return FieldConfig(
+                                      label: 'Meta',
+                                      hintText: meta.meta!,
+                                      widthFactor: 1.0,
+                                      valorInicial: meta.meta,
+                                      data: formatTimesTamp(meta.dataCriacao),
+                                    );
+                                  }),
+                                ],
+                                titulo: 'Metas a Longo Prazo (Até 12 meses)',
+                              ),
                       ),
-                    )),
-                onTap2: () {
-                  print("oi");
-                }),
-          ],
-        ),
+                    );
+                  },
+                  onTap2: () {
+                    print('l');
+                  },
+                ),
+              ],
+            ),
+          );
+        },
       ),
-      buildCardPaciente(
-        context,
-        icon: Icons.medical_services,
-        text: 'Intervenções em saúde mental',
-        detalhesPaciente: DetalhesPaciente(
-          visible: true,
-          conteudos: [
-            ItemConteudo(
-                titulo: 'Intervenção - 01/05/2013',
-                onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => FormCategoria(
-                        fields: [
-                          FieldConfig(label: 'Intervenção 1', hintText: 'Intervenção 1 do paciente', widthFactor: 1.0),
-                          FieldConfig(label: 'Intervenção 2', hintText: 'Intervenção 2 do paciente', widthFactor: 1.0),
-                          FieldConfig(label: 'Intervenção 3', hintText: 'Intervenção 3 do paciente', widthFactor: 1.0),
-                        ],
-                        titulo: 'Intervenção - 01/05/2013',
-                      ),
-                    )),
-                onTap2: () {
-                  print("oi");
-                }),
-            ItemConteudo(
-                titulo: 'Intervenção - 03/07/2018',
-                onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => FormCategoria(
-                        fields: [
-                          FieldConfig(label: 'Intervenção 1', hintText: 'Intervenção 1 do paciente', widthFactor: 1.0),
-                          FieldConfig(label: 'Intervenção 2', hintText: 'Intervenção 2 do paciente', widthFactor: 1.0),
-                          FieldConfig(label: 'Intervenção 3', hintText: 'Intervenção 3 do paciente', widthFactor: 1.0),
-                        ],
-                        titulo: 'Intervenção - 01/05/2013',
-                      ),
-                    )),
-                onTap2: () {
-                  print("oi");
-                }),
-          ],
-        ),
+      Consumer<PacienteProvider>(
+        builder: (context, value, child) {
+          IntervencoesModel? intervencoesModel = value.paciente!.intervencoesModel;
+          return buildCardPaciente(
+            context,
+            icon: Icons.medical_services,
+            text: 'Intervenções em saúde mental',
+            detalhesPaciente: DetalhesPaciente(
+              visible: true,
+              onPressed: () {
+                _dialogAdicionaIntervencao(pacienteProvider, intervencoesModel);
+              },
+              conteudos: [
+                if (intervencoesModel == null || intervencoesModel.listIntervencoes?.isEmpty == true)
+                  ItemConteudo(
+                    titulo: 'Nenhum Intervenção Cadastrada',
+                    onTap: () {
+                      _dialogAdicionaIntervencao(pacienteProvider, intervencoesModel);
+                    },
+                    onTap2: () {
+                      print("oi");
+                    },
+                  )
+                else
+                  ...?intervencoesModel.listIntervencoes?.map((e) => ItemConteudo(
+                        titulo: 'Intervenção - ${formatTimesTamp(e.dataCriacao) ?? 'Data não disponível'}',
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => FormCategoria(
+                              fields: [
+                                FieldConfig(
+                                  label: 'Problema',
+                                  hintText: e.problema ?? 'Problema',
+                                  valorInicial: e.problema,
+                                  widthFactor: 1.0,
+                                ),
+                                FieldConfig(
+                                  label: 'Intervenção',
+                                  hintText: e.intervencoes ?? 'intervencoes',
+                                  valorInicial: e.intervencoes,
+                                  data: formatTimesTamp(e.dataCriacao),
+                                  widthFactor: 1.0,
+                                ),
+                                FieldConfig(
+                                  label: 'Responsável',
+                                  hintText: e.nomeResponsavel ?? '',
+                                  valorInicial: e.nomeResponsavel,
+                                  widthFactor: 1.0,
+                                ),
+                                FieldConfig(
+                                  label: 'Meta',
+                                  hintText: e.meta ?? '',
+                                  valorInicial: e.meta,
+                                  widthFactor: 0.5,
+                                ),
+                                FieldConfig(
+                                  label: 'Meta',
+                                  hintText: e.prazo ?? '',
+                                  valorInicial: e.prazo,
+                                  widthFactor: 0.5,
+                                ),
+                              ],
+                              titulo: 'Intervenção - ${formatTimesTamp(e.dataCriacao) ?? 'Data não disponível'}',
+                            ),
+                          ),
+                        ),
+                        onTap2: () {
+                          print("oi");
+                        },
+                      )),
+              ],
+            ),
+          );
+        },
       ),
       buildCardPaciente(
         context,
         icon: Icons.people,
         text: 'Pactuações',
         detalhesPaciente: DetalhesPaciente(
-          visible: true,
+          visible: false,
           conteudos: [
             ItemConteudo(
                 titulo: 'Pactuação realizada em 01/05/2013',
@@ -1445,8 +2541,10 @@ class _PacienteScreenState extends State<PacienteScreen> {
       onTap: () => Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  DetalhesPaciente(conteudos: detalhesPaciente.conteudos, visible: detalhesPaciente.visible))),
+              builder: (context) => DetalhesPaciente(
+                  conteudos: detalhesPaciente.conteudos,
+                  visible: detalhesPaciente.visible,
+                  onPressed: detalhesPaciente.onPressed))),
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 8.0),
         padding: const EdgeInsets.all(16.0),
