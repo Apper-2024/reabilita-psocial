@@ -7,7 +7,7 @@ class PactuacaoModel {
   String? familia;
   String? responsavel;
   String? foto;
-  Timestamp? data;
+  Timestamp? dataCriacao;
 
   PactuacaoModel({
     this.paciente,
@@ -16,7 +16,7 @@ class PactuacaoModel {
     this.familia,
     this.responsavel,
     this.foto,
-    this.data,
+    this.dataCriacao,
   });
 
   factory PactuacaoModel.fromMap(Map<String, dynamic> data) {
@@ -27,7 +27,7 @@ class PactuacaoModel {
       familia: data['familia'],
       responsavel: data['responsavel'],
       foto: data['foto'],
-      data: data['data'],
+      dataCriacao: data['dataCriacao'],
     );
   }
 
@@ -39,7 +39,27 @@ class PactuacaoModel {
       'familia': familia,
       'responsavel': responsavel,
       'foto': foto,
-      'data': data,
+      'dataCriacao': dataCriacao,
     };
+  }
+}
+
+class ListPactuacaoModel {
+  List<PactuacaoModel>? pactuacoesModel;
+
+  ListPactuacaoModel({this.pactuacoesModel});
+
+  Map<String, dynamic> toMap() {
+    return {
+      'pactuacoesModel': pactuacoesModel?.map((pactuacao) => pactuacao.toMap()).toList(),
+    };
+  }
+
+  factory ListPactuacaoModel.fromMap(Map<String, dynamic> map) {
+    return ListPactuacaoModel(
+      pactuacoesModel: List<PactuacaoModel>.from(
+        map['pactuacoesModel']?.map((item) => PactuacaoModel.fromMap(item)) ?? [],
+      ),
+    );
   }
 }

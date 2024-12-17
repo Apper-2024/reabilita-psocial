@@ -32,3 +32,4 @@ const List<String> locaisDeTrabalho = [
 ];
 
 const List<String> raca = ['Branco', 'Preto', 'Pardo', 'Outro'];
+const List<String> prazo = ['Cumpriu Totalmente', 'Cumpriu Parcialmente', 'Não Cumpriu'];

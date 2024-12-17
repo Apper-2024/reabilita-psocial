@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:reabilita_social/screens/profissional/evolucao_paciente.dart';
 import 'package:reabilita_social/utils/colors.dart';
 
 class CardEvolucao extends StatelessWidget {
-  const CardEvolucao({super.key});
+  final String nome;
+  final String imageUrl;
+  final void Function()? onTap;
+  const CardEvolucao({super.key, required this.nome, required this.imageUrl, this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
       child: InkWell(
-        onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => const EvolucaoPacientePage()));
-        },
+        onTap:onTap,
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
@@ -33,20 +33,20 @@ class CardEvolucao extends StatelessWidget {
               Container(
                 width: 56,
                 height: 56,
-                decoration: const BoxDecoration(
+                decoration:  BoxDecoration(
                   image: DecorationImage(
                     image: NetworkImage(
-                        'https://images.pexels.com/photos/1181686/pexels-photo-1181686.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'),
+                        imageUrl),
                     fit: BoxFit.cover,
                   ),
-                  borderRadius: BorderRadius.all(Radius.circular(200)),
+                  borderRadius: const BorderRadius.all(Radius.circular(200)),
                 ),
               ),
               const SizedBox(width: 18),
-              const Expanded(
+               Expanded(
                 child: Text(
-                  "Fernanda da Silva",
-                  style: TextStyle(
+                 nome,
+                  style: const TextStyle(
                     fontSize: 20,
                     fontFamily: 'Poppins',
                     color: verde1,

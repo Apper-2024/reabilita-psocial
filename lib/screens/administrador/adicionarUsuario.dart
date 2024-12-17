@@ -72,7 +72,7 @@ class _AddUserPageState extends State<AddUserPage> {
                 CustomDropdownButton(
                   hint: 'Tipo de Usuário',
                   dropdownValue: _selectedUserType,
-                  items: ['Administrador', 'Profissional'],
+                  items: const ['Administrador', 'Profissional'],
                   onChanged: (value) => setState(() {
                     _selectedUserType = value!;
                   }),

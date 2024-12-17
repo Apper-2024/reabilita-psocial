@@ -102,7 +102,7 @@ class _ProfissionaisAceitosScreenState
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: verde1, width: 2.0),
+                      borderSide: const BorderSide(color: verde1, width: 2.0),
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                   ),
@@ -135,7 +135,7 @@ class _ProfissionaisAceitosScreenState
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: verde1, width: 2.0),
+                      borderSide: const BorderSide(color: verde1, width: 2.0),
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                   ),

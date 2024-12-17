@@ -1,19 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AgendaList {
-  Timestamp? data;
+  Timestamp? dataCriacao;
   String? pauta;
   String? participantes;
 
   AgendaList({
-    this.data,
+    this.dataCriacao,
     this.pauta,
     this.participantes,
   });
 
   Map<String, dynamic> toMap() {
     return {
-      'data': data,
+      'dataCriacao': dataCriacao,
       'pauta': pauta,
       'participantes': participantes,
     };
@@ -21,7 +21,7 @@ class AgendaList {
 
   factory AgendaList.fromMap(Map<String, dynamic> map) {
     return AgendaList(
-      data: map['data'],
+      dataCriacao: map['dataCriacao'],
       pauta: map['pauta'],
       participantes: map['participantes'],
     );
@@ -29,20 +29,20 @@ class AgendaList {
 }
 
 class AgendaModel {
-  List<AgendaList>? agendas;
+  List<AgendaList>? listaAgendaModel;
 
-  AgendaModel({this.agendas});
+  AgendaModel({this.listaAgendaModel});
 
   Map<String, dynamic> toMap() {
     return {
-      'agendas': agendas?.map((agenda) => agenda.toMap()).toList(),
+      'listaAgendaModel': listaAgendaModel?.map((agenda) => agenda.toMap()).toList(),
     };
   }
 
   factory AgendaModel.fromMap(Map<String, dynamic> map) {
     return AgendaModel(
-      agendas: List<AgendaList>.from(
-        map['agendas']?.map((item) => AgendaList.fromMap(item)) ?? [],
+      listaAgendaModel: List<AgendaList>.from(
+        map['listaAgendaModel']?.map((item) => AgendaList.fromMap(item)) ?? [],
       ),
     );
   }

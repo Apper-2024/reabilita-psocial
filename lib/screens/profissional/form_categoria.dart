@@ -16,8 +16,10 @@ class FieldConfig {
   final bool hasDate;
   final bool isRadioField;
   final bool isImageField;
+  final bool umaImagem;
   final bool isDropdownField;
   final List<String>? images;
+  final String? imagem;
   final List<String>? dropdownItems;
   final ValueChanged<String?>? onChangedDropdown;
   final String? subtopico;
@@ -27,7 +29,6 @@ class FieldConfig {
   final String? textBotao;
   final bool botaoAdicionar;
   final void Function()? onTapbotaoAdicionar;
-
   final void Function()? onTapBotao;
   final int? maxLine;
   final int? minLine;
@@ -41,8 +42,10 @@ class FieldConfig {
     this.hasDate = false,
     this.isRadioField = false,
     this.isImageField = false,
+    this.umaImagem = false,
     this.isDropdownField = false,
     this.images,
+    this.imagem,
     this.dropdownItems,
     this.onChangedDropdown,
     this.subtopico,
@@ -126,7 +129,22 @@ class _FormCategoriaState extends State<FormCategoria> {
             ),
           ),
         );
-      } else if (field.isRadioField) {
+      }else if (field.umaImagem) {
+        if (tempRow.isNotEmpty) {
+          rows.add(Row(children: tempRow));
+          tempRow = [];
+        }
+        rows.add(
+          Padding(
+            padding: const EdgeInsets.only(bottom: 16.0),
+            child: ImageField2(
+              label: field.label,
+              image: field.imagem,
+              onTapContainer: field.onTapContainer,
+            ),
+          ),
+        );
+      }  else if (field.isRadioField) {
         if (tempRow.isNotEmpty) {
           rows.add(Row(children: tempRow));
           tempRow = [];
@@ -533,6 +551,37 @@ class ImageField extends StatelessWidget {
               ),
           ],
         ),
+      ],
+    );
+  }
+}
+
+class ImageField2 extends StatelessWidget {
+  final String label;
+  final String? image;
+  final void Function()? onTapContainer;
+
+  const ImageField2({super.key, required this.label, this.image, this.onTapContainer});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            color: verde1,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Container(
+              width: MediaQuery.of(context).size.width * 0.22,
+              height: MediaQuery.of(context).size.width * 0.22,
+              color: Colors.grey[300],
+              child: Image.network(image!, fit: BoxFit.cover),
+            ),
       ],
     );
   }

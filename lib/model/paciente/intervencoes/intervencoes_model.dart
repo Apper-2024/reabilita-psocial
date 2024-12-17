@@ -1,15 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class IntervencoesModel {
-  List<ListIntervencoesModel>? listIntervencoes;
+  List<ListIntervencoesModel>? intervencoesModel;
 
-  IntervencoesModel({this.listIntervencoes});
+  IntervencoesModel({this.intervencoesModel});
 
   factory IntervencoesModel.fromMap(Map<String, dynamic> data) {
     return IntervencoesModel(
-      listIntervencoes: data['listIntervencoes'] != null
+      intervencoesModel: data['intervencoesModel'] != null
           ? List<ListIntervencoesModel>.from(
-              data['listIntervencoes'].map((item) => ListIntervencoesModel.fromMap(item)),
+              data['intervencoesModel'].map((item) => ListIntervencoesModel.fromMap(item)),
             )
           : null,
     );
@@ -17,7 +17,7 @@ class IntervencoesModel {
 
   Map<String, dynamic> toMap() {
     return {
-      'listIntervencoes': listIntervencoes?.map((item) => item.toMap()).toList(),
+      'intervencoesModel': intervencoesModel?.map((item) => item.toMap()).toList(),
     };
   }
 }

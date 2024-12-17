@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:reabilita_social/model/paciente/agenda/agenda_model.dart';
+import 'package:reabilita_social/model/paciente/avaliacao/avaliacao_model.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/desejo_model.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/diagnostico_multiprofissional_model.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/doencas_clinicas_model.dart';
@@ -6,9 +8,11 @@ import 'package:reabilita_social/model/paciente/diagnostico/medicacoes_model.dar
 import 'package:reabilita_social/model/paciente/diagnostico/outras_informacoes_model.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/potencialidade_model.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/recurso_individuais_model.dart';
+import 'package:reabilita_social/model/paciente/evolucao/evolucao_model.dart';
 import 'package:reabilita_social/model/paciente/intervencoes/intervencoes_model.dart';
 import 'package:reabilita_social/model/paciente/metas/meta_model.dart';
 import 'package:reabilita_social/model/paciente/paciente_model.dart';
+import 'package:reabilita_social/model/paciente/pactuacoes/pactuacao_model.dart';
 
 class PacienteProvider with ChangeNotifier {
   static final PacienteProvider _instance = PacienteProvider._internal();
@@ -81,8 +85,33 @@ class PacienteProvider with ChangeNotifier {
     notifyListeners();
   }
 
-    void setUpdateIntervencao(IntervencoesModel u) {
+  void setUpdateIntervencao(IntervencoesModel u) {
     _paciente?.intervencoesModel = u;
     notifyListeners();
+  }
+
+  void setUpdatePactuacao(ListPactuacaoModel u) {
+    _paciente?.pactuacoesModel = u;
+    notifyListeners();
+  }
+
+  void setUpdateAgenda(AgendaModel u) {
+    _paciente?.listaAgendaModel = u;
+    notifyListeners();
+  }
+
+  void setUpdateAvaliacoes(AvaliacaoModel u) {
+    _paciente?.avaliacoesModel = u;
+    notifyListeners();
+  }
+
+  void setUpdateEvolucao(ListEvolucao u) {
+    _paciente?.evolucoesModel?.evolucoesModel ??= [];
+
+    bool exists = _paciente!.evolucoesModel!.evolucoesModel!.any((item) => item.dataCriancao == u.dataCriancao);
+    if (!exists) {
+      _paciente?.evolucoesModel?.evolucoesModel?.add(u);
+      notifyListeners();
+    }
   }
 }

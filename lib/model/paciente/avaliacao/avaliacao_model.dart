@@ -1,20 +1,42 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AvaliacaoModel {
+  List<ListAvaliacao>? avaliacoesModel;
+
+  AvaliacaoModel({
+    this.avaliacoesModel,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'avaliacoesModel': avaliacoesModel?.map((e) => e.toMap()).toList(),
+    };
+  }
+
+  factory AvaliacaoModel.fromMap(Map<String, dynamic> map) {
+    return AvaliacaoModel(
+      avaliacoesModel: map['avaliacoesModel'] != null
+          ? List<ListAvaliacao>.from(map['avaliacoesModel'].map((x) => ListAvaliacao.fromMap(x)))
+          : null,
+    );
+  }
+}
+
+class ListAvaliacao {
   String? intervencao;
   String? responsavel;
   String? avaliacao;
   String? observacao;
   String? foto;
-  Timestamp? data;
+  Timestamp? dataCriacao;
 
-  AvaliacaoModel({
+  ListAvaliacao({
     this.intervencao,
     this.responsavel,
     this.avaliacao,
     this.observacao,
     this.foto,
-    this.data,
+    this.dataCriacao,
   });
 
   Map<String, dynamic> toMap() {
@@ -24,18 +46,18 @@ class AvaliacaoModel {
       'avaliacao': avaliacao,
       'observacao': observacao,
       'foto': foto,
-      'data': data,
+      'dataCriacao': dataCriacao,
     };
   }
 
-  factory AvaliacaoModel.fromMap(Map<String, dynamic> map) {
-    return AvaliacaoModel(
+  factory ListAvaliacao.fromMap(Map<String, dynamic> map) {
+    return ListAvaliacao(
       intervencao: map['intervencao'],
       responsavel: map['responsavel'],
       avaliacao: map['avaliacao'],
       observacao: map['observacao'],
       foto: map['foto'],
-      data: map['data'],
+      dataCriacao: map['dataCriacao'],
     );
   }
 }

@@ -22,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
           borderRadius: BorderRadius.circular(16.0),
         ),
         insetPadding: const EdgeInsets.all(16.0),
-        child: VideoPlayerWidget(videoPath: 'assets/video/PRP.mp4'),
+        child: const VideoPlayerWidget(videoPath: 'assets/video/PRP.mp4'),
       ),
     );
   }
@@ -41,7 +41,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     // Cabeçalho
                     Header(
-                      notificationCount: 4,
                     ),
                     const SizedBox(height: 16),
 

@@ -1,9 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:reabilita_social/model/paciente/evolucao/evolucao_model.dart';
+import 'package:reabilita_social/provider/paciente_provider.dart';
+import 'package:reabilita_social/provider/profissional_provider.dart';
+import 'package:reabilita_social/repository/paciente/gerencia_paciente_repository.dart';
 import 'package:reabilita_social/utils/colors.dart';
+import 'package:reabilita_social/utils/snack/snack_atencao.dart';
+import 'package:reabilita_social/utils/snack/snack_erro.dart';
+import 'package:reabilita_social/utils/snack/snack_sucesso.dart';
 import 'package:reabilita_social/widgets/botao/botaoPrincipal.dart';
 import 'package:table_calendar/table_calendar.dart';
-
-
 
 class EvolucaoPacientePage extends StatefulWidget {
   const EvolucaoPacientePage({super.key});
@@ -18,7 +25,17 @@ class _EvolucaoPacientePageState extends State<EvolucaoPacientePage> {
   TextEditingController comentarioController = TextEditingController();
   Map<DateTime, List<String>> comentarios = {};
 
+  bool _carregando = false;
   void _adicionarComentario() {
+    PacienteProvider pacienteProvider = PacienteProvider.instance;
+    EvolucaoModel? evolucao = pacienteProvider.paciente!.evolucoesModel;
+    ProfissionalProvider profissionalProvider = ProfissionalProvider.instance;
+
+    ListEvolucao novoComentario = ListEvolucao(
+      comentario: comentarioController.text,
+      nome: pacienteProvider.paciente!.dadosPacienteModel.nome,
+      dataCriancao: Timestamp.now(),
+    );
     showModalBottomSheet(
       backgroundColor: background,
       context: context,
@@ -52,15 +69,40 @@ class _EvolucaoPacientePageState extends State<EvolucaoPacientePage> {
             const SizedBox(height: 20),
             Botaoprincipal(
               text: 'Salvar Comentário',
-              onPressed: () {
-                setState(() {
-                  if (comentarioController.text.isNotEmpty) {
-                    comentarios[selectedDate] ??= [];
-                    comentarios[selectedDate]!.add(comentarioController.text);
-                    comentarioController.clear();
-                    Navigator.pop(context); // Fecha o BottomSheet
+              carregando: _carregando,
+              onPressed: () async {
+                try {
+                  if (comentarioController.text.isEmpty) {
+                    snackAtencao(context, "Digite um comentário para salvar");
+                    return;
                   }
-                });
+                  setState(() {
+                    _carregando = true;
+                  });
+                  evolucao ??= EvolucaoModel(evolucoesModel: []);
+
+                  novoComentario.dataCriancao = Timestamp.now();
+                  novoComentario.comentario = comentarioController.text;
+                  novoComentario.nome = profissionalProvider.profissional!.nome;
+
+                  evolucao!.evolucoesModel!.add(novoComentario);
+
+                  await GerenciaPacienteRepository()
+                      .cadastraEvolucao(evolucao!, pacienteProvider.paciente!.dadosPacienteModel.uidDocumento);
+
+                  pacienteProvider.setUpdateEvolucao(novoComentario);
+                  setState(() {
+                    _carregando = false;
+                  });
+                  snackSucesso(context, "Comentário salvo com sucesso");
+                  Navigator.of(context).pop();
+                } catch (e) {
+                  setState(() {
+                    _carregando = false;
+                  });
+                  print(e);
+                  snackErro(context, "Erro ao salvar comentário");
+                }
               },
             ),
           ],
@@ -69,15 +111,15 @@ class _EvolucaoPacientePageState extends State<EvolucaoPacientePage> {
     );
   }
 
-  int _comentariosCount(DateTime day) {
-    return comentarios[day]?.length ?? 0;
+  int _comentariosCount(DateTime day, EvolucaoModel? evolucaoModel) {
+    if (evolucaoModel == null) return 0;
+    return evolucaoModel.evolucoesModel?.where((e) => isSameDay(e.dataCriancao?.toDate(), day)).length ?? 0;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: background,
-
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: Text(
@@ -92,138 +134,166 @@ class _EvolucaoPacientePageState extends State<EvolucaoPacientePage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Center(
-              child: Column(
-                children: [
-                  CircleAvatar(
-                    backgroundImage: AssetImage('assets/paciente.jpg'),
-                    radius: 50,
+        child: Consumer<PacienteProvider>(
+          builder: (context, value, child) {
+            final pacienteProvider = value.paciente;
+            final evolucaoModel = pacienteProvider?.evolucoesModel;
+
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Column(
+                    children: [
+                      ClipOval(
+                        child: Image.network(
+                          pacienteProvider!.dadosPacienteModel.urlFoto,
+                          width: 78,
+                          height: 78,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        pacienteProvider.dadosPacienteModel.nome,
+                        style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        pacienteProvider.dadosPacienteModel.outrasInformacoes.observacao ?? '',
+                        style: const TextStyle(color: Colors.grey),
+                      ),
+                    ],
                   ),
-                  SizedBox(height: 10),
-                  Text(
-                    "Fernanda da Silva",
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    "20 anos, depressão e ansiedade",
-                    style: TextStyle(color: Colors.grey),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
-            TableCalendar(
-              locale: 'pt_BR',
-              firstDay: DateTime.utc(2020, 1, 1),
-              lastDay: DateTime.utc(2030, 12, 31),
-              focusedDay: selectedDate,
-              calendarFormat: calendarFormat,
-              selectedDayPredicate: (day) => isSameDay(day, selectedDate),
-              onDaySelected: (selectedDay, focusedDay) {
-                setState(() {
-                  selectedDate = selectedDay;
-                });
-              },
-              onFormatChanged: (format) {
-                setState(() {
-                  calendarFormat = format;
-                });
-              },
-              availableCalendarFormats: const {
-                CalendarFormat.month: 'Mês',
-                CalendarFormat.twoWeeks: '2 Semanas',
-                CalendarFormat.week: 'Semana',
-              },
-              calendarStyle: const CalendarStyle(
-                todayDecoration: BoxDecoration(
-                  color: verde2,
-                  shape: BoxShape.circle,
                 ),
-              ),
-              calendarBuilders: CalendarBuilders(
-                markerBuilder: (context, date, events) {
-                  int count = _comentariosCount(date);
-                  if (count > 0) {
-                    return Positioned(
-                      bottom: 4,
-                      right: 4,
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          color: bege,
+                const SizedBox(height: 16),
+                TableCalendar(
+                  locale: 'pt_BR',
+                  firstDay: DateTime.utc(2020, 1, 1),
+                  lastDay: DateTime.utc(2030, 12, 31),
+                  focusedDay: selectedDate,
+                  calendarFormat: calendarFormat,
+                  selectedDayPredicate: (day) => isSameDay(day, selectedDate),
+                  onDaySelected: (selectedDay, focusedDay) {
+                    setState(() {
+                      selectedDate = selectedDay;
+                    });
+                  },
+                  onFormatChanged: (format) {
+                    setState(() {
+                      calendarFormat = format;
+                    });
+                  },
+                  availableCalendarFormats: const {
+                    CalendarFormat.month: 'Mês',
+                    CalendarFormat.twoWeeks: '2 Semanas',
+                    CalendarFormat.week: 'Semana',
+                  },
+                  calendarStyle: const CalendarStyle(
+                    todayDecoration: BoxDecoration(
+                      color: verde2,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  calendarBuilders: CalendarBuilders(
+                    markerBuilder: (context, date, events) {
+                      int count = _comentariosCount(date, evolucaoModel);
+                      if (count > 0) {
+                        return Positioned(
+                          bottom: 4,
+                          right: 4,
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              color: bege,
+                              shape: BoxShape.circle,
+                            ),
+                            padding: const EdgeInsets.all(6),
+                            child: Text(
+                              '$count',
+                              style: const TextStyle(color: Colors.black87, fontSize: 12),
+                            ),
+                          ),
+                        );
+                      }
+                      return null;
+                    },
+                    selectedBuilder: (context, date, _) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: Colors.green[900],
                           shape: BoxShape.circle,
                         ),
-                        padding: const EdgeInsets.all(6),
+                        margin: const EdgeInsets.all(6.0),
+                        alignment: Alignment.center,
                         child: Text(
-                          '$count',
-                          style: const TextStyle(color: Colors.black87, fontSize: 12),
+                          '${date.day}',
+                          style: const TextStyle(color: Colors.white),
                         ),
-                      ),
-                    );
-                  }
-                  return null;
-                },
-                selectedBuilder: (context, date, _) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: Colors.green[900],
-                      shape: BoxShape.circle,
-                    ),
-                    margin: const EdgeInsets.all(6.0),
-                    alignment: Alignment.center,
-                    child: Text(
-                      '${date.day}',
-                      style: const TextStyle(color: Colors.white),
-                    ),
-                  );
-                },
-                defaultBuilder: (context, date, _) {
-                  int count = _comentariosCount(date);
-                  return Container(
-                    margin: const EdgeInsets.all(6.0),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: count > 0 ? Colors.green[300] : Colors.transparent,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Text(
-                      '${date.day}',
-                      style: TextStyle(
-                        color: count > 0 ? Colors.black : Colors.grey,
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-            const SizedBox(height: 20),
-            Text(
-              "Evolução para ${selectedDate.day}/${selectedDate.month}/${selectedDate.year}",
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-            if (comentarios[selectedDate]?.isNotEmpty ?? false)
-              Expanded(
-                child: ListView.builder(
-                  itemCount: comentarios[selectedDate]?.length ?? 0,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      leading: const CircleAvatar(
-                        backgroundImage: AssetImage('assets/psicologo.jpg'),
-                      ),
-                      title: const Text("Dr. Júlia Lorem Ipsum"),
-                      subtitle: Text(comentarios[selectedDate]![index]),
-                    );
-                  },
+                      );
+                    },
+                    defaultBuilder: (context, date, _) {
+                      int count = _comentariosCount(date, evolucaoModel);
+                      return Container(
+                        margin: const EdgeInsets.all(6.0),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: count > 0 ? Colors.green[300] : Colors.transparent,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Text(
+                          '${date.day}',
+                          style: TextStyle(
+                            color: count > 0 ? Colors.black : Colors.grey,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 ),
-              ),
-          ],
+                const SizedBox(height: 20),
+                Text(
+                  "Evolução para ${selectedDate.day}/${selectedDate.month}/${selectedDate.year}",
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 10),
+                Expanded(
+                  child: Builder(
+                    builder: (context) {
+                      final evolucoesFiltradas = evolucaoModel?.evolucoesModel
+                          ?.where((e) => isSameDay(e.dataCriancao?.toDate(), selectedDate))
+                          .toList();
+
+                      if (evolucoesFiltradas == null || evolucoesFiltradas.isEmpty) {
+                        return const Center(
+                          child: Text(
+                            "Nenhuma evolução encontrada",
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                        );
+                      }
+
+                      return ListView.builder(
+                        itemCount: evolucoesFiltradas.length,
+                        itemBuilder: (context, index) {
+                          final evolucao = evolucoesFiltradas[index];
+                          return ListTile(
+                            leading: const CircleAvatar(
+                              backgroundImage: AssetImage('assets/psicologo.jpg'),
+                            ),
+                            title: Text(evolucao.nome ?? "Nome não disponível"),
+                            subtitle: Text(evolucao.comentario ?? "Comentário não disponível"),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
+            );
+          },
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _adicionarComentario,
+        onPressed: () => _adicionarComentario(),
         backgroundColor: Colors.green[900],
         child: const Icon(Icons.add, color: Colors.white),
       ),

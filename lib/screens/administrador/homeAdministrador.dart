@@ -13,8 +13,7 @@ class ProfissionaisPage extends StatefulWidget {
   State<ProfissionaisPage> createState() => _ProfissionaisPageState();
 }
 
-class _ProfissionaisPageState extends State<ProfissionaisPage>
-    with TickerProviderStateMixin {
+class _ProfissionaisPageState extends State<ProfissionaisPage> with TickerProviderStateMixin {
   late TabController _controller;
 
   @override
@@ -50,16 +49,15 @@ class _ProfissionaisPageState extends State<ProfissionaisPage>
         appBar: AppBar(
           backgroundColor: background,
           elevation: 0,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.black),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
+          // leading: IconButton(
+          //   icon: const Icon(Icons.arrow_back, color: Colors.black),
+          //   onPressed: () {
+          //     Navigator.pop(context);
+          //   },
+          // ),
           title: const Text(
             "Profissionais",
-            style: TextStyle(
-                color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
+            style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
           ),
           actions: [
             PopupMenuButton<String>(

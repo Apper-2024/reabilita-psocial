@@ -5,12 +5,10 @@ import '../utils/colors.dart';
 
 class Header extends StatelessWidget {
   // final String imageUrl;
-  final int notificationCount;
 
-  Header(
-      {super.key,
-      //  required this.imageUrl,
-      required this.notificationCount});
+  Header({
+    super.key,
+  });
 
   ProfissionalProvider profissionalProvider = ProfissionalProvider.instance;
   @override
@@ -34,37 +32,13 @@ class Header extends StatelessWidget {
                 AuthRepository().signOut();
                 Navigator.pushNamed(context, '/login');
               },
-              child: Stack(
+              child: const Stack(
                 children: [
-                  const Icon(
-                    Icons.notification_add_outlined,
+                  Icon(
+                    Icons.exit_to_app,
                     size: 38,
                     color: preto1,
                   ),
-                  if (notificationCount > 0)
-                    Positioned(
-                      right: 0,
-                      child: Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: const BoxDecoration(
-                          color: verde1,
-                          shape: BoxShape.circle,
-                        ),
-                        constraints: const BoxConstraints(
-                          minWidth: 20,
-                          minHeight: 20,
-                        ),
-                        child: Text(
-                          '$notificationCount',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
                 ],
               ),
             ),

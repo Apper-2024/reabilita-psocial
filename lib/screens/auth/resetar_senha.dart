@@ -8,7 +8,7 @@ import 'package:reabilita_social/utils/snack/snack_sucesso.dart';
 class BottomSheetRedefinirSenha {
   static void show(BuildContext context) {
     final TextEditingController emailController = TextEditingController();
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
 
     showModalBottomSheet(
       context: context,
@@ -29,12 +29,12 @@ class BottomSheetRedefinirSenha {
             bottom: MediaQuery.of(context).viewInsets.bottom + 20.0,
           ),
           child: Form(
-            key: _formKey,
+            key: formKey,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Center(
+                const Center(
                   child: Text(
                     "Redefinir Senha",
                     style: TextStyle(
@@ -74,7 +74,7 @@ class BottomSheetRedefinirSenha {
                 Center(
                   child: ElevatedButton(
                     onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
+                      if (formKey.currentState!.validate()) {
                         try {
                           await AuthRepository()
                               .trocarSenha(emailController.text.trim());

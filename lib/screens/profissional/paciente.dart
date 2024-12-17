@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reabilita_social/controller/image_controller.dart';
 import 'package:reabilita_social/enum/enum_meta.dart';
+import 'package:reabilita_social/model/paciente/agenda/agenda_model.dart';
+import 'package:reabilita_social/model/paciente/avaliacao/avaliacao_model.dart';
 import 'package:reabilita_social/model/paciente/dadosPaciente/dados_paciente_model.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/desejo_model.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/diagnostico_modal.dart';
@@ -16,6 +18,7 @@ import 'package:reabilita_social/model/paciente/diagnostico/potencialidade_model
 import 'package:reabilita_social/model/paciente/diagnostico/recurso_individuais_model.dart';
 import 'package:reabilita_social/model/paciente/intervencoes/intervencoes_model.dart';
 import 'package:reabilita_social/model/paciente/metas/meta_model.dart';
+import 'package:reabilita_social/model/paciente/pactuacoes/pactuacao_model.dart';
 import 'package:reabilita_social/provider/paciente_provider.dart';
 import 'package:reabilita_social/repository/paciente/gerencia_paciente_repository.dart';
 import 'package:reabilita_social/screens/profissional/detalhes_paciente.dart';
@@ -1606,9 +1609,9 @@ class _PacienteScreenState extends State<PacienteScreen> {
 
                                     intervencaoModel.dataCriacao = Timestamp.now();
 
-                                    intervencao ??= IntervencoesModel(listIntervencoes: []);
+                                    intervencao ??= IntervencoesModel(intervencoesModel: []);
 
-                                    intervencao!.listIntervencoes?.add(intervencaoModel);
+                                    intervencao!.intervencoesModel?.add(intervencaoModel);
 
                                     await GerenciaPacienteRepository().cadastrarIntervencao(
                                       intervencao!,
@@ -1617,6 +1620,530 @@ class _PacienteScreenState extends State<PacienteScreen> {
 
                                     pacienteProvider.setUpdateIntervencao(intervencao!);
 
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                    snackSucesso(context, "Cadastrado com sucesso");
+                                  } catch (e) {
+                                    print("Erro: $e");
+                                    snackErro(context, "Erro ao cadastrar intervenção");
+                                    return;
+                                  }
+                                },
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _dialogAdicionaPactuacao(PacienteProvider pacienteProvider, ListPactuacaoModel? pactuacao) async {
+    PactuacaoModel pactuacaoModel = PactuacaoModel(
+      prazo: '',
+      responsavel: '',
+      dataCriacao: Timestamp.now(),
+      familia: '',
+      foto: '',
+      paciente: '',
+      responsavelPactuacao: '',
+    );
+    Uint8List? image;
+
+    final formKey = GlobalKey<FormState>();
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setStateDialog) {
+              return SingleChildScrollView(
+                child: Form(
+                  key: formKey,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    decoration: const BoxDecoration(
+                      color: background,
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                    padding: const EdgeInsets.all(26),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Cadastro de Pactuação',
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 16),
+                        TextFieldCustom(
+                          tipoTexto: TextInputType.text,
+                          hintText: "ex. João",
+                          labelText: "Responsavel pela pactuação",
+                          senha: false,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Campo obrigatório';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            pactuacaoModel.responsavelPactuacao = value!;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        TextFieldCustom(
+                          tipoTexto: TextInputType.text,
+                          hintText: "ex. Paulo",
+                          labelText: "Responsavel pelo paciente",
+                          senha: false,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Campo obrigatório';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            pactuacaoModel.responsavel = value!;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        TextFieldCustom(
+                          tipoTexto: TextInputType.text,
+                          hintText: "....",
+                          labelText: "Prazo",
+                          senha: false,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Campo obrigatório';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            pactuacaoModel.prazo = value!;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        TextFieldCustom(
+                          tipoTexto: TextInputType.text,
+                          hintText: ".....",
+                          labelText: "Família",
+                          senha: false,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Campo obrigatório';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            pactuacaoModel.familia = value!;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        Wrap(
+                          alignment: WrapAlignment.center,
+                          spacing: 12,
+                          children: [
+                            if (image != null)
+                              Container(
+                                width: MediaQuery.of(context).size.width * 0.22,
+                                height: MediaQuery.of(context).size.width * 0.22,
+                                color: Colors.grey[300],
+                                child: Image.memory(image!, fit: BoxFit.cover),
+                              ),
+                            if (image == null)
+                              InkWell(
+                                onTap: () {
+                                  ImagePickerUtil.pegarFoto(context, (foto) {
+                                    setStateDialog(() {
+                                      image = foto;
+                                    });
+                                  });
+                                },
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width * 0.22,
+                                  height: MediaQuery.of(context).size.width * 0.22,
+                                  color: Colors.grey[300],
+                                  child: const Icon(Icons.add_a_photo),
+                                ),
+                              ),
+                          ],
+                        ),
+                        const SizedBox(height: 32),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Botaoprincipal(
+                                text: "Cancelar",
+                                cor: vermelho,
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Botaoprincipal(
+                                text: "Cadastrar",
+                                onPressed: () async {
+                                  try {
+                                    if (!formKey.currentState!.validate()) {
+                                      snackAtencao(context, "Preencha todos os campos");
+                                      return;
+                                    }
+                                    if (image == null) {
+                                      snackAtencao(context, "Selecione uma ATA");
+                                      return;
+                                    }
+
+                                    formKey.currentState!.save();
+
+                                    pactuacaoModel.dataCriacao = Timestamp.now();
+                                    pactuacaoModel.paciente = pacienteProvider.paciente!.dadosPacienteModel.nome;
+
+                                    pactuacao ??= ListPactuacaoModel(pactuacoesModel: []);
+
+                                    await GerenciaPacienteRepository().cadastrarPactuacao(
+                                        pactuacao!,
+                                        pacienteProvider.paciente!.dadosPacienteModel.uidDocumento,
+                                        pactuacaoModel,
+                                        image!);
+
+                                    pacienteProvider.setUpdatePactuacao(pactuacao!);
+
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                    snackSucesso(context, "Cadastrado com sucesso");
+                                  } catch (e) {
+                                    print("Erro: $e");
+                                    snackErro(context, "Erro ao cadastrar intervenção");
+                                    return;
+                                  }
+                                },
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _dialogAdicionaEstudoCaso(PacienteProvider pacienteProvider, AgendaModel? agenda) async {
+    AgendaList agendaList = AgendaList(dataCriacao: Timestamp.now(), participantes: "", pauta: "");
+
+    final formKey = GlobalKey<FormState>();
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setStateDialog) {
+              return SingleChildScrollView(
+                child: Form(
+                  key: formKey,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    decoration: const BoxDecoration(
+                      color: background,
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                    padding: const EdgeInsets.all(26),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Cadastro de Agenda de Estudos',
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 16),
+                        TextFieldCustom(
+                          tipoTexto: TextInputType.text,
+                          hintText: "ex. João, José",
+                          labelText: "Participantes",
+                          maxLines: 5,
+                          minLines: 1,
+                          senha: false,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Campo obrigatório';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            agendaList.participantes = value!;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        TextFieldCustom(
+                          tipoTexto: TextInputType.text,
+                          hintText: ".......",
+                          labelText: "Pauta",
+                          senha: false,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Campo obrigatório';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            agendaList.pauta = value!;
+                          },
+                        ),
+                        const SizedBox(height: 32),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Botaoprincipal(
+                                text: "Cancelar",
+                                cor: vermelho,
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Botaoprincipal(
+                                text: "Cadastrar",
+                                onPressed: () async {
+                                  try {
+                                    if (!formKey.currentState!.validate()) {
+                                      snackAtencao(context, "Preencha todos os campos");
+                                      return;
+                                    }
+
+                                    formKey.currentState!.save();
+
+                                    agendaList.dataCriacao = Timestamp.now();
+
+                                    agenda ??= AgendaModel(listaAgendaModel: []);
+
+                                    agenda!.listaAgendaModel?.add(agendaList);
+
+                                    await GerenciaPacienteRepository().cadastrarAgenda(
+                                      agenda!,
+                                      pacienteProvider.paciente!.dadosPacienteModel.uidDocumento,
+                                    );
+
+                                    pacienteProvider.setUpdateAgenda(agenda!);
+
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                    snackSucesso(context, "Cadastrado com sucesso");
+                                  } catch (e) {
+                                    print("Erro: $e");
+                                    snackErro(context, "Erro ao cadastrar intervenção");
+                                    return;
+                                  }
+                                },
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _dialogAvaliacaoProgramada(PacienteProvider pacienteProvider, AvaliacaoModel? avaliacao) async {
+    ListAvaliacao avaliacaoModel = ListAvaliacao(
+        dataCriacao: Timestamp.now(), avaliacao: null, intervencao: '', responsavel: '', observacao: "", foto: "");
+
+    Uint8List? image;
+
+    final formKey = GlobalKey<FormState>();
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setStateDialog) {
+              return SingleChildScrollView(
+                child: Form(
+                  key: formKey,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    decoration: const BoxDecoration(
+                      color: background,
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                    padding: const EdgeInsets.all(26),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Cadastro de Agenda de Estudos',
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 16),
+                        const SizedBox(height: 16),
+                        TextFieldCustom(
+                          tipoTexto: TextInputType.text,
+                          hintText: ".......",
+                          labelText: "Responsavel",
+                          senha: false,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Campo obrigatório';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            avaliacaoModel.responsavel = value!;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        TextFieldCustom(
+                          tipoTexto: TextInputType.text,
+                          hintText: ".......",
+                          labelText: "Intervenção",
+                          senha: false,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Campo obrigatório';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            avaliacaoModel.intervencao = value!;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        CustomDropdownButton(
+                          hint: 'Avaliação',
+                          items: prazo,
+                          onChanged: (value) {
+                            setStateDialog(() {
+                              avaliacaoModel.avaliacao = value!;
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        TextFieldCustom(
+                          tipoTexto: TextInputType.text,
+                          hintText: ".......",
+                          labelText: "Observações",
+                          senha: false,
+                          maxLines: 5,
+                          minLines: 1,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Campo obrigatório';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            avaliacaoModel.observacao = value!;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        Wrap(
+                          alignment: WrapAlignment.center,
+                          spacing: 12,
+                          children: [
+                            if (image != null)
+                              Container(
+                                width: MediaQuery.of(context).size.width * 0.22,
+                                height: MediaQuery.of(context).size.width * 0.22,
+                                color: Colors.grey[300],
+                                child: Image.memory(image!, fit: BoxFit.cover),
+                              ),
+                            if (image == null)
+                              InkWell(
+                                onTap: () {
+                                  ImagePickerUtil.pegarFoto(context, (foto) {
+                                    setStateDialog(() {
+                                      image = foto;
+                                    });
+                                  });
+                                },
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width * 0.22,
+                                  height: MediaQuery.of(context).size.width * 0.22,
+                                  color: Colors.grey[300],
+                                  child: const Icon(Icons.add_a_photo),
+                                ),
+                              ),
+                          ],
+                        ),
+                        const SizedBox(height: 32),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Botaoprincipal(
+                                text: "Cancelar",
+                                cor: vermelho,
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Botaoprincipal(
+                                text: "Cadastrar",
+                                onPressed: () async {
+                                  try {
+                                    if (!formKey.currentState!.validate()) {
+                                      snackAtencao(context, "Preencha todos os campos");
+                                      return;
+                                    }
+                                    if (image == null) {
+                                      snackAtencao(context, "Selecione uma imagem");
+                                      return;
+                                    }
+
+                                    formKey.currentState!.save();
+                                    if (avaliacaoModel.avaliacao == null) {
+                                      snackAtencao(context, "Selecione uma avaliação");
+                                      return;
+                                    }
+                                    avaliacaoModel.dataCriacao = Timestamp.now();
+
+                                    avaliacao ??= AvaliacaoModel(avaliacoesModel: []);
+
+                                    await GerenciaPacienteRepository().cadastrarAvaliacao(
+                                        avaliacao!,
+                                        pacienteProvider.paciente!.dadosPacienteModel.uidDocumento,
+                                        avaliacaoModel,
+                                        image!);
+
+                                    pacienteProvider.setUpdateAvaliacoes(avaliacao!);
+
+                                    Navigator.pop(context);
                                     Navigator.pop(context);
                                     snackSucesso(context, "Cadastrado com sucesso");
                                   } catch (e) {
@@ -2303,7 +2830,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
                 _dialogAdicionaIntervencao(pacienteProvider, intervencoesModel);
               },
               conteudos: [
-                if (intervencoesModel == null || intervencoesModel.listIntervencoes?.isEmpty == true)
+                if (intervencoesModel == null || intervencoesModel.intervencoesModel?.isEmpty == true)
                   ItemConteudo(
                     titulo: 'Nenhum Intervenção Cadastrada',
                     onTap: () {
@@ -2314,7 +2841,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
                     },
                   )
                 else
-                  ...?intervencoesModel.listIntervencoes?.map((e) => ItemConteudo(
+                  ...?intervencoesModel.intervencoesModel?.map((e) => ItemConteudo(
                         titulo: 'Intervenção - ${formatTimesTamp(e.dataCriacao) ?? 'Data não disponível'}',
                         onTap: () => Navigator.of(context).push(
                           MaterialPageRoute(
@@ -2365,135 +2892,217 @@ class _PacienteScreenState extends State<PacienteScreen> {
           );
         },
       ),
-      buildCardPaciente(
-        context,
-        icon: Icons.people,
-        text: 'Pactuações',
-        detalhesPaciente: DetalhesPaciente(
-          visible: false,
-          conteudos: [
-            ItemConteudo(
-                titulo: 'Pactuação realizada em 01/05/2013',
-                onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => FormCategoria(
-                        fields: [
-                          FieldConfig(
-                              label: 'Paciente Psiquiátrico', hintText: 'Paciente Psiquiátrico', widthFactor: 1.0),
-                          FieldConfig(
-                              label: 'Responsáveis pela Intervenção',
-                              hintText: 'Responsáveis pela Intervenção do paciente',
-                              widthFactor: 1.0),
-                          FieldConfig(label: 'Prazo', hintText: 'Prazo do paciente', widthFactor: 1.0),
-                          FieldConfig(label: 'Família', hintText: 'Família do paciente', widthFactor: 1.0),
-                          FieldConfig(
-                              label: 'Responsáveis pela Intervenção',
-                              hintText: 'Responsáveis pela Intervenção do paciente',
-                              widthFactor: 1.0),
-                          FieldConfig(label: 'Prazo', hintText: 'Prazo do paciente', widthFactor: 1.0),
-                          FieldConfig(
-                            label: 'Ata da Pactuação',
-                            hintText: '',
-                            isImageField: true,
-                            // images: [
-                            //   const AssetImage(''),
-                            // ],
+      Consumer<PacienteProvider>(
+        builder: (context, value, child) {
+          ListPactuacaoModel? pactuacaoModel = value.paciente!.pactuacoesModel;
+
+          return buildCardPaciente(
+            context,
+            icon: Icons.people,
+            text: 'Pactuações',
+            detalhesPaciente: DetalhesPaciente(
+              visible: true,
+              onPressed: () {
+                _dialogAdicionaPactuacao(pacienteProvider, pactuacaoModel);
+              },
+              conteudos: [
+                if (pactuacaoModel == null || pactuacaoModel.pactuacoesModel?.isEmpty == true)
+                  ItemConteudo(
+                    titulo: 'Nenhuma pactuação cadastrada',
+                    onTap: () {
+                      _dialogAdicionaPactuacao(pacienteProvider, pactuacaoModel);
+                    },
+                    onTap2: () {
+                      print("oi");
+                    },
+                  )
+                else
+                  ...?pactuacaoModel.pactuacoesModel?.map((pactuacao) => ItemConteudo(
+                        titulo: 'Pactuação - ${formatTimesTamp(pactuacao.dataCriacao) ?? 'Data não disponível'}',
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => FormCategoria(
+                              fields: [
+                                FieldConfig(
+                                    label: 'Paciente Psiquiátrico',
+                                    hintText: 'Paciente Psiquiátrico',
+                                    valorInicial: pactuacao.paciente,
+                                    widthFactor: 1.0),
+                                FieldConfig(
+                                    label: 'Responsáveis pela Intervenção',
+                                    hintText: 'Responsáveis pela Intervenção do paciente',
+                                    widthFactor: 1.0,
+                                    valorInicial: pactuacao.responsavel),
+                                FieldConfig(
+                                    label: 'Prazo',
+                                    hintText: 'Prazo do paciente',
+                                    widthFactor: 1.0,
+                                    valorInicial: pactuacao.prazo),
+                                FieldConfig(
+                                    label: 'Família',
+                                    hintText: 'Família do paciente',
+                                    widthFactor: 1.0,
+                                    valorInicial: pactuacao.familia),
+                                FieldConfig(
+                                    label: 'Responsáveis pela Intervenção',
+                                    hintText: 'Responsáveis pela Intervenção do paciente',
+                                    widthFactor: 1.0,
+                                    valorInicial: pactuacao.responsavelPactuacao),
+                                FieldConfig(
+                                  label: 'Ata da Pactuação',
+                                  hintText: '',
+                                  imagem: pactuacao.foto!,
+                                  umaImagem: true,
+                                ),
+                              ],
+                              titulo: 'Pactuação - ${formatTimesTamp(pactuacao.dataCriacao) ?? 'Data não disponível'}',
+                            ),
                           ),
-                        ],
-                        titulo: 'Pactuação realizada em 01/05/2013',
-                      ),
-                    )),
-                onTap2: () {
-                  print("oi");
-                }),
-          ],
-        ),
+                        ),
+                        onTap2: () {
+                          print("oi");
+                        },
+                      )),
+              ],
+            ),
+          );
+        },
       ),
-      buildCardPaciente(
-        context,
-        icon: Icons.calendar_today,
-        text: 'Agenda de Estudo de Caso',
-        detalhesPaciente: DetalhesPaciente(
-          visible: true,
-          conteudos: [
-            ItemConteudo(
-                titulo: 'Agenda de estudo realizada em 01/05/2013',
-                onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => FormCategoria(
-                        fields: [
-                          FieldConfig(label: 'Data da Reunião', hintText: '00/00/0000', widthFactor: 0.5),
-                          FieldConfig(label: 'Pauta', hintText: 'pauta da reuniao', widthFactor: 0.5),
-                          FieldConfig(
-                              label: 'Quem é necessário participar?',
-                              hintText: 'Nomes',
-                              widthFactor: 1.0,
-                              isDoubleHeight: true),
-                        ],
-                        titulo: 'Pactuação realizada em 01/05/2013',
-                      ),
-                    )),
-                onTap2: () {
-                  print("oi");
-                }),
-          ],
-        ),
+      Consumer<PacienteProvider>(
+        builder: (context, value, child) {
+          AgendaModel? agendaModel = value.paciente!.listaAgendaModel;
+
+          return buildCardPaciente(
+            context,
+            icon: Icons.people,
+            text: 'Agenda de Estudo de Caso',
+            detalhesPaciente: DetalhesPaciente(
+              visible: true,
+              onPressed: () {
+                _dialogAdicionaEstudoCaso(pacienteProvider, agendaModel);
+              },
+              conteudos: [
+                if (agendaModel == null || agendaModel.listaAgendaModel?.isEmpty == true)
+                  ItemConteudo(
+                    titulo: 'Nenhuma agenda cadastrada',
+                    onTap: () {
+                      _dialogAdicionaEstudoCaso(pacienteProvider, agendaModel);
+                    },
+                    onTap2: () {
+                      print("oi");
+                    },
+                  )
+                else
+                  ...?agendaModel.listaAgendaModel?.map((agendas) => ItemConteudo(
+                        titulo: 'Agenda de estudo - ${formatTimesTamp(agendas.dataCriacao) ?? 'Data não disponível'}',
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => FormCategoria(
+                              fields: [
+                                FieldConfig(
+                                    label: 'Data da Reunião',
+                                    hintText: formatTimesTamp(agendas.dataCriacao)!,
+                                    widthFactor: 0.5,
+                                    valorInicial: formatTimesTamp(agendas.dataCriacao)),
+                                FieldConfig(
+                                    label: 'Pauta',
+                                    hintText: 'pauta da reuniao',
+                                    widthFactor: 0.5,
+                                    valorInicial: formatTimesTamp(agendas.dataCriacao)),
+                                FieldConfig(
+                                    label: 'Quem é necessário participar?',
+                                    hintText: 'Nomes',
+                                    widthFactor: 1.0,
+                                    isDoubleHeight: true,
+                                    valorInicial: formatTimesTamp(agendas.dataCriacao)),
+                              ],
+                              titulo:
+                                  'Agenda de estudo - ${formatTimesTamp(agendas.dataCriacao) ?? 'Data não disponível'}',
+                            ),
+                          ),
+                        ),
+                        onTap2: () {
+                          print("oi");
+                        },
+                      )),
+              ],
+            ),
+          );
+        },
       ),
-      buildCardPaciente(
-        context,
-        icon: Icons.assessment,
-        text: 'Avaliação do Projeto de Reabilitação Psicossocial',
-        detalhesPaciente: DetalhesPaciente(
-          visible: true,
-          conteudos: [
-            ItemConteudo(
-                titulo: 'Avaliação Programada do PRP (A CADA 2 MESES) - 01/05/2013',
-                onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => FormCategoria(
-                        fields: [
-                          FieldConfig(
-                              label: 'Intervenção/Pactuação', hintText: 'Nome da Intervenção', widthFactor: 1.0),
-                          FieldConfig(label: 'Responsável?', hintText: 'Nomes', widthFactor: 1.0),
-                          FieldConfig(
-                            label: 'Cumpriu Totalmente',
-                            hintText: '',
-                            isRadioField: true,
+      Consumer<PacienteProvider>(builder: (context, value, child) {
+        AvaliacaoModel? avaliacaoModel = value.paciente!.avaliacoesModel;
+        return buildCardPaciente(
+          context,
+          icon: Icons.assessment,
+          text: 'Avaliação do Projeto de Reabilitação Psicossocial',
+          detalhesPaciente: DetalhesPaciente(
+            visible: true,
+            onPressed: () {
+              _dialogAvaliacaoProgramada(pacienteProvider, avaliacaoModel);
+            },
+            conteudos: [
+              if (avaliacaoModel == null || avaliacaoModel.avaliacoesModel?.isEmpty == true)
+                ItemConteudo(
+                  titulo: 'Nenhuma agenda cadastrada',
+                  onTap: () {
+                    _dialogAvaliacaoProgramada(pacienteProvider, avaliacaoModel);
+                  },
+                  onTap2: () {
+                    print("oi");
+                  },
+                )
+              else
+                ...?avaliacaoModel.avaliacoesModel?.map((avaliacoes) => ItemConteudo(
+                      titulo:
+                          'Avaliação Programada do PRP (A CADA 2 MESES) - ${formatTimesTamp(avaliacoes.dataCriacao)}',
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => FormCategoria(
+                            fields: [
+                              FieldConfig(
+                                  label: 'Intervenção/Pactuação',
+                                  hintText: 'Nome da Intervenção',
+                                  widthFactor: 1.0,
+                                  valorInicial: avaliacoes.intervencao),
+                              FieldConfig(
+                                  label: 'Responsável?',
+                                  hintText: 'Nomes',
+                                  widthFactor: 1.0,
+                                  valorInicial: avaliacoes.responsavel),
+                              FieldConfig(
+                                  label: 'Avaliação dos Prazos do Projeto',
+                                  hintText: '',
+                                  isRadioField: true,
+                                  valorInicial: avaliacoes.intervencao),
+                              FieldConfig(
+                                  label: 'Observação',
+                                  hintText: 'Observação do Paciente',
+                                  widthFactor: 1.0,
+                                  valorInicial: avaliacoes.observacao,
+                                  isDoubleHeight: true),
+                              FieldConfig(
+                                label: 'Imagens do Paciente',
+                                hintText: '',
+                                imagem: avaliacoes.foto,
+                                umaImagem: true,
+                              ),
+                            ],
+                            titulo:
+                                'Agenda de estudo - ${formatTimesTamp(avaliacoes.dataCriacao) ?? 'Data não disponível'}',
                           ),
-                          FieldConfig(
-                            label: 'Cumpriu Parcialmente',
-                            hintText: '',
-                            isRadioField: true,
-                          ),
-                          FieldConfig(
-                            label: 'Não Cumpriu',
-                            hintText: '',
-                            isRadioField: true,
-                          ),
-                          FieldConfig(
-                              label: 'Observação',
-                              hintText: 'Observação do Paciente',
-                              widthFactor: 1.0,
-                              isDoubleHeight: true),
-                          FieldConfig(
-                            label: 'Imagens do Paciente',
-                            hintText: '',
-                            isImageField: true,
-                            // images: [
-                            //   const AssetImage(''),
-                            //   const AssetImage(''),
-                            //   const NetworkImage(''),
-                            //   const NetworkImage(''),
-                            // ],
-                          ),
-                        ],
-                        titulo: 'Avaliação Programada do PRP (A CADA 2 MESES) - 01/05/2013',
+                        ),
                       ),
+                      onTap2: () {
+                        print("oi");
+                      },
                     )),
-                onTap2: () {
-                  print("oi");
-                }),
-          ],
-        ),
-      ),
+            ],
+          ),
+        );
+      })
     ];
+
     return Scaffold(
       backgroundColor: background,
       appBar: AppBar(

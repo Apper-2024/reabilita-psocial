@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:reabilita_social/model/paciente/agenda/agenda_model.dart';
+import 'package:reabilita_social/model/paciente/avaliacao/avaliacao_model.dart';
 import 'package:reabilita_social/model/paciente/dadosPaciente/dados_paciente_model.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/desejo_model.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/diagnostico_modal.dart';
@@ -15,6 +16,7 @@ import 'package:reabilita_social/model/paciente/evolucao/evolucao_model.dart';
 import 'package:reabilita_social/model/paciente/intervencoes/intervencoes_model.dart';
 import 'package:reabilita_social/model/paciente/metas/meta_model.dart';
 import 'package:reabilita_social/model/paciente/paciente_model.dart';
+import 'package:reabilita_social/model/paciente/pactuacoes/pactuacao_model.dart';
 import 'package:reabilita_social/repository/FirebaseError/firebase_error_repository.dart';
 import 'package:uuid/v4.dart';
 
@@ -22,13 +24,11 @@ class GerenciaPacienteRepository {
   final db = FirebaseFirestore.instance;
   final storageRef = FirebaseStorage.instance.ref();
 
-  Future<void> cadastrarPacienteNovo(
-      DadosPacienteModel paciente, Uint8List arquivo, String senha) async {
+  Future<void> cadastrarPacienteNovo(DadosPacienteModel paciente, Uint8List arquivo, String senha) async {
     final uuid = const UuidV4().generate();
     final batch = db.batch();
     try {
-      final imagesRef =
-          storageRef.child("Pacientes/${paciente.uidPaciente}/$uuid.jpg");
+      final imagesRef = storageRef.child("Pacientes/${paciente.uidPaciente}/$uuid.jpg");
       await imagesRef.putData(arquivo);
 
       String imageUrl = await imagesRef.getDownloadURL();
@@ -48,11 +48,11 @@ class GerenciaPacienteRepository {
               outrasInformacoesModel: null,
               potencialidadeModel: null,
               recursoIndividuaisModel: null),
-          evolucoesModel: EvolucaoModel(
-              comentario: null, dataCriancao: null, foto: null, nome: null),
-          intervencoesModel: IntervencoesModel(listIntervencoes: null),
-          listaAgendaModel: AgendaModel(agendas: null),
-          metasModel: MetaModel(metas: null));
+          evolucoesModel: EvolucaoModel(evolucoesModel: null),
+          intervencoesModel: IntervencoesModel(intervencoesModel: null),
+          listaAgendaModel: AgendaModel(listaAgendaModel: null),
+          metasModel: MetaModel(metas: null),
+          pactuacoesModel: ListPactuacaoModel(pactuacoesModel: null));
 
       batch.set(pacienteRef, {
         ...pacienteModel.toMap(),
@@ -69,8 +69,7 @@ class GerenciaPacienteRepository {
     }
   }
 
-  Future<Map<String, Object>?> verificaSenha(
-      String senha, String email, String cns) async {
+  Future<Map<String, Object>?> verificaSenha(String senha, String email, String cns) async {
     try {
       final senhaRef = db
           .collection("Pacientes")
@@ -87,10 +86,7 @@ class GerenciaPacienteRepository {
       final pacienteData = senhaDoc.docs.first.data();
       final pacienteModel = PacienteModel.fromMap(pacienteData);
 
-      return {
-        'paciente': pacienteModel,
-        'uidColletion': senhaDoc.docs.first.reference.id
-      };
+      return {'paciente': pacienteModel, 'uidColletion': senhaDoc.docs.first.reference.id};
     } on FirebaseException catch (e) {
       throw FirebaseErrorRepository.handleFirebaseException(e);
     } catch (e) {
@@ -119,8 +115,7 @@ class GerenciaPacienteRepository {
     }
   }
 
-  Future<void> cadastrarHistoria(HistoriaCasoModel historia,
-      List<Uint8List> arquivos, String uidPaciente) async {
+  Future<void> cadastrarHistoria(HistoriaCasoModel historia, List<Uint8List> arquivos, String uidPaciente) async {
     final uuid = const UuidV4().generate();
     final batch = db.batch();
 
@@ -128,8 +123,7 @@ class GerenciaPacienteRepository {
       List<String> imageUrls = [];
 
       for (var arquivo in arquivos) {
-        final imagesRef =
-            storageRef.child("DiagnosticoMultiprofissional/$uuid.jpg");
+        final imagesRef = storageRef.child("DiagnosticoMultiprofissional/$uuid.jpg");
         await imagesRef.putData(arquivo);
         String imageUrl = await imagesRef.getDownloadURL();
         imageUrls.add(imageUrl);
@@ -153,8 +147,7 @@ class GerenciaPacienteRepository {
     }
   }
 
-  Future<void> cadastrarDesejosSonhos(
-      DesejoModel desejo, String uidPaciente) async {
+  Future<void> cadastrarDesejosSonhos(DesejoModel desejo, String uidPaciente) async {
     final batch = db.batch();
 
     try {
@@ -174,8 +167,7 @@ class GerenciaPacienteRepository {
     }
   }
 
-  Future<void> cadastrarMedicacoes(
-      ListaDeMedicacoes medicacoes, String uidPaciente) async {
+  Future<void> cadastrarMedicacoes(ListaDeMedicacoes medicacoes, String uidPaciente) async {
     final batch = db.batch();
 
     try {
@@ -195,8 +187,7 @@ class GerenciaPacienteRepository {
     }
   }
 
-  Future<void> cadastrarDoenca(
-      ListaDoencaClinica doenca, String uidPaciente) async {
+  Future<void> cadastrarDoenca(ListaDoencaClinica doenca, String uidPaciente) async {
     final batch = db.batch();
 
     try {
@@ -216,8 +207,7 @@ class GerenciaPacienteRepository {
     }
   }
 
-  Future<void> cadastrarOutrasInformacoes(
-      ListaOutrasInformacoes outrasInfo, String uidPaciente) async {
+  Future<void> cadastrarOutrasInformacoes(ListaOutrasInformacoes outrasInfo, String uidPaciente) async {
     final batch = db.batch();
 
     try {
@@ -257,15 +247,96 @@ class GerenciaPacienteRepository {
     }
   }
 
-  Future<void> cadastrarIntervencao(
-      IntervencoesModel intervencao, String uidPaciente) async {
+  Future<void> cadastrarIntervencao(IntervencoesModel intervencao, String uidPaciente) async {
     final batch = db.batch();
 
     try {
       final pacienteRef = db.collection("Pacientes").doc(uidPaciente);
 
       batch.update(pacienteRef, {
-        'IntervencoesModel': intervencao.toMap(),
+        'intervencoesModel': intervencao.toMap(),
+      });
+
+      // Commit do batch
+      await batch.commit();
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorRepository.handleFirebaseException(e);
+    } catch (e) {
+      print(e);
+      throw 'Ops, algo deu errado. Tente novamente mais tarde!';
+    }
+  }
+
+  Future<void> cadastrarPactuacao(
+      ListPactuacaoModel pactuacao, String uidPaciente, PactuacaoModel pactuacaoModel, Uint8List image) async {
+    final batch = db.batch();
+    final uuid = const UuidV4().generate();
+
+    try {
+      final imagesRef = storageRef.child("Pactuacoes/$uuid.jpg");
+      await imagesRef.putData(image);
+      String imageUrl = await imagesRef.getDownloadURL();
+
+      pactuacaoModel.foto = imageUrl;
+
+      pactuacao.pactuacoesModel?.add(pactuacaoModel);
+
+      final pacienteRef = db.collection("Pacientes").doc(uidPaciente);
+
+      batch.update(pacienteRef, {
+        'pactuacoesModel': pactuacao.toMap(),
+      });
+
+      // Commit do batch
+      await batch.commit();
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorRepository.handleFirebaseException(e);
+    } catch (e) {
+      print(e);
+      throw 'Ops, algo deu errado. Tente novamente mais tarde!';
+    }
+  }
+
+
+  Future<void> cadastrarAgenda(AgendaModel agenda, String uidPaciente) async {
+    final batch = db.batch();
+
+    try {
+      final pacienteRef = db.collection("Pacientes").doc(uidPaciente);
+
+      batch.update(pacienteRef, {
+        'listaAgendaModel': agenda.toMap(),
+      });
+
+      // Commit do batch
+      await batch.commit();
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorRepository.handleFirebaseException(e);
+    } catch (e) {
+      print(e);
+      throw 'Ops, algo deu errado. Tente novamente mais tarde!';
+    }
+  }
+ 
+
+   Future<void> cadastrarAvaliacao(
+      AvaliacaoModel avaliacao, String uidPaciente, ListAvaliacao avaliacaoModel, Uint8List image) async {
+    final batch = db.batch();
+    final uuid = const UuidV4().generate();
+
+    try {
+      final imagesRef = storageRef.child("Avaliacoes/$uuid.jpg");
+      await imagesRef.putData(image);
+      String imageUrl = await imagesRef.getDownloadURL();
+
+      avaliacaoModel.foto = imageUrl;
+
+      avaliacao.avaliacoesModel?.add(avaliacaoModel);
+
+      final pacienteRef = db.collection("Pacientes").doc(uidPaciente);
+
+      batch.update(pacienteRef, {
+        'avaliacoesModel': avaliacao.toMap(),
       });
 
       // Commit do batch
@@ -283,8 +354,7 @@ class GerenciaPacienteRepository {
 
     try {
       final pacienteRef = db.collection("Pacientes").doc(uidPaciente);
-      List<Map<String, dynamic>> sonhosVidaMap =
-          desejo.sonhoVida?.map((sonho) => sonho.toMap()).toList() ?? [];
+      List<Map<String, dynamic>> sonhosVidaMap = desejo.sonhoVida?.map((sonho) => sonho.toMap()).toList() ?? [];
 
       batch.update(pacienteRef, {
         'diagnosticoModal.desejoModel.sonhosVida': sonhosVidaMap,
@@ -300,14 +370,12 @@ class GerenciaPacienteRepository {
     }
   }
 
-  Future<String> cadastrarFotoDiagnostico(
-      HistoriaCasoModel historia, Uint8List arquivo, String uidPaciente) async {
+  Future<String> cadastrarFotoDiagnostico(HistoriaCasoModel historia, Uint8List arquivo, String uidPaciente) async {
     final uuid = const UuidV4().generate();
     final batch = db.batch();
 
     try {
-      final imagesRef =
-          storageRef.child("DiagnosticoMultiprofissional/$uuid.jpg");
+      final imagesRef = storageRef.child("DiagnosticoMultiprofissional/$uuid.jpg");
       await imagesRef.putData(arquivo);
       String imageUrl = await imagesRef.getDownloadURL();
 
@@ -330,9 +398,7 @@ class GerenciaPacienteRepository {
     }
   }
 
-  Future<void> updateDiagnostico(
-      List<DiagnosticoMultiprofissionaisModel>? diagnosticos,
-      String uidPaciente) async {
+  Future<void> updateDiagnostico(List<DiagnosticoMultiprofissionaisModel>? diagnosticos, String uidPaciente) async {
     final batch = db.batch();
 
     try {
@@ -340,8 +406,7 @@ class GerenciaPacienteRepository {
 
       // Converte a lista de DiagnosticoMultiprofissionaisModel para uma lista de mapas
       List<Map<String, dynamic>> diagnosticosMap =
-          diagnosticos?.map((diagnostico) => diagnostico.toMap()).toList() ??
-              [];
+          diagnosticos?.map((diagnostico) => diagnostico.toMap()).toList() ?? [];
 
       batch.update(pacienteRef, {
         'diagnosticoModal.historiaCasoModel.diagnosticos': diagnosticosMap,
@@ -358,8 +423,7 @@ class GerenciaPacienteRepository {
   }
 
   Future<void> updateRecursoIndividual(
-      List<DiagnosticoMultiprofissionaisModel>? diagnosticos,
-      String uidPaciente) async {
+      List<DiagnosticoMultiprofissionaisModel>? diagnosticos, String uidPaciente) async {
     final batch = db.batch();
 
     try {
@@ -367,8 +431,7 @@ class GerenciaPacienteRepository {
 
       // Converte a lista de DiagnosticoMultiprofissionaisModel para uma lista de mapas
       List<Map<String, dynamic>> diagnosticosMap =
-          diagnosticos?.map((diagnostico) => diagnostico.toMap()).toList() ??
-              [];
+          diagnosticos?.map((diagnostico) => diagnostico.toMap()).toList() ?? [];
 
       batch.update(pacienteRef, {
         'diagnosticoModal.historiaCasoModel.diagnosticos': diagnosticosMap,
@@ -384,16 +447,14 @@ class GerenciaPacienteRepository {
     }
   }
 
-  Future<void> cadastraRecursoIndividual(
-      RecursoIndividuaisModel recurso, String uidPaciente) async {
+  Future<void> cadastraRecursoIndividual(RecursoIndividuaisModel recurso, String uidPaciente) async {
     final batch = db.batch();
     Map<String, dynamic> recursoMap = recurso.toMap();
 
     try {
       final pacienteRef = db.collection("Pacientes").doc(uidPaciente);
 
-      batch.update(pacienteRef,
-          {'diagnosticoModal.recursoIndividuaisModel': recursoMap});
+      batch.update(pacienteRef, {'diagnosticoModal.recursoIndividuaisModel': recursoMap});
 
       // Commit do batch
       await batch.commit();
@@ -405,16 +466,33 @@ class GerenciaPacienteRepository {
     }
   }
 
-  Future<void> cadastraHabilidades(
-      List<Habilidades> habilidades, String uidPaciente) async {
+  
+  Future<void> cadastraEvolucao(EvolucaoModel evolucao, String uidPaciente) async {
+    final batch = db.batch();
+
+    try {
+      final pacienteRef = db.collection("Pacientes").doc(uidPaciente);
+
+      batch.update(pacienteRef, {'evolucoesModel': evolucao.toMap()});
+
+      // Commit do batch
+      await batch.commit();
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorRepository.handleFirebaseException(e);
+    } catch (e) {
+      print(e);
+      throw 'Ops, algo deu errado. Tente novamente mais tarde!';
+    }
+  }
+
+  Future<void> cadastraHabilidades(List<Habilidades> habilidades, String uidPaciente) async {
     final batch = db.batch();
 
     try {
       final pacienteRef = db.collection("Pacientes").doc(uidPaciente);
 
       // Converta a lista de Habilidades para uma lista de mapas
-      List<Map<String, dynamic>> habilidadesMap =
-          habilidades.map((habilidade) => habilidade.toMap()).toList();
+      List<Map<String, dynamic>> habilidadesMap = habilidades.map((habilidade) => habilidade.toMap()).toList();
 
       batch.update(pacienteRef, {
         'diagnosticoModal.recursoIndividuaisModel.habilidades': habilidadesMap,
@@ -430,8 +508,7 @@ class GerenciaPacienteRepository {
     }
   }
 
-  Future<void> cadastraPotencialidade(
-      PotencialidadeModel potencialidade, String uidPaciente) async {
+  Future<void> cadastraPotencialidade(PotencialidadeModel potencialidade, String uidPaciente) async {
     final batch = db.batch();
     Map<String, dynamic> potencialidadeMap = potencialidade.toMap();
 

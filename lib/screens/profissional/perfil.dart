@@ -18,7 +18,6 @@ class PerfilScreen extends StatelessWidget {
              Header(
               // imageUrl:
               //     'https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-              notificationCount: 3,
             ),
             const SizedBox(height: 16),
             const Text(
