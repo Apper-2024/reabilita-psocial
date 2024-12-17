@@ -38,7 +38,6 @@ class _BottomMenuProfissionalState extends State<BottomMenuProfissional> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // Substitua 'branco' por Colors.white
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),
         controller: pc,

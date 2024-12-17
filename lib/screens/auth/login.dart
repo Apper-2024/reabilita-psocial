@@ -1,10 +1,12 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:reabilita_social/repository/auth/auth_repository.dart';
+import 'package:reabilita_social/screens/auth/resetar_senha.dart';
 import 'package:reabilita_social/utils/colors.dart';
 import 'package:reabilita_social/utils/snack/snack_erro.dart';
 import 'package:reabilita_social/verifica_conta.dart';
 import 'package:reabilita_social/widgets/botao/botaoPrincipal.dart';
+import 'package:reabilita_social/widgets/protecao_dados.dart';
 import 'package:reabilita_social/widgets/text_field_custom.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -28,6 +30,8 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 40),
           child: Column(
+            crossAxisAlignment:
+                CrossAxisAlignment.start, // Alinhamento à esquerda
             children: [
               const SizedBox(height: 20),
               // Ícone Centralizado
@@ -72,6 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Form(
                   key: _formKey,
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       TextFieldCustom(
                         tipoTexto: TextInputType.emailAddress,
@@ -119,35 +124,31 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       const SizedBox(height: 20),
 
-                      // Linha com "Esqueceu senha" e "Primeiro acesso"
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              print('Esqueceu a senha clicado');
-                            },
-                            child: const Text(
-                              'Esqueceu sua senha?',
-                              style: TextStyle(color: Colors.red, fontSize: 16),
-                            ),
+                      // Alinhados à esquerda
+                      InkWell(
+                        onTap: () {
+                          BottomSheetRedefinirSenha.show(context);
+                        },
+                        child: const Text(
+                          'Esqueceu sua senha?',
+                          style: TextStyle(color: Colors.red, fontSize: 16),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      InkWell(
+                        onTap: () {
+                          Navigator.pushNamed(context, "/loginPrimeiroAcesso");
+                        },
+                        child: const Text(
+                          'Primeiro acesso, paciente?',
+                          style: TextStyle(
+                            color: preto1,
+                            fontSize: 16,
                           ),
-                          InkWell(
-                            onTap: () {
-                              Navigator.pushNamed(
-                                  context, "/loginPrimeiroAcesso");
-                            },
-                            child: const Text(
-                              'Primeiro acesso, paciente?',
-                              style: TextStyle(
-                                color: preto1,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                       const SizedBox(height: 20),
+
                       Botaoprincipal(
                         text: 'Login',
                         onPressed: () async {
@@ -194,16 +195,19 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
               ),
               const SizedBox(height: 10),
-              InkWell(
-                onTap: () {
-                  print('Proteção e Visibilidade de Dados clicado');
-                },
-                child: const Text(
-                  'Proteção e Visibilidade de Dados',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    color: verde1,
-                    fontSize: 14,
+              Center(
+                child: InkWell(
+                  onTap: () {
+                    ProtecaoDialog.show(context);
+                  },
+                  child: const Text(
+                    'Proteção e Visibilidade de Dados',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      color: verde1,
+                      fontSize: 14,
+                    ),
                   ),
                 ),
               ),
