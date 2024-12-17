@@ -30,20 +30,20 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             children: [
               const SizedBox(height: 20),
-              // Logo ou Ícone Centralizado
+              // Ícone Centralizado
               Center(
                 child: CircleAvatar(
                   radius: 60,
                   backgroundColor: verde1.withOpacity(0.1),
                   child: const Icon(
-                    Icons.ac_unit_rounded,
+                    Icons.ac_unit_rounded, // Novo Ícone
                     size: 60,
                     color: verde1,
                   ),
                 ),
               ),
               const SizedBox(height: 20),
-              // Texto de Boas-vindas
+
               const Text(
                 'Olá, bem-vindo de volta ao Reabilita Social!',
                 textAlign: TextAlign.center,
@@ -55,7 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 30),
 
-              // Contêiner com sombra para o formulário
+              // Formulário com sombra
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
@@ -118,17 +118,34 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      Align(
-                        alignment: AlignmentDirectional.centerEnd,
-                        child: InkWell(
-                          onTap: () {
-                            print('Esqueceu a senha clicado');
-                          },
-                          child: const Text(
-                            'Esqueceu sua senha?',
-                            style: TextStyle(color: Colors.red, fontSize: 16),
+
+                      // Linha com "Esqueceu senha" e "Primeiro acesso"
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              print('Esqueceu a senha clicado');
+                            },
+                            child: const Text(
+                              'Esqueceu sua senha?',
+                              style: TextStyle(color: Colors.red, fontSize: 16),
+                            ),
                           ),
-                        ),
+                          InkWell(
+                            onTap: () {
+                              Navigator.pushNamed(
+                                  context, "/loginPrimeiroAcesso");
+                            },
+                            child: const Text(
+                              'Primeiro acesso, paciente?',
+                              style: TextStyle(
+                                color: preto1,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 20),
                       Botaoprincipal(
@@ -147,9 +164,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
-
               const SizedBox(height: 20),
-              // Cadastro e Primeira vez
+
+              // Cadastro
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
