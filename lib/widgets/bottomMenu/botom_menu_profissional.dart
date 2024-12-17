@@ -55,22 +55,26 @@ class _BottomMenuProfissionalState extends State<BottomMenuProfissional> {
         onTap: setPaginaAtual,
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home, color: paginaAtual == 0 ? Colors.green : Colors.grey),
+            icon: Icon(Icons.home,
+                color: paginaAtual == 0 ? verde1 : Colors.grey),
             label: 'Home',
             backgroundColor: Colors.white,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.people_alt_rounded, color: paginaAtual == 1 ? Colors.green : Colors.grey),
+            icon: Icon(Icons.people_alt_rounded,
+                color: paginaAtual == 1 ? verde1 : Colors.grey),
             label: 'Projetos',
             backgroundColor: Colors.white,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.bubble_chart, color: paginaAtual == 2 ? Colors.green : Colors.grey),
+            icon: Icon(Icons.bubble_chart,
+                color: paginaAtual == 2 ? verde1 : Colors.grey),
             label: 'Evolução',
             backgroundColor: Colors.white,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person, color: paginaAtual == 3 ? Colors.green : Colors.grey),
+            icon: Icon(Icons.person,
+                color: paginaAtual == 3 ? verde1 : Colors.grey),
             label: 'Perfil',
             backgroundColor: Colors.white,
           ),
@@ -78,7 +82,8 @@ class _BottomMenuProfissionalState extends State<BottomMenuProfissional> {
         type: BottomNavigationBarType.fixed,
         selectedItemColor: verde1,
         unselectedItemColor: cinza1,
-        selectedLabelStyle: const TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.bold),
+        selectedLabelStyle:
+            const TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.bold),
         unselectedLabelStyle: const TextStyle(fontFamily: 'Poppins'),
       ),
     );

@@ -30,11 +30,11 @@ class _CadastroFinalScreenState extends State<CadastroFinalScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, dynamic> args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    final Map<String, dynamic> args =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final profissional = args['profissional'] as ProfissionalModel;
     final senha = args['senha'];
 
-   
     return Scaffold(
       backgroundColor: background,
       appBar: AppBar(
@@ -72,13 +72,17 @@ class _CadastroFinalScreenState extends State<CadastroFinalScreen> {
                   style: TextStyle(fontSize: 16),
                 ),
                 const SizedBox(height: 24),
+                // Dropdown de Raça
                 CustomDropdownButton(
-                  dropdownValue: profissional.raca,
+                  dropdownValue: profissional.raca != null &&
+                          raca.contains(profissional.raca)
+                      ? profissional.raca
+                      : null,
                   hint: 'Raça',
                   items: raca,
                   onChanged: (value) {
                     setState(() {
-                      profissional.raca = value!;
+                      profissional.raca = value;
                     });
                   },
                 ),
@@ -86,13 +90,14 @@ class _CadastroFinalScreenState extends State<CadastroFinalScreen> {
                 TextFieldCustom(
                   tipoTexto: TextInputType.text,
                   hintText: "ex. 111.111.111-11",
-                  labelText: "Digite seu cpf",
+                  labelText: "Digite seu CPF",
                   senha: false,
                   inputFormatters: [cpfFormater],
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Campo obrigatório';
                     }
+                    // Aqui você pode adicionar validação de CPF se desejar.
                     return null;
                   },
                   onSaved: (value) {
@@ -100,24 +105,32 @@ class _CadastroFinalScreenState extends State<CadastroFinalScreen> {
                   },
                 ),
                 const SizedBox(height: 16),
+                // Dropdown de Profissão
                 CustomDropdownButton(
                   hint: "Profissão",
-                  dropdownValue: profissional.profissao,
+                  dropdownValue: profissional.profissao != null &&
+                          profissoes.contains(profissional.profissao)
+                      ? profissional.profissao
+                      : null,
                   items: profissoes,
                   onChanged: (value) {
                     setState(() {
-                      profissional.profissao = value!;
+                      profissional.profissao = value;
                     });
                   },
                 ),
                 const SizedBox(height: 16),
+                // Dropdown Local de Trabalho
                 CustomDropdownButton(
                   hint: "Local de Trabalho",
-                  dropdownValue: profissional.localTrabalho,
+                  dropdownValue: profissional.localTrabalho != null &&
+                          locaisDeTrabalho.contains(profissional.localTrabalho)
+                      ? profissional.localTrabalho
+                      : null,
                   items: locaisDeTrabalho,
                   onChanged: (value) {
                     setState(() {
-                      profissional.localTrabalho = value!;
+                      profissional.localTrabalho = value;
                     });
                   },
                 ),
@@ -157,7 +170,10 @@ class _CadastroFinalScreenState extends State<CadastroFinalScreen> {
                   },
                   child: const Text(
                     "Tire uma foto ou selecione uma imagem",
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600, color: preto1),
+                    style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w600,
+                        color: preto1),
                   ),
                 ),
                 if (_image != null) Anexo(arquivoBytes: _image!),
@@ -165,31 +181,44 @@ class _CadastroFinalScreenState extends State<CadastroFinalScreen> {
                 Botaoprincipal(
                   text: "Cadastrar",
                   onPressed: () async {
+                    // Validações antes de salvar
+                    if (profissional.raca == null ||
+                        profissional.raca!.isEmpty) {
+                      snackAtencao(context, "Selecione uma raça");
+                      return;
+                    }
+                    if (profissional.profissao == null ||
+                        profissional.profissao!.isEmpty) {
+                      snackAtencao(context, "Selecione sua profissão");
+                      return;
+                    }
+
+                    if (profissional.localTrabalho == null ||
+                        profissional.localTrabalho!.isEmpty) {
+                      snackAtencao(
+                          context, "Selecione o seu local de trabalho");
+                      return;
+                    }
+
+                    if (_image == null) {
+                      snackAtencao(context, "Selecione uma foto");
+                      return;
+                    }
+
+                    if (!_formKey.currentState!.validate()) {
+                      return;
+                    }
+
+                    _formKey.currentState!.save();
+
                     try {
-                      if (profissional.raca == null) {
-                        snackAtencao(context, "Selecione um raça");
-                        return;
-                      }
-                      if (profissional.profissao == null) {
-                        snackAtencao(context, "Selecione sua profissão");
-                        return;
-                      }
+                      final usuario = await AuthRepository()
+                          .criarUsuario(profissional.email, senha);
 
-                      if (profissional.localTrabalho == null) {
-                        snackAtencao(context, "Selecione o seu local de trabalho");
-                        return;
-                      }
-
-                       if (_image == null) {
-                        snackAtencao(context, "Selecione uma foto");
-                        return;
-                      }
-                      _formKey.currentState!.save();
-
-                      final usuario = await AuthRepository().criarUsuario(profissional.email, senha);
-
-                      await GerenciaProfissionalRepository().criaProfissional(usuario, profissional, _image!);
-                      Navigator.pushNamedAndRemoveUntil(context, "/menuProfissional", (route) => false);
+                      await GerenciaProfissionalRepository()
+                          .criaProfissional(usuario, profissional, _image!);
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, "/menuProfissional", (route) => false);
                       snackSucesso(context, "Sucesso ao criar sua conta!");
                     } catch (e) {
                       snackErro(context, e.toString());

@@ -5,6 +5,7 @@ import 'package:reabilita_social/repository/FirebaseError/firebase_error_reposit
 class GerenciaAdministradorRepository {
   final db = FirebaseFirestore.instance;
 
+
    Future<AdministradorModel> buscaAdministrador(String uid) async {
     try {
       final unidadeDoc = await db.collection('Administrador').doc(uid).get();
@@ -18,3 +19,5 @@ class GerenciaAdministradorRepository {
   }
   
 }
+
+

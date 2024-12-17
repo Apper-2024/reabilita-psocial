@@ -8,6 +8,7 @@ import 'package:reabilita_social/provider/administrador_provider.dart';
 import 'package:reabilita_social/provider/imagem_provider.dart';
 import 'package:reabilita_social/provider/paciente_provider.dart';
 import 'package:reabilita_social/provider/profissional_provider.dart';
+import 'package:reabilita_social/screens/administrador/homeAdministrador.dart';
 import 'package:reabilita_social/screens/administrador/menu_profissionais.dart';
 import 'package:reabilita_social/screens/auth/cadastros/cadastro.dart';
 import 'package:reabilita_social/screens/auth/cadastros/cadastro_final.dart';
@@ -20,7 +21,7 @@ import 'package:reabilita_social/widgets/bottomMenu/botom_menu_profissional.dart
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   try {
     await Firebase.initializeApp(options: DefaultFirebaseOptions.web);
     print("Firebase initialized successfully");
@@ -66,7 +67,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => const LoginScreen(),
 
         //ADMINISTRADOR
-        '/usuariosAdministrador': (context) => const MenuProfissionais(),
+        '/usuariosAdministrador': (context) => const ProfissionaisPage(),
 
         //PROFISSIONAL
         '/cadastroProjeto': (context) => const CadastroProjetoScreen(),
@@ -75,7 +76,7 @@ class MyApp extends StatelessWidget {
         '/cadastro': (context) => const CadastroScreen(),
         '/cadastroFinal': (context) => const CadastroFinalScreen(),
         '/loginPrimeiroAcesso': (context) => const LoginPrimeiroAcesso(),
-        
+
         //PACIENTE
       },
     );

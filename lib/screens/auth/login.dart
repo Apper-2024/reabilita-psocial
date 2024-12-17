@@ -24,148 +24,174 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: background,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              'Olá, bem-vindo de volta ao Reabilita Social!',
-              style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.bold, fontSize: 24),
-            ),
-            const SizedBox(height: 33),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 39),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    TextFieldCustom(
-                      tipoTexto: TextInputType.emailAddress,
-                      hintText: "ex. joao@gmail.com",
-                      labelText: "Digite seu email",
-                      senha: false,
-                      formController: emailController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Campo obrigatório';
-                        }
-                        if (!EmailValidator.validate(value)) {
-                          return 'Email inválido';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 30),
-                    TextFieldCustom(
-                      hintText: "*******",
-                      labelText: "Senha",
-                      tipoTexto: TextInputType.text,
-                      senha: verSenha,
-                      formController: senhaController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Campo obrigatório';
-                        }
-
-                        if (value.length < 6) {
-                          return 'Senha deve possuir mais de 6 digitos!';
-                        }
-                        return null;
-                      },
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          verSenha ? Icons.visibility : Icons.visibility_off,
-                          color: preto1,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            verSenha = !verSenha;
-                          });
-                        },
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    Align(
-                      alignment: AlignmentDirectional.centerEnd,
-                      child: InkWell(
-                        onTap: () {
-                          print('clicado');
-                        },
-                        child: const Text(
-                          'Esqueceu sua senha?',
-                          style: TextStyle(color: Colors.red, fontSize: 16),
-                        ),
-                      ),
-                    ),
-                    Align(
-                      alignment: AlignmentDirectional.centerEnd,
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.pushNamed(context, "/loginPrimeiroAcesso");
-                        },
-                        child: const Text(
-                          'Primeiro acesso, paciente?',
-                          style: TextStyle(color: preto1, fontSize: 16),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    Botaoprincipal(
-                      text: 'Login',
-                      onPressed: () async {
-                        try {
-                          final usuario = await AuthRepository().fazerLogin(emailController.text, senhaController.text);
-                          verificaUser(context, usuario);
-                        } catch (e) {
-                          snackErro(context, e.toString());
-                        }
-                      },
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          'Não tem uma conta?',
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 18,
-                          ),
-                        ),
-                        const SizedBox(width: 5),
-                        InkWell(
-                          onTap: () {
-                            Navigator.pushNamed(context, "/cadastro");
-                          },
-                          child: const Text(
-                            'Se cadastre',
-                            style: TextStyle(
-                              color: verde1,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 30),
-                  ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 40),
+          child: Column(
+            children: [
+              const SizedBox(height: 20),
+              // Logo ou Ícone Centralizado
+              Center(
+                child: CircleAvatar(
+                  radius: 60,
+                  backgroundColor: verde1.withOpacity(0.1),
+                  child: const Icon(
+                    Icons.ac_unit_rounded,
+                    size: 60,
+                    color: verde1,
+                  ),
                 ),
               ),
-            ),
-            InkWell(
-              onTap: () {
-                print('Proteção e Visibilidade de Dados clicado');
-              },
-              child: const Text(
-                'Proteção e Visibilidade de Dados',
+              const SizedBox(height: 20),
+              // Texto de Boas-vindas
+              const Text(
+                'Olá, bem-vindo de volta ao Reabilita Social!',
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: 'Poppins',
-                  color: verde1,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 22,
                 ),
               ),
-            ),
-          ],
+              const SizedBox(height: 30),
+
+              // Contêiner com sombra para o formulário
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      TextFieldCustom(
+                        tipoTexto: TextInputType.emailAddress,
+                        hintText: "ex. joao@gmail.com",
+                        labelText: "Digite seu email",
+                        senha: false,
+                        formController: emailController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Campo obrigatório';
+                          }
+                          if (!EmailValidator.validate(value)) {
+                            return 'Email inválido';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      TextFieldCustom(
+                        hintText: "*******",
+                        labelText: "Senha",
+                        tipoTexto: TextInputType.text,
+                        senha: verSenha,
+                        formController: senhaController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Campo obrigatório';
+                          }
+                          if (value.length < 6) {
+                            return 'Senha deve possuir mais de 6 dígitos!';
+                          }
+                          return null;
+                        },
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            verSenha ? Icons.visibility : Icons.visibility_off,
+                            color: preto1,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              verSenha = !verSenha;
+                            });
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      Align(
+                        alignment: AlignmentDirectional.centerEnd,
+                        child: InkWell(
+                          onTap: () {
+                            print('Esqueceu a senha clicado');
+                          },
+                          child: const Text(
+                            'Esqueceu sua senha?',
+                            style: TextStyle(color: Colors.red, fontSize: 16),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      Botaoprincipal(
+                        text: 'Login',
+                        onPressed: () async {
+                          try {
+                            final usuario = await AuthRepository().fazerLogin(
+                                emailController.text, senhaController.text);
+                            verificaUser(context, usuario);
+                          } catch (e) {
+                            snackErro(context, e.toString());
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 20),
+              // Cadastro e Primeira vez
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    'Não tem uma conta?',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 16,
+                    ),
+                  ),
+                  const SizedBox(width: 5),
+                  InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(context, "/cadastro");
+                    },
+                    child: const Text(
+                      'Se cadastre',
+                      style: TextStyle(
+                        color: verde1,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              InkWell(
+                onTap: () {
+                  print('Proteção e Visibilidade de Dados clicado');
+                },
+                child: const Text(
+                  'Proteção e Visibilidade de Dados',
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    color: verde1,
+                    fontSize: 14,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

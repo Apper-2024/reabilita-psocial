@@ -43,7 +43,7 @@ class _CadastroProjetoScreenState extends State<CadastroProjetoScreen> {
         profissao: "",
         rendaMensal: "",
         tipoUsuario: EnumTipoUsuario.paciente.name,
-        statusConta: EnumStatusConta.naoCadastrada.name,
+        statusConta: EnumStatusConta.pendente.name,
         endereco: EnderecoModel(
           cep: "",
           rua: "",

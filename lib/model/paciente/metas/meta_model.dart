@@ -11,7 +11,7 @@ class MetaList {
     return MetaList(
       meta: map['meta'],
       dataCriacao: map['dataCriacao'],
-      tipo: map['tipo'],
+      tipo: map['tipoUsuario'],
     );
   }
 

@@ -25,7 +25,8 @@ class ProjetosScreen extends StatefulWidget {
 
 class _ProjetosScreenState extends State<ProjetosScreen> {
   final FirebaseFirestore db = FirebaseService().db;
-  final ProfissionalProvider profissionalProvider = ProfissionalProvider.instance;
+  final ProfissionalProvider profissionalProvider =
+      ProfissionalProvider.instance;
 
   late Query _baseQuery;
   PacienteProvider pacienteProvider = PacienteProvider.instance;
@@ -34,13 +35,16 @@ class _ProjetosScreenState extends State<ProjetosScreen> {
     super.initState();
     _baseQuery = db
         .collection("Pacientes")
-        .where('dadosPacienteModel.uidProfisional', isEqualTo: profissionalProvider.profissional!.uidProfissional)
+        .where('dadosPacienteModel.uidProfisional',
+            isEqualTo: profissionalProvider.profissional!.uidProfissional)
         .orderBy('dadosPacienteModel.dataCriacao', descending: true);
 
     if (widget.titulo == 'cadastrado') {
-      _baseQuery = _baseQuery.where('dadosPacienteModel.statusConta', isEqualTo: EnumStatusConta.ativo.name);
+      _baseQuery = _baseQuery.where('dadosPacienteModel.statusConta',
+          isEqualTo: EnumStatusConta.ativo.name);
     } else {
-      _baseQuery = _baseQuery.where('dadosPacienteModel.statusConta', isEqualTo: EnumStatusConta.naoCadastrada.name);
+      _baseQuery = _baseQuery.where('dadosPacienteModel.statusConta',
+          isEqualTo: EnumStatusConta.pendente.name);
     }
   }
 
@@ -59,7 +63,8 @@ class _ProjetosScreenState extends State<ProjetosScreen> {
         padding: const EdgeInsets.all(16.0),
         child: StreamBuilder<QuerySnapshot>(
           stream: query.snapshots(),
-          builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          builder:
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasError) {
               print(snapshot.error);
               return const Center(child: Text('Algo deu errado'));
@@ -77,7 +82,8 @@ class _ProjetosScreenState extends State<ProjetosScreen> {
               print(doc.data() as Map<String, dynamic>);
             }).toList();
 
-            final List<PacienteModel> pacientes = snapshot.data!.docs.map((doc) {
+            final List<PacienteModel> pacientes =
+                snapshot.data!.docs.map((doc) {
               return PacienteModel.fromMap(doc.data() as Map<String, dynamic>);
             }).toList();
 
@@ -92,7 +98,8 @@ class _ProjetosScreenState extends State<ProjetosScreen> {
                   },
                   foto: paciente.dadosPacienteModel.urlFoto,
                   nome: paciente.dadosPacienteModel.nome,
-                  observacao: paciente.dadosPacienteModel.outrasInformacoes.observacao,
+                  observacao:
+                      paciente.dadosPacienteModel.outrasInformacoes.observacao,
                 );
               },
             );
