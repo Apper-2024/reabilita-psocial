@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:reabilita_social/screens/profissional/edita_perfil_prof.dart';
+import 'package:reabilita_social/screens/profissional/suporteUsuario.dart';
 import 'package:reabilita_social/widgets/botao/botaoPrincipal.dart';
 import '../../utils/colors.dart';
 import '../../widgets/header.dart';
@@ -54,19 +55,29 @@ class PerfilScreen extends StatelessWidget {
             ),
             const Divider(),
             const SizedBox(height: 10),
-            const Row(
-              children: [
-                Icon(Icons.help_rounded, size: 36),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  'Ajuda e Suporte',
-                  style: TextStyle(
-                    fontSize: 20.0,
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SuporteUsuario(),
                   ),
-                ),
-              ],
+                );
+              },
+              child: const Row(
+                children: [
+                  Icon(Icons.help_rounded, size: 36),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    'Ajuda e Suporte',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                    ),
+                  ),
+                ],
+              ),
             ),
             const Divider(),
             const SizedBox(height: 10),
