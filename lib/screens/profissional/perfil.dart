@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:reabilita_social/screens/profissional/edita_perfil_prof.dart';
 import 'package:reabilita_social/widgets/botao/botaoPrincipal.dart';
 import '../../utils/colors.dart';
 import '../../widgets/header.dart';
@@ -15,10 +16,10 @@ class PerfilScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-             Header(
-              // imageUrl:
-              //     'https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-            ),
+            Header(
+                // imageUrl:
+                //     'https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+                ),
             const SizedBox(height: 16),
             const Text(
               'Meu Perfil',
@@ -29,35 +30,27 @@ class PerfilScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 30),
-            const Row(
-              children: [
-                Icon(Icons.account_circle, size: 36),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  'Editar Perfil',
-                  style: TextStyle(
-                    fontSize: 20.0,
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const EditarPerfilScreen(),
                   ),
-                ),
-              ],
-            ),
-            const Divider(),
-            const SizedBox(height: 10),
-            const Row(
-              children: [
-                Icon(Icons.settings, size: 36),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  'Configuraçoes e Privacidade',
-                  style: TextStyle(
-                    fontSize: 20.0,
+                );
+              },
+              child: const Row(
+                children: [
+                  Icon(Icons.account_circle, size: 36),
+                  SizedBox(width: 10),
+                  Text(
+                    'Editar Perfil',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             const Divider(),
             const SizedBox(height: 10),

@@ -24,7 +24,8 @@ class GerenciaProfissionalRepository {
     }
   }
 
-    Future<void> criaProfissional(UserCredential usuario, ProfissionalModel profissional, Uint8List arquivo) async {
+  Future<void> criaProfissional(UserCredential usuario,
+      ProfissionalModel profissional, Uint8List arquivo) async {
     WriteBatch batch = db.batch();
     try {
       // Cria o modelo de usuário
@@ -34,19 +35,51 @@ class GerenciaProfissionalRepository {
         tipoUsuario: EnumTipoUsuario.profissional.name,
       );
       profissional.uidProfissional = usuario.user!.uid;
-  
+
       // Upload da imagem
-      final imagesRef = storageRef.child("Profissionais/${profissional.uidProfissional}.jpg");
+      final imagesRef =
+          storageRef.child("Profissionais/${profissional.uidProfissional}.jpg");
       await imagesRef.putData(arquivo);
-  
+
       // Obtém a URL da imagem
       String imageUrl = await imagesRef.getDownloadURL();
       profissional.urlFoto = imageUrl;
-  
+
       // Adiciona as operações ao batch
-      batch.set(db.collection("Profissionais").doc(usuario.user!.uid), profissional.toMap());
-      batch.set(db.collection("Usuarios").doc(usuario.user!.uid), usuarioModel.toMap());
-  
+      batch.set(db.collection("Profissionais").doc(usuario.user!.uid),
+          profissional.toMap());
+      batch.set(db.collection("Usuarios").doc(usuario.user!.uid),
+          usuarioModel.toMap());
+
+      // Comita o batch
+      await batch.commit();
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorRepository.handleFirebaseException(e);
+    } catch (e) {
+      throw 'Ops, algo deu errado. Tente novamente mais tarde!';
+    }
+  }
+
+  Future<void> atualizaProfissional(
+      ProfissionalModel profissional, Uint8List? arquivo) async {
+    WriteBatch batch = db.batch();
+    try {
+      String? imageUrl;
+
+      // Atualiza a imagem apenas se um novo arquivo for fornecido
+      if (arquivo != null) {
+        final imagesRef = storageRef
+            .child("Profissionais/${profissional.uidProfissional}.jpg");
+        await imagesRef.putData(arquivo);
+        imageUrl = await imagesRef.getDownloadURL();
+        profissional.urlFoto = imageUrl;
+      }
+
+      // Adiciona as operações ao batch
+      batch.update(
+          db.collection("Profissionais").doc(profissional.uidProfissional),
+          profissional.toMap());
+
       // Comita o batch
       await batch.commit();
     } on FirebaseException catch (e) {

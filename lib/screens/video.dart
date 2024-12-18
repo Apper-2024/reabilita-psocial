@@ -12,7 +12,7 @@ class VideoPlayerWidget extends StatefulWidget {
 
 class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   late VideoPlayerController _controller;
-  bool _isLoading = true;
+  bool _isInitialized = false;
 
   @override
   void initState() {
@@ -20,7 +20,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
     _controller = VideoPlayerController.asset(widget.videoPath)
       ..initialize().then((_) {
         setState(() {
-          _isLoading = false;
+          _isInitialized = true;
         });
         _controller.play();
       }).catchError((error) {
@@ -36,11 +36,12 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return _isLoading
-        ? const Center(child: CircularProgressIndicator())
-        : AspectRatio(
-            aspectRatio: _controller.value.aspectRatio,
-            child: Stack(
+    return AspectRatio(
+      aspectRatio: _controller.value.isInitialized
+          ? _controller.value.aspectRatio
+          : 16 / 9, 
+      child: _isInitialized
+          ? Stack(
               alignment: Alignment.bottomCenter,
               children: [
                 VideoPlayer(_controller),
@@ -68,7 +69,10 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                   ),
                 ),
               ],
+            )
+          : Container(
+              color: Colors.transparent, // Fica invisível antes de carregar
             ),
-          );
+    );
   }
 }
