@@ -1,7 +1,8 @@
 import 'dart:typed_data';
-
+import 'package:universal_html/html.dart' as html;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:reabilita_social/controller/image_controller.dart';
 import 'package:reabilita_social/enum/enum_meta.dart';
@@ -11,6 +12,7 @@ import 'package:reabilita_social/model/paciente/dadosPaciente/dados_paciente_mod
 import 'package:reabilita_social/model/paciente/diagnostico/desejo_model.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/diagnostico_modal.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/diagnostico_multiprofissional_model.dart';
+import 'package:reabilita_social/model/paciente/diagnostico/dificuldade_pessoal_model.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/doencas_clinicas_model.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/medicacoes_model.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/outras_informacoes_model.dart';
@@ -33,6 +35,7 @@ import 'package:reabilita_social/widgets/botao/botaoPrincipal.dart';
 import 'package:reabilita_social/widgets/dropdown_custom.dart';
 import 'package:reabilita_social/widgets/nao_encontrado.dart';
 import 'package:reabilita_social/widgets/text_field_custom.dart';
+import 'package:share_plus/share_plus.dart';
 
 class PacienteScreen extends StatefulWidget {
   const PacienteScreen({super.key});
@@ -1219,6 +1222,118 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                   } catch (e) {
                                     print("Erro: $e");
                                     snackErro(context, "Erro ao cadastrar doença clínica");
+                                    return;
+                                  }
+                                },
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _dialogAdicionarDificuldade(
+      PacienteProvider pacienteProvider, DificuldadePessoalModal? dificuldades) async {
+    ListaDificuldadePessoal dificuldadePessoalModel = ListaDificuldadePessoal(
+      dificuldadePessoal: "",
+      dataCriacao: Timestamp.now(),
+    );
+
+    final formKey = GlobalKey<FormState>();
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setStateDialog) {
+              return SingleChildScrollView(
+                child: Form(
+                  key: formKey,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    decoration: const BoxDecoration(
+                      color: background,
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                    padding: const EdgeInsets.all(26),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Cadastro de Dificuldaddes Pessoais',
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 16),
+                        TextFieldCustom(
+                          tipoTexto: TextInputType.text,
+                          hintText: ".....",
+                          labelText: "Dificuldade Pessoal",
+                          senha: false,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Campo obrigatório';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            dificuldadePessoalModel.dificuldadePessoal = value!;
+                          },
+                        ),
+                        const SizedBox(height: 32),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Botaoprincipal(
+                                text: "Cancelar",
+                                cor: vermelho,
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Botaoprincipal(
+                                text: "Cadastrar",
+                                onPressed: () async {
+                                  try {
+                                    if (!formKey.currentState!.validate()) {
+                                      snackAtencao(context, "Preencha todos os campos");
+                                      return;
+                                    }
+
+                                    formKey.currentState!.save();
+                                    dificuldadePessoalModel.dataCriacao = Timestamp.now();
+
+                                    dificuldades ??= DificuldadePessoalModal(dificuldadePessoal: []);
+
+                                    dificuldades!.dificuldadePessoal?.add(dificuldadePessoalModel);
+
+                                    await GerenciaPacienteRepository().cadastrarDificuldades(
+                                      dificuldades!,
+                                      pacienteProvider.paciente!.dadosPacienteModel.uidDocumento,
+                                    );
+
+                                    pacienteProvider.setUpdateDificuldades(dificuldades!);
+
+                                    Navigator.pop(context);
+                                    snackSucesso(context, "Cadastrado com sucesso");
+                                  } catch (e) {
+                                    print("Erro: $e");
+                                    snackErro(context, "Erro ao cadastrar dificuldade pessoal");
                                     return;
                                   }
                                 },
@@ -2543,15 +2658,39 @@ class _PacienteScreenState extends State<PacienteScreen> {
             ItemConteudo(
                 titulo: 'Dificuldades Pessoais, Coletivas e Estruturais',
                 onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => FormCategoria(
-                        fields: [
-                          FieldConfig(
-                              label: 'Recursos Individuais',
-                              hintText: 'Recursos Individuais do paciente',
-                              widthFactor: 1.0),
-                          FieldConfig(label: 'Habilidades', hintText: 'Habilidades do paciente', widthFactor: 1.0)
-                        ],
-                        titulo: 'Dificuldades Pessoais, Coletivas e Estruturais',
+                      builder: (context) => Consumer<PacienteProvider>(
+                        builder: (context, pacienteProvider, child) {
+                          DificuldadePessoalModal? dificuldadePessoal =
+                              pacienteProvider.paciente!.diagnosticoModal?.dificuldadePessoalModel;
+
+                          if (dificuldadePessoal == null || dificuldadePessoal.dificuldadePessoal!.isEmpty) {
+                            return NaoEncontrado(
+                                titulo: "Não há dificuldades cadastradas",
+                                textButton: "Adicionar Dificuldades Pessoais, Coletivas e Estruturais",
+                                onPressed: () => _dialogAdicionarDificuldade(pacienteProvider, dificuldadePessoal));
+                          } else {
+                            return FormCategoria(
+                              fields: [
+                                ...dificuldadePessoal.dificuldadePessoal!.map((dificuldade) {
+                                  return [
+                                    FieldConfig(
+                                      label: 'Recursos Individuais',
+                                      hintText: dificuldade.dificuldadePessoal!,
+                                      isDoubleHeight: true,
+                                      valorInicial: dificuldade.dificuldadePessoal!,
+                                      data: formatTimesTamp(dificuldade.dataCriacao),
+                                      botaoAdicionar: true,
+                                      onTapbotaoAdicionar: () {
+                                        _dialogAdicionarDificuldade(pacienteProvider, dificuldadePessoal);
+                                      },
+                                    ),
+                                  ];
+                                }).expand((element) => element),
+                              ],
+                              titulo: 'Dificuldades Pessoais, Coletivas e Estruturais',
+                            );
+                          }
+                        },
                       ),
                     )),
                 onTap2: () {
@@ -3123,19 +3262,26 @@ class _PacienteScreenState extends State<PacienteScreen> {
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.black),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32),
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32),
           child: Column(
             children: [
-              ListView.builder(
-                itemCount: listaCard.length,
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  return listaCard[index];
+              Column(
+                children: listaCard,
+              ),
+              Botaoprincipal(
+                text: 'Compartilhar Projeto',
+                onPressed: () async {
+                  if (html.window.navigator.userAgent.contains('Mobi')) {
+                    await Share.share('Aqui está o código do projeto: ${pacienteProvider.paciente!.url}',
+                        subject: 'Código do Paciente');
+                  } else {
+                    await Clipboard.setData(ClipboardData(text: pacienteProvider.paciente!.url));
+                    snackSucesso(context, 'Código copiado para a área de transferência');
+                  }
                 },
               ),
-              Botaoprincipal(text: 'Compartilhar Projeto', onPressed: () {}),
               const SizedBox(height: 32),
             ],
           ),

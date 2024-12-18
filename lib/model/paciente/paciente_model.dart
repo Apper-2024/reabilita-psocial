@@ -16,6 +16,8 @@ class PacienteModel {
   AgendaModel? listaAgendaModel;
   ListPactuacaoModel? pactuacoesModel;
   AvaliacaoModel? avaliacoesModel;
+  String url;
+
   PacienteModel({
     required this.dadosPacienteModel,
     this.metasModel,
@@ -25,6 +27,7 @@ class PacienteModel {
     this.listaAgendaModel,
     this.pactuacoesModel,
     this.avaliacoesModel,
+    required this.url,
   });
 
   factory PacienteModel.fromMap(Map<String, dynamic> json) {
@@ -38,6 +41,8 @@ class PacienteModel {
       listaAgendaModel: json['listaAgendaModel'] != null ? AgendaModel.fromMap(json['listaAgendaModel']) : null,
       pactuacoesModel: json['pactuacoesModel'] != null ? ListPactuacaoModel.fromMap(json['pactuacoesModel']) : null,
       avaliacoesModel: json['avaliacoesModel'] != null ? AvaliacaoModel.fromMap(json['avaliacoesModel']) : null,
+      url: json['url'] ,
+
     );
   }
 
@@ -51,6 +56,7 @@ class PacienteModel {
       'listaAgendaModel': listaAgendaModel?.toMap(),
       'pactuacoesModel': pactuacoesModel?.toMap(),
       'avaliacoesModel': avaliacoesModel?.toMap(),
+      'url': url,
     };
   }
 }

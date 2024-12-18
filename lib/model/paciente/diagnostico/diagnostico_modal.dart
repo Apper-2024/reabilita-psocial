@@ -1,5 +1,6 @@
 import 'package:reabilita_social/model/paciente/diagnostico/desejo_model.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/diagnostico_multiprofissional_model.dart';
+import 'package:reabilita_social/model/paciente/diagnostico/dificuldade_pessoal_model.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/doencas_clinicas_model.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/medicacoes_model.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/outras_informacoes_model.dart';
@@ -14,6 +15,7 @@ class DiagnosticoModal {
   ListaOutrasInformacoes? outrasInformacoesModel;
   PotencialidadeModel? potencialidadeModel;
   RecursoIndividuaisModel? recursoIndividuaisModel;
+  DificuldadePessoalModal? dificuldadePessoalModel;
 
   DiagnosticoModal({
     this.desejoModel,
@@ -23,6 +25,7 @@ class DiagnosticoModal {
     this.outrasInformacoesModel,
     this.potencialidadeModel,
     this.recursoIndividuaisModel,
+    this.dificuldadePessoalModel,
   });
 
   factory DiagnosticoModal.fromMap(Map<String, dynamic> data) {
@@ -30,7 +33,8 @@ class DiagnosticoModal {
       desejoModel: data['desejoModel'] != null ? DesejoModel.fromMap(data['desejoModel']) : null,
       historiaCasoModel:
           data['historiaCasoModel'] != null ? HistoriaCasoModel.fromMap(data['historiaCasoModel']) : null,
-      doencasClinicasModel: data['doencasClinicasModel'] != null ? ListaDoencaClinica.fromMap(data['doencasClinicasModel']) : null,
+      doencasClinicasModel:
+          data['doencasClinicasModel'] != null ? ListaDoencaClinica.fromMap(data['doencasClinicasModel']) : null,
       medicacoesModel: data['medicacoesModel'] != null ? ListaDeMedicacoes.fromMap(data['medicacoesModel']) : null,
       outrasInformacoesModel: data['outrasInformacoesModel'] != null
           ? ListaOutrasInformacoes.fromMap(data['outrasInformacoesModel'])
@@ -39,6 +43,9 @@ class DiagnosticoModal {
           data['potencialidadeModel'] != null ? PotencialidadeModel.fromMap(data['potencialidadeModel']) : null,
       recursoIndividuaisModel: data['recursoIndividuaisModel'] != null
           ? RecursoIndividuaisModel.fromMap(data['recursoIndividuaisModel'])
+          : null,
+      dificuldadePessoalModel: data['dificuldadePessoalModel'] != null
+          ? DificuldadePessoalModal.fromMap(data['dificuldadePessoalModel'])
           : null,
     );
   }
@@ -52,6 +59,7 @@ class DiagnosticoModal {
       'outrasInformacoesModel': outrasInformacoesModel?.toMap(),
       'potencialidadeModel': potencialidadeModel?.toMap(),
       'recursoIndividuaisModel': recursoIndividuaisModel?.toMap(),
+      'dificuldadePessoalModel': dificuldadePessoalModel?.toMap(),
     };
   }
 }

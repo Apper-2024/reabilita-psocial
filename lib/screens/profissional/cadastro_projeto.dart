@@ -33,6 +33,7 @@ class _CadastroProjetoScreenState extends State<CadastroProjetoScreen> {
   Uint8List? _image;
 
   final paciente = PacienteModel(
+    url: '',
     dadosPacienteModel: DadosPacienteModel(
         nome: "",
         dataNascimento: "",
@@ -63,7 +64,7 @@ class _CadastroProjetoScreenState extends State<CadastroProjetoScreen> {
         uidProfisional: "",
         urlFoto: "",
         uidPaciente: "",
-        uidDocumento: ""),
+        uidDocumento: "",),
   );
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _dataNascimento = TextEditingController();

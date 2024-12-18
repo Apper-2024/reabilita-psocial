@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:reabilita_social/screens/profissional/edita_perfil_prof.dart';
+import 'package:reabilita_social/screens/profissional/pesquisa_usuario.dart';
 import 'package:reabilita_social/screens/profissional/suporteUsuario.dart';
 import 'package:reabilita_social/widgets/botao/botaoPrincipal.dart';
 import '../../utils/colors.dart';
@@ -55,7 +56,7 @@ class PerfilScreen extends StatelessWidget {
             ),
             const Divider(),
             const SizedBox(height: 10),
-            GestureDetector(
+            InkWell(
               onTap: () {
                 Navigator.push(
                   context,
@@ -72,6 +73,32 @@ class PerfilScreen extends StatelessWidget {
                   ),
                   Text(
                     'Ajuda e Suporte',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Divider(),
+            const SizedBox(height: 10),
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PesquisaUsuarioScreen(),
+                  ),
+                );
+              },
+              child: const Row(
+                children: [
+                  Icon(Icons.person_search_outlined, size: 36),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    'Pesquisar Paciente',
                     style: TextStyle(
                       fontSize: 20.0,
                     ),

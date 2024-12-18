@@ -200,7 +200,7 @@ class _FormCategoriaState extends State<FormCategoria> {
                   padding: const EdgeInsets.symmetric(horizontal: 64),
                   child: Botaoprincipal(
                     onPressed: field.onTapbotaoAdicionar!,
-                    text: 'Criar novo diagnóstico',
+                    text: 'Criar novo',
                   ),
                 ),
               ),

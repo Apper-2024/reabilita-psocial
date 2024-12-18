@@ -3,6 +3,7 @@ import 'package:reabilita_social/model/paciente/agenda/agenda_model.dart';
 import 'package:reabilita_social/model/paciente/avaliacao/avaliacao_model.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/desejo_model.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/diagnostico_multiprofissional_model.dart';
+import 'package:reabilita_social/model/paciente/diagnostico/dificuldade_pessoal_model.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/doencas_clinicas_model.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/medicacoes_model.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/outras_informacoes_model.dart';
@@ -104,7 +105,10 @@ class PacienteProvider with ChangeNotifier {
     _paciente?.avaliacoesModel = u;
     notifyListeners();
   }
-
+  void setUpdateDificuldades(DificuldadePessoalModal u) {
+    _paciente?.diagnosticoModal?.dificuldadePessoalModel = u;
+    notifyListeners();
+  }
   void setUpdateEvolucao(ListEvolucao u) {
     _paciente?.evolucoesModel?.evolucoesModel ??= [];
 
