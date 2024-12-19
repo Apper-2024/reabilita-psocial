@@ -1,5 +1,6 @@
 const functions = require("firebase-functions");
 const axios = require("axios");
+const cors = require('cors')({ origin: true });
 
 const GOOGLE_MAPS_API_KEY = "AIzaSyAoSesmAI2cUK5YF4PWUXJOc_TjhdhA7o4";
 
@@ -52,26 +53,28 @@ async function getNearbyPlaces(lat, lng) {
 }
 
 // Cloud Function HTTP
-exports.searchNearbyPlaces = functions.https.onRequest(async (req, res) => {
-  try {
-    const address = req.query.address;
-    if (!address) {
-      console.warn("Parâmetro 'address' ausente na requisição."); // Log de ausência de parâmetro
-      res.status(400).send({ error: "O parâmetro 'address' é obrigatório." });
-      return;
+exports.searchNearbyPlaces = functions.https.onRequest((req, res) => {
+  cors(req, res, async () => {
+    try {
+      const address = req.query.address;
+      if (!address) {
+        console.warn("Parâmetro 'address' ausente na requisição."); // Log de ausência de parâmetro
+        res.status(400).send({ error: "O parâmetro 'address' é obrigatório." });
+        return;
+      }
+
+      console.log("Endereço recebido:", address); // Log do endereço recebido
+
+      const coordinates = await getCoordinates(address);
+      console.log("Coordenadas finais:", coordinates); // Log das coordenadas finais
+
+      const places = await getNearbyPlaces(coordinates.lat, coordinates.lng);
+      console.log("Lugares próximos encontrados:", places.length); // Log do número de lugares encontrados
+
+      res.status(200).send(places);
+    } catch (error) {
+      console.error("Erro na execução da função:", error); // Log detalhado do erro
+      res.status(500).send({ error: error.message });
     }
-
-    console.log("Endereço recebido:", address); // Log do endereço recebido
-
-    const coordinates = await getCoordinates(address);
-    console.log("Coordenadas finais:", coordinates); // Log das coordenadas finais
-
-    const places = await getNearbyPlaces(coordinates.lat, coordinates.lng);
-    console.log("Lugares próximos encontrados:", places.length); // Log do número de lugares encontrados
-
-    res.status(200).send(places);
-  } catch (error) {
-    console.error("Erro na execução da função:", error); // Log detalhado do erro
-    res.status(500).send({ error: error.message });
-  }
+  });
 });
