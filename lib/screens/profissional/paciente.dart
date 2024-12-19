@@ -3274,8 +3274,9 @@ class _PacienteScreenState extends State<PacienteScreen> {
                 text: 'Compartilhar Projeto',
                 onPressed: () async {
                   if (html.window.navigator.userAgent.contains('Mobi')) {
+                   
                     await Share.share('Aqui está o código do projeto: ${pacienteProvider.paciente!.url}',
-                        subject: 'Código do Paciente');
+                        subject: pacienteProvider.paciente!.url);
                   } else {
                     await Clipboard.setData(ClipboardData(text: pacienteProvider.paciente!.url));
                     snackSucesso(context, 'Código copiado para a área de transferência');
