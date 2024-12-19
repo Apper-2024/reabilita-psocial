@@ -6,7 +6,8 @@ class OpcaoCard extends StatelessWidget {
   final String title;
   final Widget destination;
 
-  const OpcaoCard({super.key, 
+  const OpcaoCard({
+    super.key,
     required this.icon,
     required this.title,
     required this.destination,
@@ -14,29 +15,41 @@ class OpcaoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Card(
-        color: Colors.white,
-        elevation: 2,
-        margin: const EdgeInsets.only(bottom: 12),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: ListTile(
-          leading: Icon(icon, color: verde1, size: 30),
-          title: Text(
-            title,
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-            ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6.0),
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => destination),
+          );
+        },
+        child: Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.1),
+                blurRadius: 8,
+                offset: const Offset(0, 4),
+              ),
+            ],
           ),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => destination),
-            );
-          },
+          child: Row(
+            children: [
+              Icon(icon, color: verde1, size: 36),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.w600, color: preto1),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

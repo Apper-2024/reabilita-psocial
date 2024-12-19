@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:reabilita_social/screens/Mapa.dart';
 import 'package:reabilita_social/screens/profissional/legislacao.dart';
 import 'package:reabilita_social/utils/colors.dart';
 import 'package:reabilita_social/widgets/card/card_opcao.dart';
@@ -31,11 +32,11 @@ class SuporteUsuario extends StatelessWidget {
               title: "LEGISLAÇÃO EM SAÚDE MENTAL E ASSISTÊNCIA SOCIAL",
               destination: LegislacaoPage(),
             ),
-            // OpcaoCard(
-            //   icon: Icons.search,
-            //   title: "BUSCA DE SERVIÇOS DE SAÚDE MENTAL",
-            //   destination: BuscaServicosPage(),
-            // ),
+            OpcaoCard(
+              icon: Icons.search,
+              title: "BUSCA DE SERVIÇOS DE SAÚDE MENTAL",
+              destination: SearchPage(),
+            ),
             // OpcaoCard(
             //   icon: Icons.bar_chart,
             //   title: "RELATÓRIO E ESTATÍSTICAS",
@@ -62,4 +63,3 @@ class SuporteUsuario extends StatelessWidget {
     );
   }
 }
-

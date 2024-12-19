@@ -7,10 +7,12 @@ class ProfissionaisPendentesScreen extends StatefulWidget {
   const ProfissionaisPendentesScreen({super.key});
 
   @override
-  _ProfissionaisPendentesScreenState createState() => _ProfissionaisPendentesScreenState();
+  _ProfissionaisPendentesScreenState createState() =>
+      _ProfissionaisPendentesScreenState();
 }
 
-class _ProfissionaisPendentesScreenState extends State<ProfissionaisPendentesScreen> {
+class _ProfissionaisPendentesScreenState
+    extends State<ProfissionaisPendentesScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<List<Map<String, dynamic>>> _fetchPendentes() async {
@@ -18,8 +20,10 @@ class _ProfissionaisPendentesScreenState extends State<ProfissionaisPendentesScr
       List<Map<String, dynamic>> allPendentes = [];
 
       // Busca pendentes na coleção Profissionais
-      QuerySnapshot profSnapshot =
-          await _firestore.collection('Profissionais').where('statusConta', isEqualTo: 'analise').get();
+      QuerySnapshot profSnapshot = await _firestore
+          .collection('Profissionais')
+          .where('statusConta', isEqualTo: 'analise')
+          .get();
 
       allPendentes.addAll(profSnapshot.docs.map((doc) {
         final data = doc.data() as Map<String, dynamic>;
@@ -29,8 +33,10 @@ class _ProfissionaisPendentesScreenState extends State<ProfissionaisPendentesScr
       }));
 
       // Busca pendentes na coleção Administrador
-      QuerySnapshot adminSnapshot =
-          await _firestore.collection('Administrador').where('statusConta', isEqualTo: 'analise').get();
+      QuerySnapshot adminSnapshot = await _firestore
+          .collection('Administrador')
+          .where('statusConta', isEqualTo: 'analise')
+          .get();
 
       allPendentes.addAll(adminSnapshot.docs.map((doc) {
         final data = doc.data() as Map<String, dynamic>;
@@ -50,23 +56,32 @@ class _ProfissionaisPendentesScreenState extends State<ProfissionaisPendentesScr
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: background,
       body: Column(
         children: [
-          const SizedBox(height: 16),
-          // Título centralizado no topo
-          const Text(
-            'Veja os profissionais pendentes',
-            style: TextStyle(
-              fontSize: 20,
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w500,
-              color: preto1,
+          Center(
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Icon(
+                  Icons.hail_rounded,
+                  color: bege,
+                  size: 70,
+                ),
+                const Text(
+                  'veja todos os usuários pendentes.',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black54,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
             ),
-            textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
-          // Espaço para os cards (com FutureBuilder)
           Expanded(
             child: FutureBuilder<List<Map<String, dynamic>>>(
               future: _fetchPendentes(),
@@ -88,11 +103,13 @@ class _ProfissionaisPendentesScreenState extends State<ProfissionaisPendentesScr
 
                 final profissionaisPendentes = snapshot.data;
 
-                if (profissionaisPendentes == null || profissionaisPendentes.isEmpty) {
+                if (profissionaisPendentes == null ||
+                    profissionaisPendentes.isEmpty) {
                   return const Center(
                     child: Text(
                       'Nenhum profissional pendente encontrado.',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                   );
                 }
@@ -108,12 +125,15 @@ class _ProfissionaisPendentesScreenState extends State<ProfissionaisPendentesScr
                       nome: profissional['nome'] ?? 'Sem nome',
                       email: profissional['email'] ?? 'Sem email',
                       telefone: profissional['telefone'] ?? 'Sem telefone',
-                      urlFoto: profissional['urlFoto'] ?? 'https://via.placeholder.com/150',
+                      urlFoto: profissional['urlFoto'] ??
+                          'https://via.placeholder.com/150',
                       status: profissional['statusConta'] ?? 'Sem status',
                       uidDocumento: profissional['uidDocumento'],
-                      tipoUsuario: profissional['tipoUsuario']?.toString() ?? 'Desconhecido', // Corrigido
+                      tipoUsuario: profissional['tipoUsuario']?.toString() ??
+                          'Desconhecido', // Corrigido
                       onTap: () {
-                        debugPrint('Card selecionado: ${profissional['nome']} (${profissional['uidDocumento']})');
+                        debugPrint(
+                            'Card selecionado: ${profissional['nome']} (${profissional['uidDocumento']})');
                       },
                     );
                   },

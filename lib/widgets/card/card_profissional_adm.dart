@@ -5,9 +5,9 @@ class CardProfissionaisAdm extends StatelessWidget {
   final String nome;
   final String email;
   final String telefone;
-  final String urlFoto; 
-  final String status; 
-  final String uidDocumento; 
+  final String urlFoto;
+  final String status;
+  final String uidDocumento;
   final String tipoUsuario; // Adicionado tipoUsuario
   final VoidCallback onTap;
 
@@ -39,7 +39,6 @@ class CardProfissionaisAdm extends StatelessWidget {
       },
       child: Card(
         color: Colors.white,
-        elevation: 4,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),
@@ -57,7 +56,8 @@ class CardProfissionaisAdm extends StatelessWidget {
                   height: 60,
                   fit: BoxFit.cover,
                   errorBuilder: (context, error, stackTrace) {
-                    return const Icon(Icons.person, size: 60, color: Colors.grey);
+                    return const Icon(Icons.person,
+                        size: 60, color: Colors.grey);
                   },
                 ),
               ),
@@ -67,23 +67,34 @@ class CardProfissionaisAdm extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(nome, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                    Text(email, style: const TextStyle(fontSize: 14, color: Colors.grey)),
-                    Text(telefone, style: const TextStyle(fontSize: 14, color: Colors.grey)),
-                    Text('Tipo: ${tipoUsuario.toUpperCase()}'), // Mostra o tipoUsuario
+                    Text(nome,
+                        style: const TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold)),
+                    Text(email,
+                        style:
+                            const TextStyle(fontSize: 14, color: Colors.grey)),
+                    Text(telefone,
+                        style:
+                            const TextStyle(fontSize: 14, color: Colors.grey)),
+                    Text(
+                        'Tipo: ${tipoUsuario.toUpperCase()}'), // Mostra o tipoUsuario
                   ],
                 ),
               ),
               // Status
               Container(
-                padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
                 decoration: BoxDecoration(
                   color: _getStatusColor(status),
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 child: Text(
                   status.toUpperCase(),
-                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white),
+                  style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
                 ),
               ),
             ],

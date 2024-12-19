@@ -152,165 +152,167 @@ class _EditaPerfilProfState extends State<EditaPerfilProf> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: background,
       appBar: AppBar(
         backgroundColor: background,
         title: const Text('Editar Perfil'),
       ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Center(
-                      child: Column(
-                        children: [
-                          GestureDetector(
-                            onTap: _selecionarImagem,
-                            child: CircleAvatar(
-                              radius: 50,
-                              backgroundImage: _novaImagem != null
-                                  ? MemoryImage(_novaImagem!)
-                                  : (_profissional?.urlFoto != null
-                                      ? NetworkImage(_profissional!.urlFoto)
-                                      : null) as ImageProvider?,
-                              child: _novaImagem == null &&
-                                      _profissional?.urlFoto == null
-                                  ? const Icon(Icons.camera_alt,
-                                      size: 30, color: Colors.white)
-                                  : null,
+      body: Container(
+        child: _isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Center(
+                        child: Column(
+                          children: [
+                            GestureDetector(
+                              onTap: _selecionarImagem,
+                              child: CircleAvatar(
+                                radius: 50,
+                                backgroundImage: _novaImagem != null
+                                    ? MemoryImage(_novaImagem!)
+                                    : (_profissional?.urlFoto != null
+                                        ? NetworkImage(_profissional!.urlFoto)
+                                        : null) as ImageProvider?,
+                                child: _novaImagem == null &&
+                                        _profissional?.urlFoto == null
+                                    ? const Icon(Icons.camera_alt,
+                                        size: 30, color: Colors.white)
+                                    : null,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 8),
-                          const Text(
-                            'Clique na imagem para alterar',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey,
+                            const SizedBox(height: 8),
+                            const Text(
+                              'Clique na imagem para alterar',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 16),
-                    TextFieldCustom(
-                      labelText: "Nome",
-                      hintText: "Digite seu nome",
-                      formController: _nomeController,
-                      tipoTexto: TextInputType.text,
-                    ),
-                    const SizedBox(height: 16),
-                    CustomDropdownButton(
-                      hint: "Gênero",
-                      dropdownValue: _profissional?.genero != null &&
-                              generos.contains(_profissional!.genero)
-                          ? _profissional!.genero
-                          : null,
-                      items: generos,
-                      onChanged: (value) {
-                        setState(() {
-                          _profissional!.genero = value;
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    CustomDropdownButton(
-                      hint: "Profissão",
-                      dropdownValue: _profissional?.profissao != null &&
-                              profissoes.contains(_profissional!.profissao)
-                          ? _profissional!.profissao
-                          : null,
-                      items: profissoes,
-                      onChanged: (value) {
-                        setState(() {
-                          _profissional!.profissao = value;
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    CustomDropdownButton(
-                      hint: "Local de Trabalho",
-                      dropdownValue: _profissional?.localTrabalho != null &&
-                              locaisDeTrabalho
-                                  .contains(_profissional!.localTrabalho)
-                          ? _profissional!.localTrabalho
-                          : null,
-                      items: locaisDeTrabalho,
-                      onChanged: (value) {
-                        setState(() {
-                          _profissional!.localTrabalho = value;
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    CustomDropdownButton(
-                      hint: "Raça",
-                      dropdownValue: _profissional?.raca != null &&
-                              raca.contains(_profissional!.raca)
-                          ? _profissional!.raca
-                          : null,
-                      items: raca,
-                      onChanged: (value) {
-                        setState(() {
-                          _profissional!.raca = value;
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    TextFieldCustom(
-                      labelText: "Email",
-                      hintText: "Digite seu email",
-                      formController: _emailController,
-                      tipoTexto: TextInputType.emailAddress,
-                    ),
-                    const SizedBox(height: 16),
-                    TextFieldCustom(
-                      labelText: "CPF",
-                      hintText: "Digite seu CPF",
-                      formController: _cpfController,
-                      tipoTexto: TextInputType.number,
-                    ),
-                    const SizedBox(height: 16),
-                    TextFieldCustom(
-                      labelText: "Telefone",
-                      hintText: "Digite seu telefone",
-                      formController: _telefoneController,
-                      tipoTexto: TextInputType.phone,
-                    ),
-                    const SizedBox(height: 16),
-                    TextFieldCustom(
-                      labelText: "CEP",
-                      hintText: "Digite o CEP",
-                      formController: _cepController,
-                      tipoTexto: TextInputType.number,
-                    ),
-                    const SizedBox(height: 16),
-                    TextFieldCustom(
-                      labelText: "Rua",
-                      hintText: "Digite sua rua",
-                      formController: _ruaController,
-                      tipoTexto: TextInputType.text,
-                    ),
-                    const SizedBox(height: 16),
-                    TextFieldCustom(
-                      labelText: "Número",
-                      hintText: "Digite o número da residência",
-                      formController: _numeroController,
-                      tipoTexto: TextInputType.text,
-                    ),
-                    const SizedBox(height: 24),
-                    Botaoprincipal(
-                      text: "Salvar",
-                      onPressed: _salvarAlteracoes,
-                    ),
-                  ],
+                      const SizedBox(height: 16),
+                      TextFieldCustom(
+                        labelText: "Nome",
+                        hintText: "Digite seu nome",
+                        formController: _nomeController,
+                        tipoTexto: TextInputType.text,
+                      ),
+                      const SizedBox(height: 16),
+                      CustomDropdownButton(
+                        hint: "Gênero",
+                        dropdownValue: _profissional?.genero != null &&
+                                generos.contains(_profissional!.genero)
+                            ? _profissional!.genero
+                            : null,
+                        items: generos,
+                        onChanged: (value) {
+                          setState(() {
+                            _profissional!.genero = value;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      CustomDropdownButton(
+                        hint: "Profissão",
+                        dropdownValue: _profissional?.profissao != null &&
+                                profissoes.contains(_profissional!.profissao)
+                            ? _profissional!.profissao
+                            : null,
+                        items: profissoes,
+                        onChanged: (value) {
+                          setState(() {
+                            _profissional!.profissao = value;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      CustomDropdownButton(
+                        hint: "Local de Trabalho",
+                        dropdownValue: _profissional?.localTrabalho != null &&
+                                locaisDeTrabalho
+                                    .contains(_profissional!.localTrabalho)
+                            ? _profissional!.localTrabalho
+                            : null,
+                        items: locaisDeTrabalho,
+                        onChanged: (value) {
+                          setState(() {
+                            _profissional!.localTrabalho = value;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      CustomDropdownButton(
+                        hint: "Raça",
+                        dropdownValue: _profissional?.raca != null &&
+                                raca.contains(_profissional!.raca)
+                            ? _profissional!.raca
+                            : null,
+                        items: raca,
+                        onChanged: (value) {
+                          setState(() {
+                            _profissional!.raca = value;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      TextFieldCustom(
+                        labelText: "Email",
+                        hintText: "Digite seu email",
+                        formController: _emailController,
+                        tipoTexto: TextInputType.emailAddress,
+                      ),
+                      const SizedBox(height: 16),
+                      TextFieldCustom(
+                        labelText: "CPF",
+                        hintText: "Digite seu CPF",
+                        formController: _cpfController,
+                        tipoTexto: TextInputType.number,
+                      ),
+                      const SizedBox(height: 16),
+                      TextFieldCustom(
+                        labelText: "Telefone",
+                        hintText: "Digite seu telefone",
+                        formController: _telefoneController,
+                        tipoTexto: TextInputType.phone,
+                      ),
+                      const SizedBox(height: 16),
+                      TextFieldCustom(
+                        labelText: "CEP",
+                        hintText: "Digite o CEP",
+                        formController: _cepController,
+                        tipoTexto: TextInputType.number,
+                      ),
+                      const SizedBox(height: 16),
+                      TextFieldCustom(
+                        labelText: "Rua",
+                        hintText: "Digite sua rua",
+                        formController: _ruaController,
+                        tipoTexto: TextInputType.text,
+                      ),
+                      const SizedBox(height: 16),
+                      TextFieldCustom(
+                        labelText: "Número",
+                        hintText: "Digite o número da residência",
+                        formController: _numeroController,
+                        tipoTexto: TextInputType.text,
+                      ),
+                      const SizedBox(height: 24),
+                      Botaoprincipal(
+                        text: "Salvar",
+                        onPressed: _salvarAlteracoes,
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
+      ),
     );
   }
 }

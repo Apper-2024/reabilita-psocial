@@ -22,7 +22,8 @@ final ProfissionalProvider profissionalProvider = ProfissionalProvider.instance;
 PacienteProvider pacienteProvider = PacienteProvider.instance;
 Query _baseQuery = db
     .collection("Pacientes")
-    .where('dadosPacienteModel.uidProfisional', isEqualTo: profissionalProvider.profissional!.uidProfissional)
+    .where('dadosPacienteModel.uidProfisional',
+        isEqualTo: profissionalProvider.profissional!.uidProfissional)
     .orderBy('dadosPacienteModel.dataCriacao', descending: true);
 
 class _EvolucaoScreenState extends State<EvolucaoScreen> {
@@ -32,23 +33,39 @@ class _EvolucaoScreenState extends State<EvolucaoScreen> {
       backgroundColor: background,
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Header(),
               const SizedBox(height: 16),
-              const Text(
-                'Tenha a evoluções dos pacientes',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontFamily: 'Poppins',
-                  color: preto1,
+              Center(
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Icon(
+                      Icons.bar_chart,
+                      color: bege,
+                      size: 80,
+                    ),
+                    const Text(
+                      'Tenha a evoluções dos pacientes.',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black54,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
                 ),
               ),
+              const SizedBox(height: 16),
               StreamBuilder<QuerySnapshot>(
                 stream: _baseQuery.snapshots(),
-                builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.hasError) {
                     print(snapshot.error);
                     return const Center(child: Text('Algo deu errado'));
@@ -59,16 +76,27 @@ class _EvolucaoScreenState extends State<EvolucaoScreen> {
                   }
 
                   if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                    return const Center(child: Text("Nenhum usuário encontrado"));
+                    return const Center(
+                        child: Text("Nenhum usuário encontrado"));
                   }
 
-                  final List<PacienteModel> pacientes = snapshot.data!.docs.map((doc) {
-                    return PacienteModel.fromMap(doc.data() as Map<String, dynamic>);
+                  final List<PacienteModel> pacientes =
+                      snapshot.data!.docs.map((doc) {
+                    return PacienteModel.fromMap(
+                        doc.data() as Map<String, dynamic>);
                   }).toList();
 
-                  return ListView.builder(
+                  return GridView.builder(
                     itemCount: pacientes.length,
                     shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2, // Define duas colunas
+                      crossAxisSpacing: 5, // Espaçamento horizontal reduzido
+                      mainAxisSpacing: 5, // Espaçamento vertical reduzido
+                      childAspectRatio: 2 / 2, // Ajuste da proporção
+                    ),
                     itemBuilder: (context, index) {
                       final paciente = pacientes[index];
                       return CardEvolucao(
@@ -77,8 +105,6 @@ class _EvolucaoScreenState extends State<EvolucaoScreen> {
                         onTap: () {
                           pacienteProvider.setPaciente(paciente);
                           Navigator.pushNamed(context, "/evolucaoPaciente");
-                          // Navigator.of(context)
-                          //     .push(MaterialPageRoute(builder: (context) => const EvolucaoPacientePage()));
                         },
                       );
                     },

@@ -8,6 +8,7 @@ import 'package:reabilita_social/provider/administrador_provider.dart';
 import 'package:reabilita_social/provider/imagem_provider.dart';
 import 'package:reabilita_social/provider/paciente_provider.dart';
 import 'package:reabilita_social/provider/profissional_provider.dart';
+import 'package:reabilita_social/screens/Mapa.dart';
 import 'package:reabilita_social/screens/administrador/adicionarUsuario.dart';
 import 'package:reabilita_social/screens/administrador/detalheAdministrador.dart';
 import 'package:reabilita_social/screens/administrador/homeAdministrador.dart';
@@ -19,12 +20,11 @@ import 'package:reabilita_social/screens/profissional/cadastro_projeto.dart';
 import 'package:reabilita_social/screens/profissional/edita_perfil_prof.dart';
 import 'package:reabilita_social/screens/profissional/evolucao_paciente.dart';
 import 'package:reabilita_social/screens/profissional/paciente.dart';
-import 'package:reabilita_social/screens/profissional/perfil.dart';
+import 'package:reabilita_social/screens/profissional/recursos.dart';
 import 'package:reabilita_social/screens/profissional/pesquisa_usuario.dart';
 import 'package:reabilita_social/screens/profissional/projetos.dart';
 import 'package:reabilita_social/screens/profissional/referencias.dart';
 import 'package:reabilita_social/screens/profissional/suporteUsuario.dart';
-import 'package:reabilita_social/screens/testemapa.dart';
 import 'package:reabilita_social/services/route_service.dart';
 import 'package:reabilita_social/verifica_conta.dart';
 import 'package:reabilita_social/widgets/bottomMenu/botom_menu_profissional.dart';
@@ -78,27 +78,42 @@ class MyApp extends StatelessWidget {
         '/PesquisaMapa': (context) => const SearchPage(),
 
         //ADMINISTRADOR
-        '/usuariosAdministrador': (context) => const RouteGuard(child: ProfissionaisPage()),
-        '/adicionarAdministrador': (context) => const RouteGuard(child: AddUserPage()),
-        '/detaheAdministrador': (context) => const RouteGuard(child: DetalheAdministrador()),
-        '/homeAdministrador': (context) => const RouteGuard(child: ProfissionaisPage()),
+        '/usuariosAdministrador': (context) =>
+            const RouteGuard(child: ProfissionaisPage()),
+        '/adicionarAdministrador': (context) =>
+            const RouteGuard(child: AddUserPage()),
+        '/detaheAdministrador': (context) =>
+            const RouteGuard(child: DetalheAdministrador()),
+        '/homeAdministrador': (context) =>
+            const RouteGuard(child: ProfissionaisPage()),
         '/Menu': (context) => const RouteGuard(child: ProfissionaisPage()),
 
         //PROFISSIONAL
-        '/cadastroProjeto': (context) => const RouteGuard(child: CadastroProjetoScreen()),
+        '/cadastroProjeto': (context) =>
+            const RouteGuard(child: CadastroProjetoScreen()),
         '/telaPaciente': (context) => const RouteGuard(child: PacienteScreen()),
         //'/detalhePaciente': (context) => RouteGuard(child:  DetalhesPaciente()),
-        '/menuProfissional': (context) => const RouteGuard(child: BottomMenuProfissional()),
-        '/perfilProfissional': (context) => const RouteGuard(child: PerfilScreen()),
+        '/menuProfissional': (context) =>
+            const RouteGuard(child: BottomMenuProfissional()),
+        '/recursosProfissional': (context) =>
+            const RouteGuard(child: RecursosScreen()),
         '/cadastro': (context) => const RouteGuard(child: CadastroScreen()),
-        '/cadastroFinal': (context) => const RouteGuard(child: CadastroFinalScreen()),
-        '/loginPrimeiroAcesso': (context) => const RouteGuard(child: LoginPrimeiroAcesso()),
-        '/evolucaoPaciente': (context) => const RouteGuard(child: EvolucaoPacientePage()),
-        '/editarPerfil': (context) => const RouteGuard(child: EditaPerfilProf()),
-        '/suporteUsuario': (context) => const RouteGuard(child:  SuporteUsuario()),
-        '/pesquisaUsuario': (context) => const RouteGuard(child:  PesquisaUsuarioScreen()),
-        '/projetoScreen': (context) => const RouteGuard(child:  ProjetosScreen()),
-        '/referenciasTela': (context) => const RouteGuard(child:  ReferenciasPage()),
+        '/cadastroFinal': (context) =>
+            const RouteGuard(child: CadastroFinalScreen()),
+        '/loginPrimeiroAcesso': (context) =>
+            const RouteGuard(child: LoginPrimeiroAcesso()),
+        '/evolucaoPaciente': (context) =>
+            const RouteGuard(child: EvolucaoPacientePage()),
+        '/editarPerfil': (context) =>
+            const RouteGuard(child: EditaPerfilProf()),
+        '/suporteUsuario': (context) =>
+            const RouteGuard(child: SuporteUsuario()),
+        '/pesquisaUsuario': (context) =>
+            const RouteGuard(child: PesquisaUsuarioScreen()),
+        '/projetoScreen': (context) =>
+            const RouteGuard(child: ProjetosScreen()),
+        '/referenciasTela': (context) =>
+            const RouteGuard(child: ReferenciasPage()),
 
         //PACIENTE
       },

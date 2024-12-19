@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:reabilita_social/screens/profissional/evolucao.dart';
 import 'package:reabilita_social/screens/profissional/home.dart';
-import 'package:reabilita_social/screens/profissional/perfil.dart';
+import 'package:reabilita_social/screens/profissional/recursos.dart';
 import 'package:reabilita_social/screens/profissional/projetos.dart';
 import 'package:reabilita_social/utils/colors.dart';
 
@@ -46,39 +46,44 @@ class _BottomMenuProfissionalState extends State<BottomMenuProfissional> {
           HomeScreen(),
           ProjetosScreen(),
           EvolucaoScreen(),
-          PerfilScreen(),
+          RecursosScreen(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: paginaAtual,
         onTap: setPaginaAtual,
-        backgroundColor: background,
+        backgroundColor: Colors.white,
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home, color: paginaAtual == 0 ? verde1 : Colors.grey),
+            icon: Icon(Icons.home,
+                color: paginaAtual == 0 ? verde1 : Colors.grey),
             label: 'Home',
             backgroundColor: Colors.white,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.people_alt_rounded, color: paginaAtual == 1 ? verde1 : Colors.grey),
+            icon: Icon(Icons.people_alt_rounded,
+                color: paginaAtual == 1 ? verde1 : Colors.grey),
             label: 'Projetos',
             backgroundColor: Colors.white,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.bubble_chart, color: paginaAtual == 2 ? verde1 : Colors.grey),
+            icon: Icon(Icons.bubble_chart,
+                color: paginaAtual == 2 ? verde1 : Colors.grey),
             label: 'Evolução',
             backgroundColor: Colors.white,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person, color: paginaAtual == 3 ? verde1 : Colors.grey),
-            label: 'Perfil',
+            icon: Icon(Icons.all_inclusive_rounded,
+                color: paginaAtual == 3 ? verde1 : Colors.grey),
+            label: 'Recursos',
             backgroundColor: Colors.white,
           ),
         ],
         type: BottomNavigationBarType.fixed,
         selectedItemColor: verde1,
         unselectedItemColor: cinza1,
-        selectedLabelStyle: const TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.bold),
+        selectedLabelStyle:
+            const TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.bold),
         unselectedLabelStyle: const TextStyle(fontFamily: 'Poppins'),
       ),
     );

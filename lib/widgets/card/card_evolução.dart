@@ -5,65 +5,54 @@ class CardEvolucao extends StatelessWidget {
   final String nome;
   final String imageUrl;
   final void Function()? onTap;
-  const CardEvolucao({super.key, required this.nome, required this.imageUrl, this.onTap});
+  const CardEvolucao(
+      {super.key, required this.nome, required this.imageUrl, this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+      padding: const EdgeInsets.all(8.0),
       child: InkWell(
-        onTap:onTap,
+        onTap: onTap,
         child: Container(
-          padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
                 color: Colors.grey.withOpacity(0.1),
-                spreadRadius: 2,
-                blurRadius: 10,
-                offset: const Offset(0, 5),
+                blurRadius: 8,
+                offset: const Offset(0, 4),
               ),
             ],
           ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Container(
-                width: 56,
-                height: 56,
-                decoration:  BoxDecoration(
+                height: 120,
+                decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: NetworkImage(
-                        imageUrl),
+                    image: NetworkImage(imageUrl),
                     fit: BoxFit.cover,
                   ),
-                  borderRadius: const BorderRadius.all(Radius.circular(200)),
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(16),
+                  ),
                 ),
               ),
-              const SizedBox(width: 18),
-               Expanded(
+              Padding(
+                padding: const EdgeInsets.all(14),
                 child: Text(
-                 nome,
+                  'Gabriel Lamarca Galdino da Silva',
                   style: const TextStyle(
-                    fontSize: 20,
+                    fontSize: 14,
                     fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w600,
                     color: verde1,
                   ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-              const SizedBox(width: 18),
-              Container(
-                width: 30,
-                height: 30,
-                decoration: const BoxDecoration(
-                  color: verde2,
-                  borderRadius: BorderRadius.all(Radius.circular(200)),
-                ),
-                child: const Center(
-                  child: Icon(Icons.arrow_forward, size: 18, color: Colors.white),
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.visible,
                 ),
               ),
             ],

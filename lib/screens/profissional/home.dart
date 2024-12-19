@@ -30,18 +30,17 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // Define explicitamente o background
+      backgroundColor: background,
       body: profissionalProvider.profissional?.nome == null
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(20.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Cabeçalho
-                    Header(
-                    ),
+                    Header(),
                     const SizedBox(height: 16),
 
                     // Boas-vindas
@@ -51,23 +50,25 @@ class _HomeScreenState extends State<HomeScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
-                            'Bem-Vindo,',
+                            'Bem-vindo,',
                             style: TextStyle(
                               fontSize: 28,
                               fontWeight: FontWeight.normal,
+                              color: preto1,
                             ),
                           ),
                           Text(
-                            profissionalProvider.profissional!.nome,
+                            profissionalProvider.profissional!.nome + "!",
                             style: const TextStyle(
                               fontSize: 28,
                               fontWeight: FontWeight.bold,
+                              color: preto1,
                             ),
                           ),
                         ],
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 30),
 
                     // Ferramentas de auxílio
                     const Text(
@@ -76,55 +77,64 @@ class _HomeScreenState extends State<HomeScreen> {
                         fontSize: 18,
                         fontFamily: 'Poppins',
                         color: preto1,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     const SizedBox(height: 16),
 
                     // Suporte ao Usuário
-                    Container(
-                      padding: const EdgeInsets.all(22),
-                      decoration: BoxDecoration(
-                        color: bege,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Suporte ao Usuário',
-                                style: TextStyle(
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Poppins',
-                                  color: preto1,
-                                ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, "/suporteUsuario");
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: bege,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: const [
+                                  Text(
+                                    'Suporte ao Usuário',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Poppins',
+                                      color: preto1,
+                                    ),
+                                  ),
+                                  SizedBox(height: 8),
+                                  Text(
+                                    'Referências, legislações, informações e muito mais',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontFamily: 'Poppins',
+                                      color: preto1,
+                                    ),
+                                    softWrap: true,
+                                  ),
+                                  SizedBox(height: 8),
+                                  Text(
+                                    'Conferir  ➔',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.bold,
+                                      color: verde1,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              SizedBox(height: 8),
-                              Text(
-                                'Referências, legislações,\ninformações e muito mais',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontFamily: 'Poppins',
-                                  color: preto1,
-                                ),
-                              ),
-                              SizedBox(height: 8),
-                              Text(
-                                'Conferir  ➔',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.bold,
-                                  color: verde1,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Icon(Icons.flag, color: preto1, size: 48),
-                        ],
+                            ),
+                            const Icon(Icons.flag, color: verde1, size: 48),
+                          ],
+                        ),
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -135,19 +145,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(8),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.1),
-                            spreadRadius: 2,
-                            blurRadius: 10,
-                            offset: const Offset(0, 5),
-                          ),
-                        ],
                       ),
-                      child: const Row(
+                      child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(width: 8),
+                        children: const [
+                          Icon(
+                            Icons.format_quote,
+                            color: bege,
+                            size: 48,
+                          ),
+                          SizedBox(width: 16),
                           Expanded(
                             child: Text(
                               '“Permeando projetos de vida com sentidos e significados construídos no habitat, rede social e trabalho”',
@@ -157,12 +164,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 color: cinza1,
                               ),
                             ),
-                          ),
-                          SizedBox(width: 10),
-                          Icon(
-                            Icons.format_quote,
-                            color: bege,
-                            size: 48,
                           ),
                         ],
                       ),
@@ -175,6 +176,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         fontSize: 18,
                         fontFamily: 'Poppins',
                         color: preto1,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -187,18 +189,23 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: verde1,
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: const Row(
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Como realizar um Projeto\nde Reabilitação Psicossocial?',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w500,
-                                color: Colors.white,
+                          children: const [
+                            Expanded(
+                              child: Text(
+                                'Como realizar um Projeto de Reabilitação Psicossocial?',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 2,
                               ),
                             ),
+                            SizedBox(width: 16),
                             Icon(Icons.spa, color: verde2, size: 58),
                           ],
                         ),
@@ -212,6 +219,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         fontSize: 18,
                         fontFamily: 'Poppins',
                         color: preto1,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -220,20 +228,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(8),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.1),
-                            spreadRadius: 2,
-                            blurRadius: 10,
-                            offset: const Offset(0, 5),
-                          ),
-                        ],
                       ),
                       child: const Text(
-                        '• Estimule a autonomia do paciente com atividades diárias.\n'
-                        '• Incentive a participação em redes sociais de apoio.\n'
-                        '• Estabeleça metas pequenas e significativas para o paciente.\n'
-                        '• Mantenha o diálogo aberto com os familiares e profissionais envolvidos.',
+                        '• Estimule a autonomia do paciente com atividades diárias.\n• Incentive a participação em redes sociais de apoio.\n• Estabeleça metas pequenas e significativas para o paciente.\n• Mantenha o diálogo aberto com os familiares e profissionais envolvidos.',
                         style: TextStyle(
                           fontSize: 16,
                           fontFamily: 'Poppins',

@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:reabilita_social/utils/colors.dart';
 
 class CardProjeto extends StatelessWidget {
-  String foto;
-  String nome;
-  String observacao;
-  void Function()? onTap;
+  final String foto;
+  final String nome;
+  final String observacao;
+  final void Function()? onTap;
+
   CardProjeto({
     super.key,
     required this.foto,
@@ -14,10 +15,41 @@ class CardProjeto extends StatelessWidget {
     this.onTap,
   });
 
+  void _showObservacao(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          title: const Text(
+            'Observação',
+            style: TextStyle(color: preto1),
+          ),
+          content: Text(
+            observacao,
+            style: const TextStyle(color: preto1),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              style: TextButton.styleFrom(
+                backgroundColor: verde1,
+              ),
+              child: const Text(
+                'Fechar',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.only(bottom: 18),
       child: InkWell(
         onTap: onTap,
         child: Container(
@@ -27,15 +59,15 @@ class CardProjeto extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.withOpacity(0.1),
-                spreadRadius: 2,
-                blurRadius: 10,
-                offset: const Offset(0, 5),
+                color: Colors.grey.withOpacity(0.05),
+                spreadRadius: 1,
+                blurRadius: 5,
+                offset: const Offset(0, 3),
               ),
             ],
           ),
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
                 width: 56,
@@ -49,26 +81,20 @@ class CardProjeto extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 18),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    nome,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontFamily: 'Poppins',
-                      color: verde1,
-                    ),
+              Expanded(
+                child: Text(
+                  nome,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontFamily: 'Poppins',
+                    color: verde1,
                   ),
-                  Text(
-                    observacao,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontFamily: 'Poppins',
-                      color: cinza1,
-                    ),
-                  ),
-                ],
+                  maxLines: null,
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.info_outline, color: verde1),
+                onPressed: () => _showObservacao(context),
               ),
             ],
           ),

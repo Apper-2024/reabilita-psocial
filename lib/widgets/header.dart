@@ -4,13 +4,12 @@ import 'package:reabilita_social/repository/auth/auth_repository.dart';
 import '../utils/colors.dart';
 
 class Header extends StatelessWidget {
-  // final String imageUrl;
-
   Header({
     super.key,
   });
 
   ProfissionalProvider profissionalProvider = ProfissionalProvider.instance;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -19,27 +18,48 @@ class Header extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            ClipOval(
-              child: Image.network(
-                profissionalProvider.profissional!.urlFoto,
-                width: 48,
-                height: 48,
-                fit: BoxFit.cover,
+            Container(
+              width: 60,
+              height: 60,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(
+                    10), // Forma intermediária entre oval e quadrado
+                image: DecorationImage(
+                  image:
+                      NetworkImage(profissionalProvider.profissional!.urlFoto),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             InkWell(
               onTap: () {
-                AuthRepository().signOut();
-                Navigator.pushNamed(context, '/login');
+                AuthRepository().signOut(); // Remove autenticação do Firebase
+                Navigator.pushNamedAndRemoveUntil(context, '/login',
+                    (route) => false); // Redireciona para o login
               },
-              child: const Stack(
-                children: [
-                  Icon(
-                    Icons.exit_to_app,
-                    size: 38,
-                    color: preto1,
-                  ),
-                ],
+              child: Container(
+                padding: const EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Row(
+                  children: [
+                    Icon(
+                      Icons.exit_to_app,
+                      size: 24,
+                      color: Colors.grey,
+                    ),
+                    SizedBox(width: 4),
+                    Text(
+                      "Sair",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

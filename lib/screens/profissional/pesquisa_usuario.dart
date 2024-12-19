@@ -21,7 +21,8 @@ class PesquisaUsuarioScreen extends StatefulWidget {
 
 class _PesquisaUsuarioScreenState extends State<PesquisaUsuarioScreen> {
   final FirebaseFirestore db = FirebaseService().db;
-  final ProfissionalProvider profissionalProvider = ProfissionalProvider.instance;
+  final ProfissionalProvider profissionalProvider =
+      ProfissionalProvider.instance;
   final TextEditingController _searchController = TextEditingController();
   String _query = '';
 
@@ -50,24 +51,33 @@ class _PesquisaUsuarioScreenState extends State<PesquisaUsuarioScreen> {
 
     return Scaffold(
       backgroundColor: background,
-appBar: AppBar(
-  leading: IconButton(
-    icon: const Icon(Icons.arrow_back),
-    onPressed: () {
-      Navigator.pop(context);
-    },
-  ),
-),      body: Padding(
-
+      appBar: AppBar(
+        backgroundColor: background,
+        title: const Text(
+          'Pesquisar Usuário',
+          style: TextStyle(
+            fontSize: 22,
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w500,
+            color: preto1,
+          ),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: preto1),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        elevation: 0,
+      ),
+      body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Header(),
-            const SizedBox(height: 16),
             const Text(
-              'Pesquisar Usuário',
+              'Procure pelo nome ou código do paciente',
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 18,
                 fontFamily: 'Poppins',
                 color: preto1,
               ),
@@ -75,14 +85,17 @@ appBar: AppBar(
             const SizedBox(height: 16),
             Row(
               children: [
-                Expanded(child: TextSearch(hintText: 'Procure pelo id do paciente', controller: _searchController)),
+                Expanded(
+                    child: TextSearch(
+                        hintText: 'Digite o nome ou código do paciente',
+                        controller: _searchController)),
                 IconButton(
                   onPressed: () {
                     setState(() {
                       _query = _searchController.text;
                     });
                   },
-                  icon: const Icon(Icons.search),
+                  icon: const Icon(Icons.search, color: verde1),
                 ),
               ],
             ),
@@ -90,7 +103,8 @@ appBar: AppBar(
             if (_query.isNotEmpty)
               FutureBuilder<QuerySnapshot>(
                 future: query.get(),
-                builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.hasError) {
                     print(snapshot.error);
                     return const Center(child: Text('Algo deu errado'));
@@ -101,11 +115,12 @@ appBar: AppBar(
                   }
 
                   if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                    return const Center(child: Text("Nenhum usuário encontrado"));
+                    return const Center(
+                        child: Text("Nenhum usuário encontrado"));
                   }
 
-                  final PacienteModel paciente =
-                      PacienteModel.fromMap(snapshot.data!.docs.first.data() as Map<String, dynamic>);
+                  final PacienteModel paciente = PacienteModel.fromMap(
+                      snapshot.data!.docs.first.data() as Map<String, dynamic>);
 
                   return CardProjeto(
                     onTap: () {
@@ -117,7 +132,8 @@ appBar: AppBar(
                     },
                     foto: paciente.dadosPacienteModel.urlFoto,
                     nome: paciente.dadosPacienteModel.nome,
-                    observacao: paciente.dadosPacienteModel.outrasInformacoes.observacao,
+                    observacao: paciente
+                        .dadosPacienteModel.outrasInformacoes.observacao,
                   );
                 },
               ),

@@ -1,4 +1,3 @@
-// projetos.dart
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:reabilita_social/model/paciente/paciente_model.dart';
@@ -21,7 +20,8 @@ class ProjetosScreen extends StatefulWidget {
 
 class _ProjetosScreenState extends State<ProjetosScreen> {
   final FirebaseFirestore db = FirebaseService().db;
-  final ProfissionalProvider profissionalProvider = ProfissionalProvider.instance;
+  final ProfissionalProvider profissionalProvider =
+      ProfissionalProvider.instance;
   final TextEditingController _searchController = TextEditingController();
   String _query = '';
 
@@ -32,7 +32,8 @@ class _ProjetosScreenState extends State<ProjetosScreen> {
     super.initState();
     _baseQuery = db
         .collection("Pacientes")
-        .where('dadosPacienteModel.uidProfisional', isEqualTo: profissionalProvider.profissional!.uidProfissional)
+        .where('dadosPacienteModel.uidProfisional',
+            isEqualTo: profissionalProvider.profissional!.uidProfissional)
         .orderBy('dadosPacienteModel.dataCriacao', descending: true);
     _searchController.addListener(_onSearchChanged);
   }
@@ -56,8 +57,10 @@ class _ProjetosScreenState extends State<ProjetosScreen> {
 
     if (_searchController.text.isNotEmpty) {
       query = query
-          .where('dadosPacienteModel.nome', isGreaterThanOrEqualTo: _searchController.text)
-          .where('dadosPacienteModel.nome', isLessThanOrEqualTo: '${_searchController.text}\uf8ff');
+          .where('dadosPacienteModel.nome',
+              isGreaterThanOrEqualTo: _searchController.text)
+          .where('dadosPacienteModel.nome',
+              isLessThanOrEqualTo: '${_searchController.text}\uf8ff');
     }
 
     return Scaffold(
@@ -77,26 +80,41 @@ class _ProjetosScreenState extends State<ProjetosScreen> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
             Header(),
             const SizedBox(height: 16),
-            const Text(
-              'Tenha acesso aos projetos criados',
-              style: TextStyle(
-                fontSize: 20,
-                fontFamily: 'Poppins',
-                color: preto1,
-              ),
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                Icon(
+                  Icons.folder_open,
+                  color: bege,
+                  size: 80,
+                ),
+                const Text(
+                  'Tenha acesso aos projetos criados.',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black54,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
             ),
             const SizedBox(height: 16),
-            TextSearch(hintText: 'Procure o nome do paciente', controller: _searchController),
+            TextSearch(
+                hintText: 'Procure o nome do paciente',
+                controller: _searchController),
             const SizedBox(height: 16),
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
                 stream: query.snapshots(),
-                builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.hasError) {
                     print(snapshot.error);
                     return const Center(child: Text('Algo deu errado'));
@@ -107,11 +125,14 @@ class _ProjetosScreenState extends State<ProjetosScreen> {
                   }
 
                   if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                    return const Center(child: Text("Nenhum usuário encontrado"));
+                    return const Center(
+                        child: Text("Nenhum usuário encontrado"));
                   }
 
-                  final List<PacienteModel> pacientes = snapshot.data!.docs.map((doc) {
-                    return PacienteModel.fromMap(doc.data() as Map<String, dynamic>);
+                  final List<PacienteModel> pacientes =
+                      snapshot.data!.docs.map((doc) {
+                    return PacienteModel.fromMap(
+                        doc.data() as Map<String, dynamic>);
                   }).toList();
 
                   return ListView.builder(
@@ -129,7 +150,8 @@ class _ProjetosScreenState extends State<ProjetosScreen> {
                         },
                         foto: paciente.dadosPacienteModel.urlFoto,
                         nome: paciente.dadosPacienteModel.nome,
-                        observacao: paciente.dadosPacienteModel.outrasInformacoes.observacao,
+                        observacao: paciente
+                            .dadosPacienteModel.outrasInformacoes.observacao,
                       );
                     },
                   );

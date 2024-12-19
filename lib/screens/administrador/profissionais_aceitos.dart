@@ -16,8 +16,8 @@ class _ProfissionaisAceitosScreenState
     extends State<ProfissionaisAceitosScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  String _selectedStatus = 'todos'; 
-  String _selectedUserType = 'todos'; 
+  String _selectedStatus = 'todos';
+  String _selectedUserType = 'todos';
 
   Future<List<Map<String, dynamic>>> _fetchUsers(
       String status, String userType) async {
@@ -67,19 +67,30 @@ class _ProfissionaisAceitosScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: background,
       body: Column(
         children: [
-          const SizedBox(height: 16),
-          const Text(
-            'Profissionais e Administradores Aceitos',
-            style: TextStyle(
-              fontSize: 20,
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w500,
-              color: preto1,
+          Center(
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Icon(
+                  Icons.groups_rounded,
+                  color: bege,
+                  size: 70,
+                ),
+                const Text(
+                  'Gerencie todos os usuários do sistema.',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black54,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
             ),
-            textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
 

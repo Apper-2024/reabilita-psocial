@@ -12,7 +12,8 @@ class ProfissionaisPage extends StatefulWidget {
   State<ProfissionaisPage> createState() => _ProfissionaisPageState();
 }
 
-class _ProfissionaisPageState extends State<ProfissionaisPage> with TickerProviderStateMixin {
+class _ProfissionaisPageState extends State<ProfissionaisPage>
+    with TickerProviderStateMixin {
   late TabController _controller;
 
   @override
@@ -26,7 +27,6 @@ class _ProfissionaisPageState extends State<ProfissionaisPage> with TickerProvid
     try {
       await FirebaseAuth.instance.signOut();
       Navigator.pushNamed(context, "/login");
-      
     } catch (e) {
       debugPrint("Erro ao fazer logout: $e");
       snackErro(context, "Erro ao sair. Tente novamente.");
@@ -48,8 +48,9 @@ class _ProfissionaisPageState extends State<ProfissionaisPage> with TickerProvid
           //   },
           // ),
           title: const Text(
-            "Profissionais",
-            style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
+            "Bem-vindo, Administrador!",
+            style: TextStyle(
+                color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
           ),
           actions: [
             PopupMenuButton<String>(
@@ -80,7 +81,7 @@ class _ProfissionaisPageState extends State<ProfissionaisPage> with TickerProvid
             ),
           ],
         ),
-        backgroundColor: branco,
+        backgroundColor: background,
         body: Column(
           children: [
             const SizedBox(height: 16),
@@ -112,7 +113,6 @@ class _ProfissionaisPageState extends State<ProfissionaisPage> with TickerProvid
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
             Navigator.pushNamed(context, "/adicionarAdministrador");
-        
           },
           backgroundColor: verde1,
           icon: const Icon(
