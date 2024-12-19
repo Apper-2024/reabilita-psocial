@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:reabilita_social/repository/auth/auth_repository.dart';
 import 'package:reabilita_social/screens/profissional/edita_perfil_prof.dart';
 import 'package:reabilita_social/screens/profissional/pesquisa_usuario.dart';
 import 'package:reabilita_social/screens/profissional/suporteUsuario.dart';
@@ -129,7 +130,8 @@ class PerfilScreen extends StatelessWidget {
             Botaoprincipal(
               text: "Sair",
               onPressed: () {
-                Navigator.pushNamed(context, "/");
+                AuthRepository().signOut();
+                Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
               },
             ),
           ],

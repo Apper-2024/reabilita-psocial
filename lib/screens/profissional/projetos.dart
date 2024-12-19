@@ -62,13 +62,25 @@ class _ProjetosScreenState extends State<ProjetosScreen> {
 
     return Scaffold(
       backgroundColor: background,
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.pushNamed(context, '/cadastroProjeto');
+        },
+        backgroundColor: verde1,
+        icon: const Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
+        label: const Text(
+          "Adicionar Projeto",
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Header(
-           
-            ),
+            Header(),
             const SizedBox(height: 16),
             const Text(
               'Tenha acesso aos projetos criados',
