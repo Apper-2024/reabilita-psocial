@@ -3,19 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       home: SearchPage(),
     );
   }
 }
 
 class SearchPage extends StatefulWidget {
+  const SearchPage({super.key});
+
   @override
   _SearchPageState createState() => _SearchPageState();
 }
@@ -65,7 +69,7 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Search Mental Health Services'),
+        title: const Text('Search Mental Health Services'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -76,7 +80,7 @@ class _SearchPageState extends State<SearchPage> {
               decoration: InputDecoration(
                 labelText: 'Enter address',
                 suffixIcon: IconButton(
-                  icon: Icon(Icons.search),
+                  icon: const Icon(Icons.search),
                   onPressed: _search,
                 ),
               ),

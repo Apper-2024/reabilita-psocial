@@ -6,7 +6,7 @@ class OpcaoCard extends StatelessWidget {
   final String title;
   final Widget destination;
 
-  OpcaoCard({
+  const OpcaoCard({super.key, 
     required this.icon,
     required this.title,
     required this.destination,
@@ -18,7 +18,7 @@ class OpcaoCard extends StatelessWidget {
       child: Card(
         color: Colors.white,
         elevation: 2,
-        margin: EdgeInsets.only(bottom: 12),
+        margin: const EdgeInsets.only(bottom: 12),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
@@ -26,7 +26,7 @@ class OpcaoCard extends StatelessWidget {
           leading: Icon(icon, color: verde1, size: 30),
           title: Text(
             title,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w600,
             ),

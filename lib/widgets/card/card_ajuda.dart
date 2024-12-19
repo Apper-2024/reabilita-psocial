@@ -6,10 +6,10 @@ class CardAjuda extends StatelessWidget {
   final String descricacao;
 
   const CardAjuda({
-    Key? key,
+    super.key,
     required this.titulo,
     required this.descricacao,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class CardAjuda extends StatelessWidget {
           children: [
             Text(
               titulo,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
                 color: verde1, 
@@ -36,7 +36,7 @@ class CardAjuda extends StatelessWidget {
             const SizedBox(height: 6),
             Text(
               descricacao,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 14,
                 color: Colors.black87,
                 height: 1.5,

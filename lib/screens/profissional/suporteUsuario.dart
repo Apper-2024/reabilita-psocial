@@ -5,18 +5,20 @@ import 'package:reabilita_social/widgets/card/card_opcao.dart';
 import 'referencias.dart';
 
 class SuporteUsuario extends StatelessWidget {
+  const SuporteUsuario({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: background,
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           "Suporte ao Usuário",
         ),
         backgroundColor: background,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      body: const Padding(
+        padding: EdgeInsets.all(16.0),
         child: Column(
           children: [
             OpcaoCard(

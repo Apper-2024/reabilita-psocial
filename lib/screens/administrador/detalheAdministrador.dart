@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:reabilita_social/screens/administrador/homeAdministrador.dart';
 import 'package:reabilita_social/utils/colors.dart';
 import 'package:reabilita_social/utils/snack/snack_sucesso.dart';
 import 'package:reabilita_social/widgets/botao/botaoStatus.dart';

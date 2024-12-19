@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:reabilita_social/repository/auth/auth_repository.dart';
-import 'package:reabilita_social/screens/profissional/pesquisa_usuario.dart';
 import 'package:reabilita_social/widgets/botao/botaoPrincipal.dart';
 import '../../utils/colors.dart';
 import '../../widgets/header.dart';

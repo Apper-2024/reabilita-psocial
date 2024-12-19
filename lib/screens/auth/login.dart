@@ -137,7 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(height: 8),
                       InkWell(
                         onTap: () {
-                          Navigator.pushNamed(context, "/loginPrimeiroAcesso");
+                          Navigator.pushNamed(context, "/PesquisaMapa");
                         },
                         child: const Text(
                           'Primeiro acesso, paciente?',

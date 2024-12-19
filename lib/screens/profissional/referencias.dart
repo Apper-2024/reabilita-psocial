@@ -3,12 +3,14 @@ import 'package:reabilita_social/utils/colors.dart';
 import 'package:reabilita_social/widgets/card/card_ajuda.dart';
 
 class ReferenciasPage extends StatelessWidget {
+  const ReferenciasPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: background, 
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           "Referências",
           style: TextStyle(
             color: verde1,
@@ -16,7 +18,7 @@ class ReferenciasPage extends StatelessWidget {
           ),
         ),
         backgroundColor: background,
-        iconTheme: IconThemeData(color: verde1),
+        iconTheme: const IconThemeData(color: verde1),
         centerTitle: true,
         elevation: 0, // Remove sombra
       ),

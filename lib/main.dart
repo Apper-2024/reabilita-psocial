@@ -24,6 +24,7 @@ import 'package:reabilita_social/screens/profissional/pesquisa_usuario.dart';
 import 'package:reabilita_social/screens/profissional/projetos.dart';
 import 'package:reabilita_social/screens/profissional/referencias.dart';
 import 'package:reabilita_social/screens/profissional/suporteUsuario.dart';
+import 'package:reabilita_social/screens/testemapa.dart';
 import 'package:reabilita_social/services/route_service.dart';
 import 'package:reabilita_social/verifica_conta.dart';
 import 'package:reabilita_social/widgets/bottomMenu/botom_menu_profissional.dart';
@@ -74,29 +75,30 @@ class MyApp extends StatelessWidget {
         //GERAL
         '/': (context) => const VerificaConta(),
         '/login': (context) => const LoginScreen(),
+        '/PesquisaMapa': (context) => const SearchPage(),
 
         //ADMINISTRADOR
-        '/usuariosAdministrador': (context) => RouteGuard(child: const ProfissionaisPage()),
-        '/adicionarAdministrador': (context) => RouteGuard(child: const AddUserPage()),
-        '/detaheAdministrador': (context) => RouteGuard(child: const DetalheAdministrador()),
-        '/homeAdministrador': (context) => RouteGuard(child: const ProfissionaisPage()),
-        '/Menu': (context) => RouteGuard(child: const ProfissionaisPage()),
+        '/usuariosAdministrador': (context) => const RouteGuard(child: ProfissionaisPage()),
+        '/adicionarAdministrador': (context) => const RouteGuard(child: AddUserPage()),
+        '/detaheAdministrador': (context) => const RouteGuard(child: DetalheAdministrador()),
+        '/homeAdministrador': (context) => const RouteGuard(child: ProfissionaisPage()),
+        '/Menu': (context) => const RouteGuard(child: ProfissionaisPage()),
 
         //PROFISSIONAL
-        '/cadastroProjeto': (context) => RouteGuard(child: const CadastroProjetoScreen()),
-        '/telaPaciente': (context) => RouteGuard(child: const PacienteScreen()),
+        '/cadastroProjeto': (context) => const RouteGuard(child: CadastroProjetoScreen()),
+        '/telaPaciente': (context) => const RouteGuard(child: PacienteScreen()),
         //'/detalhePaciente': (context) => RouteGuard(child:  DetalhesPaciente()),
-        '/menuProfissional': (context) => RouteGuard(child: const BottomMenuProfissional()),
-        '/perfilProfissional': (context) => RouteGuard(child: const PerfilScreen()),
-        '/cadastro': (context) => RouteGuard(child: const CadastroScreen()),
-        '/cadastroFinal': (context) => RouteGuard(child: const CadastroFinalScreen()),
-        '/loginPrimeiroAcesso': (context) => RouteGuard(child: const LoginPrimeiroAcesso()),
-        '/evolucaoPaciente': (context) => RouteGuard(child: const EvolucaoPacientePage()),
-        '/editarPerfil': (context) => RouteGuard(child: const EditaPerfilProf()),
-        '/suporteUsuario': (context) => RouteGuard(child:  SuporteUsuario()),
-        '/pesquisaUsuario': (context) => RouteGuard(child:  PesquisaUsuarioScreen()),
-        '/projetoScreen': (context) => RouteGuard(child:  ProjetosScreen()),
-        '/referenciasTela': (context) => RouteGuard(child:  ReferenciasPage()),
+        '/menuProfissional': (context) => const RouteGuard(child: BottomMenuProfissional()),
+        '/perfilProfissional': (context) => const RouteGuard(child: PerfilScreen()),
+        '/cadastro': (context) => const RouteGuard(child: CadastroScreen()),
+        '/cadastroFinal': (context) => const RouteGuard(child: CadastroFinalScreen()),
+        '/loginPrimeiroAcesso': (context) => const RouteGuard(child: LoginPrimeiroAcesso()),
+        '/evolucaoPaciente': (context) => const RouteGuard(child: EvolucaoPacientePage()),
+        '/editarPerfil': (context) => const RouteGuard(child: EditaPerfilProf()),
+        '/suporteUsuario': (context) => const RouteGuard(child:  SuporteUsuario()),
+        '/pesquisaUsuario': (context) => const RouteGuard(child:  PesquisaUsuarioScreen()),
+        '/projetoScreen': (context) => const RouteGuard(child:  ProjetosScreen()),
+        '/referenciasTela': (context) => const RouteGuard(child:  ReferenciasPage()),
 
         //PACIENTE
       },

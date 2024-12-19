@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 import 'package:universal_html/html.dart' as html;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';

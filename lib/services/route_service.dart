@@ -5,7 +5,7 @@ import 'package:reabilita_social/screens/auth/login.dart';
 class RouteGuard extends StatelessWidget {
   final Widget child;
 
-  RouteGuard({required this.child});
+  const RouteGuard({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -13,11 +13,11 @@ class RouteGuard extends StatelessWidget {
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasData) {
           return child;
         } else {
-          return LoginScreen();
+          return const LoginScreen();
         }
       },
     );

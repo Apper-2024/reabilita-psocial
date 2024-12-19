@@ -10,7 +10,7 @@ class LegislacaoPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: background, 
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           "Legislação em Saúde Mental",
           style: TextStyle(
             color: verde1, 
@@ -18,7 +18,7 @@ class LegislacaoPage extends StatelessWidget {
           ),
         ),
         backgroundColor: background,
-        iconTheme: IconThemeData(color: verde1), 
+        iconTheme: const IconThemeData(color: verde1), 
         centerTitle: true,
         elevation: 0, 
       ),

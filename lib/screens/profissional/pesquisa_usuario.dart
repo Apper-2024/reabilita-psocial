@@ -52,7 +52,7 @@ class _PesquisaUsuarioScreenState extends State<PesquisaUsuarioScreen> {
       backgroundColor: background,
 appBar: AppBar(
   leading: IconButton(
-    icon: Icon(Icons.arrow_back),
+    icon: const Icon(Icons.arrow_back),
     onPressed: () {
       Navigator.pop(context);
     },

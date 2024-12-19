@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:reabilita_social/screens/administrador/adicionarUsuario.dart';
 import 'package:reabilita_social/screens/administrador/profissionais_aceitos.dart';
 import 'package:reabilita_social/screens/administrador/profissionais_pendentes.dart';
-import 'package:reabilita_social/screens/auth/login.dart';
 import 'package:reabilita_social/utils/colors.dart';
 import 'package:reabilita_social/utils/snack/snack_erro.dart';
 
