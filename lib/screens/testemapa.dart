@@ -28,38 +28,20 @@ class _SearchPageState extends State<SearchPage> {
   final TextEditingController _controller = TextEditingController();
   List<dynamic> _places = [];
 
-  Future<Map<String, dynamic>> getCoordinates(String address) async {
-    const apiKey = 'AIzaSyAoSesmAI2cUK5YF4PWUXJOc_TjhdhA7o4'; // Substitua pela sua chave de API
-    final url = 'https://maps.googleapis.com/maps/api/geocode/json?address=$address&key=$apiKey';
+  Future<List<dynamic>> searchNearbyPlaces(String address) async {
+    final url = 'https://us-central1-reabilitapsocial.cloudfunctions.net/searchNearbyPlaces/searchNearbyPlaces?address=$address';
     final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
-      if (data['results'].isNotEmpty) {
-        final location = data['results'][0]['geometry']['location'];
-        return {'lat': location['lat'], 'lng': location['lng']};
-      }
-    }
-    throw Exception('Failed to get coordinates');
-  }
-
-  Future<List<dynamic>> getNearbyPlaces(double lat, double lng) async {
-    const apiKey = 'AIzaSyAoSesmAI2cUK5YF4PWUXJOc_TjhdhA7o4'; // Substitua pela sua chave de API
-    final url =
-        'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$lat,$lng&radius=1500&type=health&keyword=mental&key=$apiKey';
-    final response = await http.get(Uri.parse(url));
-
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      return data['results'];
+      return data;
     }
     throw Exception('Failed to get nearby places');
   }
 
   void _search() async {
     final address = _controller.text;
-    final coordinates = await getCoordinates(address);
-    final places = await getNearbyPlaces(coordinates['lat'], coordinates['lng']);
+    final places = await searchNearbyPlaces(address);
     setState(() {
       _places = places;
     });
