@@ -13,14 +13,14 @@ import 'package:reabilita_social/widgets/dropdown_custom.dart';
 import 'package:reabilita_social/widgets/text_field_custom.dart';
 import 'package:reabilita_social/utils/listas.dart';
 
-class EditarPerfilScreen extends StatefulWidget {
-  const EditarPerfilScreen({super.key});
+class EditaPerfilProf extends StatefulWidget {
+  const EditaPerfilProf({super.key});
 
   @override
-  State<EditarPerfilScreen> createState() => _EditarPerfilScreenState();
+  State<EditaPerfilProf> createState() => _EditaPerfilProfState();
 }
 
-class _EditarPerfilScreenState extends State<EditarPerfilScreen> {
+class _EditaPerfilProfState extends State<EditaPerfilProf> {
   final _formKey = GlobalKey<FormState>();
   final _repository = GerenciaProfissionalRepository();
   final _auth = FirebaseAuth.instance;

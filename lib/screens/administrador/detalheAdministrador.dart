@@ -7,13 +7,13 @@ import 'package:reabilita_social/widgets/botao/botaoStatus.dart';
 import 'package:reabilita_social/widgets/informacaoTitle.dart';
 
 class DetalheAdministrador extends StatefulWidget {
-  final String uidDocumento;
-  final String userType;
+  final String? uidDocumento;
+  final String? userType;
 
   const DetalheAdministrador({
     super.key,
-    required this.uidDocumento,
-    required this.userType,
+    this.uidDocumento,
+    this.userType,
   });
 
   @override
@@ -112,12 +112,8 @@ class _DetalheAdministradorState extends State<DetalheAdministrador> {
         centerTitle: true,
         leading: GestureDetector(
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const ProfissionaisPage(),
-              ),
-            );
+            Navigator.pushNamed(context, "/usuariosAdministrador");
+          
           },
           child: const Padding(
             padding: EdgeInsets.only(left: 12.0),

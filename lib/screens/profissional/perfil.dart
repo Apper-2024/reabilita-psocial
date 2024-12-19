@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:reabilita_social/repository/auth/auth_repository.dart';
-import 'package:reabilita_social/screens/profissional/edita_perfil_prof.dart';
 import 'package:reabilita_social/screens/profissional/pesquisa_usuario.dart';
-import 'package:reabilita_social/screens/profissional/suporteUsuario.dart';
 import 'package:reabilita_social/widgets/botao/botaoPrincipal.dart';
 import '../../utils/colors.dart';
 import '../../widgets/header.dart';
@@ -35,12 +33,7 @@ class PerfilScreen extends StatelessWidget {
             const SizedBox(height: 30),
             GestureDetector(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const EditarPerfilScreen(),
-                  ),
-                );
+                Navigator.pushNamed(context, "/editarPerfil");
               },
               child: const Row(
                 children: [
@@ -59,12 +52,8 @@ class PerfilScreen extends StatelessWidget {
             const SizedBox(height: 10),
             InkWell(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => SuporteUsuario(),
-                  ),
-                );
+                Navigator.pushNamed(context, "/suporteUsuario");
+              
               },
               child: const Row(
                 children: [
@@ -85,12 +74,8 @@ class PerfilScreen extends StatelessWidget {
             const SizedBox(height: 10),
             InkWell(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => PesquisaUsuarioScreen(),
-                  ),
-                );
+                Navigator.pushNamed(context, "/pesquisaUsuario");
+              
               },
               child: const Row(
                 children: [

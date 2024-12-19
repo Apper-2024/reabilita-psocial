@@ -5,6 +5,7 @@ import 'package:reabilita_social/screens/administrador/profissionais_aceitos.dar
 import 'package:reabilita_social/screens/administrador/profissionais_pendentes.dart';
 import 'package:reabilita_social/screens/auth/login.dart';
 import 'package:reabilita_social/utils/colors.dart';
+import 'package:reabilita_social/utils/snack/snack_erro.dart';
 
 class ProfissionaisPage extends StatefulWidget {
   const ProfissionaisPage({super.key});
@@ -26,18 +27,11 @@ class _ProfissionaisPageState extends State<ProfissionaisPage> with TickerProvid
   void _logout() async {
     try {
       await FirebaseAuth.instance.signOut();
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const LoginScreen()),
-      );
+      Navigator.pushNamed(context, "/login");
+      
     } catch (e) {
       debugPrint("Erro ao fazer logout: $e");
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Erro ao sair. Tente novamente."),
-          backgroundColor: Colors.red,
-        ),
-      );
+      snackErro(context, "Erro ao sair. Tente novamente.");
     }
   }
 
@@ -119,10 +113,8 @@ class _ProfissionaisPageState extends State<ProfissionaisPage> with TickerProvid
         ),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const AddUserPage()),
-            );
+            Navigator.pushNamed(context, "/adicionarAdministrador");
+        
           },
           backgroundColor: verde1,
           icon: const Icon(

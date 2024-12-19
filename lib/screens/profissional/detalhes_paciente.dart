@@ -18,6 +18,7 @@ class DetalhesPaciente extends StatelessWidget {
   final List<ItemConteudo> conteudos;
   final bool visible;
   final void Function()? onPressed;
+  
   const DetalhesPaciente({
     super.key,
     required this.conteudos,
