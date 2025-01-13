@@ -78,42 +78,27 @@ class MyApp extends StatelessWidget {
         '/PesquisaMapa': (context) => const SearchPage(),
 
         //ADMINISTRADOR
-        '/usuariosAdministrador': (context) =>
-            const RouteGuard(child: ProfissionaisPage()),
-        '/adicionarAdministrador': (context) =>
-            const RouteGuard(child: AddUserPage()),
-        '/detaheAdministrador': (context) =>
-            const RouteGuard(child: DetalheAdministrador()),
-        '/homeAdministrador': (context) =>
-            const RouteGuard(child: ProfissionaisPage()),
+        '/usuariosAdministrador': (context) => const RouteGuard(child: ProfissionaisPage()),
+        '/adicionarAdministrador': (context) => const RouteGuard(child: AddUserPage()),
+        '/detaheAdministrador': (context) => const RouteGuard(child: DetalheAdministrador()),
+        '/homeAdministrador': (context) => const RouteGuard(child: ProfissionaisPage()),
         '/Menu': (context) => const RouteGuard(child: ProfissionaisPage()),
 
         //PROFISSIONAL
-        '/cadastroProjeto': (context) =>
-            const RouteGuard(child: CadastroProjetoScreen()),
+        '/cadastroProjeto': (context) => const RouteGuard(child: CadastroProjetoScreen()),
         '/telaPaciente': (context) => const RouteGuard(child: PacienteScreen()),
         //'/detalhePaciente': (context) => RouteGuard(child:  DetalhesPaciente()),
-        '/menuProfissional': (context) =>
-            const RouteGuard(child: BottomMenuProfissional()),
-        '/recursosProfissional': (context) =>
-            const RouteGuard(child: RecursosScreen()),
+        '/menuProfissional': (context) => const RouteGuard(child: BottomMenuProfissional()),
+        '/recursosProfissional': (context) => const RouteGuard(child: RecursosScreen()),
         '/cadastro': (context) => const RouteGuard(child: CadastroScreen()),
-        '/cadastroFinal': (context) =>
-            const RouteGuard(child: CadastroFinalScreen()),
-        '/loginPrimeiroAcesso': (context) =>
-            const RouteGuard(child: LoginPrimeiroAcesso()),
-        '/evolucaoPaciente': (context) =>
-            const RouteGuard(child: EvolucaoPacientePage()),
-        '/editarPerfil': (context) =>
-            const RouteGuard(child: EditaPerfilProf()),
-        '/suporteUsuario': (context) =>
-            const RouteGuard(child: SuporteUsuario()),
-        '/pesquisaUsuario': (context) =>
-            const RouteGuard(child: PesquisaUsuarioScreen()),
-        '/projetoScreen': (context) =>
-            const RouteGuard(child: ProjetosScreen()),
-        '/referenciasTela': (context) =>
-            const RouteGuard(child: ReferenciasPage()),
+        '/cadastroFinal': (context) => const RouteGuard(child: CadastroFinalScreen()),
+        '/loginPrimeiroAcesso': (context) => const RouteGuard(child: LoginPrimeiroAcesso()),
+        '/evolucaoPaciente': (context) => const RouteGuard(child: EvolucaoPacientePage()),
+        '/editarPerfil': (context) => const RouteGuard(child: EditaPerfilProf()),
+        '/suporteUsuario': (context) => const RouteGuard(child: SuporteUsuario()),
+        '/pesquisaUsuario': (context) => const RouteGuard(child: PesquisaUsuarioScreen()),
+        '/projetoScreen': (context) => const RouteGuard(child: ProjetosScreen()),
+        '/referenciasTela': (context) => const RouteGuard(child: ReferenciasPage()),
 
         //PACIENTE
       },

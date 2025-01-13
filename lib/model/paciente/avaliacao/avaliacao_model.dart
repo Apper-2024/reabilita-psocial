@@ -26,6 +26,7 @@ class ListAvaliacao {
   String? intervencao;
   String? responsavel;
   String? avaliacao;
+  String? pactuacao;
   String? observacao;
   String? foto;
   Timestamp? dataCriacao;
@@ -33,6 +34,7 @@ class ListAvaliacao {
   ListAvaliacao({
     this.intervencao,
     this.responsavel,
+    this.pactuacao,
     this.avaliacao,
     this.observacao,
     this.foto,
@@ -42,6 +44,7 @@ class ListAvaliacao {
   Map<String, dynamic> toMap() {
     return {
       'intervencao': intervencao,
+      'pactuacao': pactuacao,
       'responsavel': responsavel,
       'avaliacao': avaliacao,
       'observacao': observacao,
@@ -53,6 +56,7 @@ class ListAvaliacao {
   factory ListAvaliacao.fromMap(Map<String, dynamic> map) {
     return ListAvaliacao(
       intervencao: map['intervencao'],
+      pactuacao: map['pactuacao'],
       responsavel: map['responsavel'],
       avaliacao: map['avaliacao'],
       observacao: map['observacao'],

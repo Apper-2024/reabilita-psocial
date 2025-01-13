@@ -30,33 +30,29 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 40),
           child: Column(
-            crossAxisAlignment:
-                CrossAxisAlignment.start, // Alinhamento à esquerda
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 20),
-              // Ícone Centralizado
               Center(
-                child: CircleAvatar(
-                  radius: 60,
-                  backgroundColor: verde1.withOpacity(0.1),
-                  child: const Icon(
-                    Icons.ac_unit_rounded, // Novo Ícone
-                    size: 60,
-                    color: verde1,
+                child: Image.asset(
+                  "assets/imagens/logo.png",
+                  height: 120,
+                ),
+              ),
+              const SizedBox(height: 30),
+
+              const Center(
+                child: Text(
+                  'Olá, bem-vindo de volta ao Reabilita Social!',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w400,
+                    fontSize: 22,
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
 
-              const Text(
-                'Olá, bem-vindo de volta ao Reabilita Social!',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.bold,
-                  fontSize: 22,
-                ),
-              ),
               const SizedBox(height: 30),
 
               // Formulário com sombra
@@ -137,7 +133,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(height: 8),
                       InkWell(
                         onTap: () {
-                          Navigator.pushNamed(context, "/PesquisaMapa");
+                          Navigator.pushNamed(context, "/loginPrimeiroAcesso");
                         },
                         child: const Text(
                           'Primeiro acesso, paciente?',
@@ -153,8 +149,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         text: 'Login',
                         onPressed: () async {
                           try {
-                            final usuario = await AuthRepository().fazerLogin(
-                                emailController.text, senhaController.text);
+                            final usuario =
+                                await AuthRepository().fazerLogin(emailController.text, senhaController.text);
                             verificaUser(context, usuario);
                           } catch (e) {
                             snackErro(context, e.toString());
@@ -201,7 +197,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ProtecaoDialog.show(context);
                   },
                   child: const Text(
-                    'Proteção e Visibilidade de Dados',
+                    'Termo e Condições de Uso do webapp “App projeto de reabilitação psicossocial”',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontFamily: 'Poppins',

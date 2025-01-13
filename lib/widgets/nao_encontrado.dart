@@ -7,7 +7,8 @@ class NaoEncontrado extends StatefulWidget {
   final String? textButton;
   final void Function()? onPressed;
 
-  const NaoEncontrado({super.key, 
+  const NaoEncontrado({
+    super.key,
     required this.titulo,
     this.textButton,
     this.onPressed,
@@ -22,6 +23,17 @@ class _NaoEncontradoState extends State<NaoEncontrado> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: background,
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.black),
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32),
         child: Center(

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:reabilita_social/repository/auth/auth_repository.dart';
 import '../../utils/colors.dart';
 import '../../widgets/header.dart';
 
@@ -17,7 +16,7 @@ class RecursosScreen extends StatelessWidget {
           children: [
             Header(),
             const SizedBox(height: 16),
-            Center(
+            const Center(
               child: Stack(
                 alignment: Alignment.center,
                 children: [
@@ -26,7 +25,7 @@ class RecursosScreen extends StatelessWidget {
                     color: bege,
                     size: 70,
                   ),
-                  const Text(
+                  Text(
                     'Explore nossos Recursos.',
                     style: TextStyle(
                       fontSize: 20,
@@ -40,7 +39,7 @@ class RecursosScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 30),
-            GestureDetector(
+            InkWell(
               onTap: () {
                 Navigator.pushNamed(context, "/editarPerfil");
               },

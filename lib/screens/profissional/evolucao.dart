@@ -39,7 +39,7 @@ class _EvolucaoScreenState extends State<EvolucaoScreen> {
             children: [
               Header(),
               const SizedBox(height: 16),
-              Center(
+              const Center(
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
@@ -48,7 +48,7 @@ class _EvolucaoScreenState extends State<EvolucaoScreen> {
                       color: bege,
                       size: 80,
                     ),
-                    const Text(
+                    Text(
                       'Tenha a evoluções dos pacientes.',
                       style: TextStyle(
                         fontSize: 20,

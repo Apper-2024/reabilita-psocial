@@ -8,6 +8,7 @@ import 'package:reabilita_social/model/paciente/diagnostico/doencas_clinicas_mod
 import 'package:reabilita_social/model/paciente/diagnostico/medicacoes_model.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/outras_informacoes_model.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/potencialidade_model.dart';
+import 'package:reabilita_social/model/paciente/diagnostico/problema_model.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/recurso_individuais_model.dart';
 import 'package:reabilita_social/model/paciente/evolucao/evolucao_model.dart';
 import 'package:reabilita_social/model/paciente/intervencoes/intervencoes_model.dart';
@@ -58,6 +59,12 @@ class PacienteProvider with ChangeNotifier {
 
   void setUpdatePotencialidade(PotencialidadeModel u) {
     _paciente?.diagnosticoModal?.potencialidadeModel = u;
+    notifyListeners();
+  }
+
+
+    void setUpdateProblema(ProblemaModel u) {
+    _paciente?.diagnosticoModal?.problemaModel = u;
     notifyListeners();
   }
 

@@ -32,7 +32,7 @@ class _SearchPageState extends State<SearchPage> {
   Future<List<String>> fetchCities(String query) async {
     if (query.isEmpty) return [];
 
-    final url =
+    const url =
         'https://servicodados.ibge.gov.br/api/v1/localidades/municipios';
     final response = await http.get(Uri.parse(url));
 

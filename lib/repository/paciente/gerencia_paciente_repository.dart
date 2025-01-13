@@ -12,6 +12,7 @@ import 'package:reabilita_social/model/paciente/diagnostico/doencas_clinicas_mod
 import 'package:reabilita_social/model/paciente/diagnostico/medicacoes_model.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/outras_informacoes_model.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/potencialidade_model.dart';
+import 'package:reabilita_social/model/paciente/diagnostico/problema_model.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/recurso_individuais_model.dart';
 import 'package:reabilita_social/model/paciente/evolucao/evolucao_model.dart';
 import 'package:reabilita_social/model/paciente/intervencoes/intervencoes_model.dart';
@@ -538,6 +539,27 @@ class GerenciaPacienteRepository {
 
       batch.update(pacienteRef, {
         'diagnosticoModal.potencialidadeModel': potencialidadeMap,
+      });
+
+      // Commit do batch
+      await batch.commit();
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorRepository.handleFirebaseException(e);
+    } catch (e) {
+      print(e);
+      throw 'Ops, algo deu errado. Tente novamente mais tarde!';
+    }
+  }
+
+  Future<void> cadastraProblema(ProblemaModel problema, String uidPaciente) async {
+    final batch = db.batch();
+    Map<String, dynamic> problemaMap = problema.toMap();
+
+    try {
+      final pacienteRef = db.collection("Pacientes").doc(uidPaciente);
+
+      batch.update(pacienteRef, {
+        'diagnosticoModal.problemaModel': problemaMap,
       });
 
       // Commit do batch

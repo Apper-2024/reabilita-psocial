@@ -7,7 +7,7 @@ class CardProjeto extends StatelessWidget {
   final String observacao;
   final void Function()? onTap;
 
-  CardProjeto({
+  const CardProjeto({
     super.key,
     required this.foto,
     required this.nome,

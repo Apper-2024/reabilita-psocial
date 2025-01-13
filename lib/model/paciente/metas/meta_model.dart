@@ -25,9 +25,9 @@ class MetaList {
 }
 
 class MetaModel {
-  List<MetaList>? metas;
+  List<MetaList> metas;
 
-  MetaModel({this.metas});
+  MetaModel({List<MetaList>? metas}) : metas = metas ?? [];
 
   factory MetaModel.fromMap(Map<String, dynamic> data) {
     return MetaModel(
@@ -35,13 +35,13 @@ class MetaModel {
           ? List<MetaList>.from(
               data['metas'].map((item) => MetaList.fromMap(item)),
             )
-          : null,
+          : [],
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'metas': metas?.map((meta) => meta.toMap()).toList(),
+      'metas': metas.map((meta) => meta.toMap()).toList(),
     };
   }
 }

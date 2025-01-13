@@ -85,7 +85,7 @@ class _ProjetosScreenState extends State<ProjetosScreen> {
           children: [
             Header(),
             const SizedBox(height: 16),
-            Stack(
+            const Stack(
               alignment: Alignment.center,
               children: [
                 Icon(
@@ -93,7 +93,7 @@ class _ProjetosScreenState extends State<ProjetosScreen> {
                   color: bege,
                   size: 80,
                 ),
-                const Text(
+                Text(
                   'Tenha acesso aos projetos criados.',
                   style: TextStyle(
                     fontSize: 20,

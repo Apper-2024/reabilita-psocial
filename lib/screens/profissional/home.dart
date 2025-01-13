@@ -58,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           Text(
-                            profissionalProvider.profissional!.nome + "!",
+                            "${profissionalProvider.profissional!.nome}!",
                             style: const TextStyle(
                               fontSize: 28,
                               fontWeight: FontWeight.bold,
@@ -83,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SizedBox(height: 16),
 
                     // Suporte ao Usuário
-                    GestureDetector(
+                    InkWell(
                       onTap: () {
                         Navigator.pushNamed(context, "/suporteUsuario");
                       },
@@ -93,13 +93,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: bege,
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: Row(
+                        child: const Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: const [
+                                children: [
                                   Text(
                                     'Suporte ao Usuário',
                                     style: TextStyle(
@@ -132,7 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ],
                               ),
                             ),
-                            const Icon(Icons.flag, color: verde1, size: 48),
+                            Icon(Icons.flag, color: verde1, size: 48),
                           ],
                         ),
                       ),
@@ -146,9 +146,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: Row(
+                      child: const Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
+                        children: [
                           Icon(
                             Icons.format_quote,
                             color: bege,
@@ -171,7 +171,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SizedBox(height: 16),
 
                     const Text(
-                      'Reabilitação Psicossocial',
+                      'Assista o Vídeo Sobre Projeto de Reabilitação Psicossocial',
                       style: TextStyle(
                         fontSize: 18,
                         fontFamily: 'Poppins',
@@ -180,41 +180,38 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     const SizedBox(height: 16),
+                    //imagens nao achando
                     InkWell(
                       onTap: () => _showVideoDialog(context),
-                      child: Container(
-                        height: 120,
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: verde1,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: const [
-                            Expanded(
-                              child: Text(
-                                'Como realizar um Projeto de Reabilitação Psicossocial?',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.white,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 2,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Container(
+                            height: 200,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              image: const DecorationImage(
+                                image: AssetImage('assets/imagens/thumb.png'),
+                                fit: BoxFit.cover,
                               ),
                             ),
-                            SizedBox(width: 16),
-                            Icon(Icons.spa, color: verde2, size: 58),
-                          ],
-                        ),
+                          ),
+                          SizedBox(
+                            height: 120,
+                            child: Icon(
+                              Icons.play_circle_filled,
+                              size: 58,
+                              color: Colors.white.withOpacity(0.9),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
+
                     const SizedBox(height: 16),
 
                     const Text(
-                      'Dicas de Reabilitação',
+                      'Dicas de Reabilitação Psicossocial',
                       style: TextStyle(
                         fontSize: 18,
                         fontFamily: 'Poppins',
@@ -230,7 +227,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: const Text(
-                        '• Estimule a autonomia do paciente com atividades diárias.\n• Incentive a participação em redes sociais de apoio.\n• Estabeleça metas pequenas e significativas para o paciente.\n• Mantenha o diálogo aberto com os familiares e profissionais envolvidos.',
+                        '• Estimule a autonomia do paciente com atividades diárias.\n• Incentive a participação em redes sociais de apoio.\n• Estabeleça metas mensuráveis e significativas para o paciente.\n• Mantenha o diálogo transversal com os familiares e profissionais envolvidos.',
                         style: TextStyle(
                           fontSize: 16,
                           fontFamily: 'Poppins',

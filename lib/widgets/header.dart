@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:reabilita_social/provider/profissional_provider.dart';
 import 'package:reabilita_social/repository/auth/auth_repository.dart';
-import '../utils/colors.dart';
 
 class Header extends StatelessWidget {
   Header({

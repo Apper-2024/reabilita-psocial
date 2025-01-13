@@ -59,7 +59,7 @@ class _ProfissionaisPendentesScreenState
       backgroundColor: background,
       body: Column(
         children: [
-          Center(
+          const Center(
             child: Stack(
               alignment: Alignment.center,
               children: [
@@ -68,7 +68,7 @@ class _ProfissionaisPendentesScreenState
                   color: bege,
                   size: 70,
                 ),
-                const Text(
+                Text(
                   'veja todos os usuários pendentes.',
                   style: TextStyle(
                     fontSize: 18,

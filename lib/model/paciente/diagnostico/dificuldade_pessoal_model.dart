@@ -2,13 +2,22 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ListaDificuldadePessoal {
   String? dificuldadePessoal;
+  String? dificuldadeColetiva;
+  String? dificuldadeEstruturais;
   Timestamp? dataCriacao;
 
-  ListaDificuldadePessoal({this.dificuldadePessoal, this.dataCriacao});
+  ListaDificuldadePessoal({
+    this.dificuldadePessoal,
+    this.dificuldadeColetiva,
+    this.dificuldadeEstruturais,
+    this.dataCriacao,
+  });
 
   factory ListaDificuldadePessoal.fromMap(Map<String, dynamic> map) {
     return ListaDificuldadePessoal(
       dificuldadePessoal: map['dificuldadePessoal'],
+      dificuldadeColetiva: map['dificuldadeColetiva'],
+      dificuldadeEstruturais: map['dificuldadeEstruturais'],
       dataCriacao: map['dataCriacao'],
     );
   }
@@ -16,6 +25,8 @@ class ListaDificuldadePessoal {
   Map<String, dynamic> toMap() {
     return {
       'dificuldadePessoal': dificuldadePessoal,
+      'dificuldadeColetiva': dificuldadeColetiva,
+      'dificuldadeEstruturais': dificuldadeEstruturais,
       'dataCriacao': dataCriacao,
     };
   }

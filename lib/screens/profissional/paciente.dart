@@ -1,3 +1,4 @@
+import 'package:reabilita_social/model/paciente/diagnostico/problema_model.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -56,9 +57,9 @@ class _PacienteScreenState extends State<PacienteScreen> {
     DiagnosticoMultiprofissionaisModel diagnosticoMultiprofissionaisModel = DiagnosticoMultiprofissionaisModel(
       diagnosticos: '',
       dataCriacao: null,
-      nomeResponsavel: '',
-      profissaoResponsavel: null,
-      cpf: '',
+      nomeResponsavel: '', //tirar
+      profissaoResponsavel: null, //tirar
+      cpf: '', //tirar
     );
 
     final formKey = GlobalKey<FormState>();
@@ -94,6 +95,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                           tipoTexto: TextInputType.text,
                           hintText: "....",
                           labelText: "História do caso",
+                          minLines: 5,
+                          maxLines: 5,
                           senha: false,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -109,8 +112,10 @@ class _PacienteScreenState extends State<PacienteScreen> {
                         TextFieldCustom(
                           tipoTexto: TextInputType.text,
                           hintText: "ex. Depressão",
-                          labelText: "Diagnostico",
+                          labelText: "Diagnóstico",
                           senha: false,
+                          minLines: 5,
+                          maxLines: 5,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Campo obrigatório';
@@ -155,6 +160,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
                           },
                         ),
                         const SizedBox(height: 16),
+                        //vai ter que pegar
                         CustomDropdownButton(
                           hint: "Profissão",
                           dropdownValue: diagnosticoMultiprofissionaisModel.profissaoResponsavel,
@@ -164,6 +170,10 @@ class _PacienteScreenState extends State<PacienteScreen> {
                               diagnosticoMultiprofissionaisModel.profissaoResponsavel = value!;
                             });
                           },
+                        ),
+                        const Text(
+                          'Selecione laudos, ou imagens relevantes para o caso.',
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                         ),
                         const SizedBox(height: 16),
                         Wrap(
@@ -217,10 +227,10 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                       snackAtencao(context, "Preencha todos os campos");
                                       return;
                                     }
-                                    if (images.isEmpty) {
-                                      snackAtencao(context, "Adicione uma imagem");
-                                      return;
-                                    }
+                                    // if (images.isEmpty) {
+                                    //   snackAtencao(context, "Adicione uma imagem");
+                                    //   return;
+                                    // }
                                     formKey.currentState!.save();
                                     diagnosticoMultiprofissionaisModel.dataCriacao = Timestamp.now();
                                     historiaCasoModel.dataCriacao = Timestamp.now();
@@ -743,6 +753,114 @@ class _PacienteScreenState extends State<PacienteScreen> {
     );
   }
 
+  Future<void> _dialogAdicionarProblema(PacienteProvider pacienteProvider, ProblemaModel? problema) async {
+    Problema problemaModel = Problema(dataCriacao: Timestamp.now(), problema: '');
+
+    final formKey = GlobalKey<FormState>();
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setStateDialog) {
+              return SingleChildScrollView(
+                child: Form(
+                  key: formKey,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    decoration: const BoxDecoration(
+                      color: background,
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                    padding: const EdgeInsets.all(26),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Cadastro de problemas',
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 16),
+                        TextFieldCustom(
+                          tipoTexto: TextInputType.text,
+                          hintText: ".....",
+                          labelText: "Problema",
+                          senha: false,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Campo obrigatório';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            problemaModel.problema = value!;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Botaoprincipal(
+                                text: "Cancelar",
+                                cor: vermelho,
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Botaoprincipal(
+                                text: "Cadastrar",
+                                onPressed: () async {
+                                  try {
+                                    if (!formKey.currentState!.validate()) {
+                                      snackAtencao(context, "Preencha todos os campos");
+                                      return;
+                                    }
+                                    formKey.currentState!.save();
+                                    problemaModel.dataCriacao = Timestamp.now();
+
+                                    // Inicialize a lista de potencialidades se estiver nula
+                                    problema ??= ProblemaModel(problema: []);
+                                    problema?.problema ??= [];
+
+                                    // Adicione a nova potencialidade à lista
+                                    problema?.problema!.add(problemaModel);
+
+                                    await GerenciaPacienteRepository().cadastraProblema(
+                                      problema!,
+                                      pacienteProvider.paciente!.dadosPacienteModel.uidDocumento,
+                                    );
+
+                                    pacienteProvider.setUpdateProblema(problema!);
+
+                                    Navigator.pop(context);
+                                    snackSucesso(context, "Cadastrado com sucesso");
+                                  } catch (e) {
+                                    snackErro(context, "Erro ao cadastrar, tente novamente mais tarde");
+                                  }
+                                },
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
   Future<void> _dialogDesejosSonhos(PacienteProvider pacienteProvider) async {
     DesejoModel desejoModel = DesejoModel(
       desejos: '',
@@ -1000,7 +1118,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          'Cadastro de Diagnóstico Multiprofissional',
+                          'Cadastro de Medicamentos',
                           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 16),
@@ -1022,8 +1140,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                         const SizedBox(height: 16),
                         TextFieldCustom(
                           tipoTexto: TextInputType.text,
-                          hintText: "ex. Viajar",
-                          labelText: "Sonho de vida",
+                          hintText: "ex. 2 miligramas",
+                          labelText: "Posologia",
                           senha: false,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -1032,13 +1150,13 @@ class _PacienteScreenState extends State<PacienteScreen> {
                             return null;
                           },
                           onSaved: (value) {
-                            medicacoesModel.frequencia = value!;
+                            medicacoesModel.quantidade = value!;
                           },
                         ),
                         const SizedBox(height: 16),
                         TextFieldCustom(
                           tipoTexto: TextInputType.text,
-                          hintText: "ex. 3 vezes ao dia",
+                          hintText: "ex. 30 comprimidos",
                           labelText: "Quantidade",
                           senha: false,
                           validator: (value) {
@@ -1049,6 +1167,22 @@ class _PacienteScreenState extends State<PacienteScreen> {
                           },
                           onSaved: (value) {
                             medicacoesModel.quantidade = value!;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        TextFieldCustom(
+                          tipoTexto: TextInputType.text,
+                          hintText: "ex. Tomar 1 cp de 6/6h",
+                          labelText: "Frequência",
+                          senha: false,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Campo obrigatório';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            medicacoesModel.frequencia = value!;
                           },
                         ),
                         const SizedBox(height: 16),
@@ -1166,7 +1300,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
                         const SizedBox(height: 16),
                         TextFieldCustom(
                           tipoTexto: TextInputType.text,
-                          hintText: "ex. Depressão",
+                          hintText: "Ex. Diabetes Mellitus, Hipertensão Arterial, etc...",
                           labelText: "Doença Clínica",
                           senha: false,
                           validator: (value) {
@@ -1244,6 +1378,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
       PacienteProvider pacienteProvider, DificuldadePessoalModal? dificuldades) async {
     ListaDificuldadePessoal dificuldadePessoalModel = ListaDificuldadePessoal(
       dificuldadePessoal: "",
+      dificuldadeColetiva: "",
+      dificuldadeEstruturais: "",
       dataCriacao: Timestamp.now(),
     );
 
@@ -1272,14 +1408,14 @@ class _PacienteScreenState extends State<PacienteScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          'Cadastro de Dificuldaddes Pessoais',
+                          'Cadastro dificuldades Pessoais',
                           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 16),
                         TextFieldCustom(
                           tipoTexto: TextInputType.text,
                           hintText: ".....",
-                          labelText: "Dificuldade Pessoal",
+                          labelText: "Dificuldades Pessoais",
                           senha: false,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -1289,6 +1425,38 @@ class _PacienteScreenState extends State<PacienteScreen> {
                           },
                           onSaved: (value) {
                             dificuldadePessoalModel.dificuldadePessoal = value!;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        TextFieldCustom(
+                          tipoTexto: TextInputType.text,
+                          hintText: ".....",
+                          labelText: "Dificuldades Coletivas",
+                          senha: false,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Campo obrigatório';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            dificuldadePessoalModel.dificuldadeColetiva = value!;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        TextFieldCustom(
+                          tipoTexto: TextInputType.text,
+                          hintText: ".....",
+                          labelText: "Dificuldades Estruturais",
+                          senha: false,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Campo obrigatório';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            dificuldadePessoalModel.dificuldadeEstruturais = value!;
                           },
                         ),
                         const SizedBox(height: 32),
@@ -1382,13 +1550,13 @@ class _PacienteScreenState extends State<PacienteScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          'Cadastro de Doença Clínica',
+                          'Cadastro de Outras Informações',
                           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 16),
                         TextFieldCustom(
                           tipoTexto: TextInputType.text,
-                          hintText: ".......",
+                          hintText: "ex. Adicione informações relevantes sobre o paciente",
                           labelText: "Outras Informações",
                           senha: false,
                           validator: (value) {
@@ -1490,7 +1658,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          'Cadastro de Doença Clínica',
+                          'Cadastro de Metas',
                           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 16),
@@ -1552,7 +1720,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
 
                                     meta ??= MetaModel(metas: []);
 
-                                    meta!.metas?.add(metaModel);
+                                    meta!.metas.add(metaModel);
 
                                     await GerenciaPacienteRepository().cadastrarMetas(
                                       meta!,
@@ -1586,8 +1754,13 @@ class _PacienteScreenState extends State<PacienteScreen> {
   }
 
   Future<void> _dialogAdicionaIntervencao(PacienteProvider pacienteProvider, IntervencoesModel? intervencao) async {
+    String? problema;
+    String? meta;
+
     ListIntervencoesModel intervencaoModel = ListIntervencoesModel(
         dataCriacao: Timestamp.now(), intervencoes: '', meta: "", nomeResponsavel: '', prazo: '', problema: '');
+    ProblemaModel? problemaModel = pacienteProvider.paciente?.diagnosticoModal?.problemaModel;
+    MetaModel? metaModel = pacienteProvider.paciente?.metasModel;
 
     final formKey = GlobalKey<FormState>();
     return showDialog<void>(
@@ -1618,21 +1791,30 @@ class _PacienteScreenState extends State<PacienteScreen> {
                           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 16),
-                        TextFieldCustom(
-                          tipoTexto: TextInputType.text,
-                          hintText: "ex. Acorreu tal coisa",
-                          labelText: "Problema",
-                          senha: false,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Campo obrigatório';
-                            }
-                            return null;
-                          },
-                          onSaved: (value) {
-                            intervencaoModel.problema = value!;
+                        CustomDropdownButton(
+                          hint: 'Selecione o problema',
+                          items: problemaModel!.problema!.map((e) => e.problema!).toList(),
+                          onChanged: (value) {
+                            setStateDialog(() {
+                              problema = value;
+                            });
                           },
                         ),
+                        // TextFieldCustom(
+                        //   tipoTexto: TextInputType.text,
+                        //   hintText: "ex. Acorreu tal coisa",
+                        //   labelText: "Problema",
+                        //   senha: false,
+                        //   validator: (value) {
+                        //     if (value == null || value.isEmpty) {
+                        //       return 'Campo obrigatório';
+                        //     }
+                        //     return null;
+                        //   },
+                        //   onSaved: (value) {
+                        //     intervencaoModel.problema = value!;
+                        //   },
+                        // ),
                         const SizedBox(height: 16),
                         TextFieldCustom(
                           tipoTexto: TextInputType.text,
@@ -1666,21 +1848,31 @@ class _PacienteScreenState extends State<PacienteScreen> {
                           },
                         ),
                         const SizedBox(height: 16),
-                        TextFieldCustom(
-                          tipoTexto: TextInputType.text,
-                          hintText: "ex. Melhorar tal coisa",
-                          labelText: "Meta",
-                          senha: false,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Campo obrigatório';
-                            }
-                            return null;
-                          },
-                          onSaved: (value) {
-                            intervencaoModel.meta = value!;
+
+                        CustomDropdownButton(
+                          hint: 'Selecione a meta',
+                          items: metaModel!.metas.map((e) => e.meta!).toList(),
+                          onChanged: (value) {
+                            setStateDialog(() {
+                              meta = value;
+                            });
                           },
                         ),
+                        // TextFieldCustom(
+                        //   tipoTexto: TextInputType.text,
+                        //   hintText: "ex. Melhorar tal coisa",
+                        //   labelText: "Meta",
+                        //   senha: false,
+                        //   validator: (value) {
+                        //     if (value == null || value.isEmpty) {
+                        //       return 'Campo obrigatório';
+                        //     }
+                        //     return null;
+                        //   },
+                        //   onSaved: (value) {
+                        //     intervencaoModel.meta = value!;
+                        //   },
+                        // ),
                         const SizedBox(height: 16),
                         TextFieldCustom(
                           tipoTexto: TextInputType.text,
@@ -1719,13 +1911,27 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                       snackAtencao(context, "Preencha todos os campos");
                                       return;
                                     }
+
+                                    if (problema == null ) {
+                                      snackAtencao(context, "Preencha todos os campos");
+                                      return;
+                                    }
+
+                                    if (meta == null) {
+                                      snackAtencao(context, "Preencha todos os campos");
+                                      return;
+                                    }
+
                                     formKey.currentState!.save();
 
                                     intervencaoModel.dataCriacao = Timestamp.now();
+                                    intervencaoModel.problema = problema!;
+                                    intervencaoModel.meta = meta!;
 
                                     intervencao ??= IntervencoesModel(intervencoesModel: []);
 
-                                    intervencao!.intervencoesModel?.add(intervencaoModel);
+
+                                    intervencao!.intervencoesModel.add(intervencaoModel);
 
                                     await GerenciaPacienteRepository().cadastrarIntervencao(
                                       intervencao!,
@@ -2119,25 +2325,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          'Cadastro de Agenda de Estudos',
+                          'Avaliação Programada do PRP (a cada 2 meses)',
                           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 16),
-                        const SizedBox(height: 16),
-                        TextFieldCustom(
-                          tipoTexto: TextInputType.text,
-                          hintText: ".......",
-                          labelText: "Responsavel",
-                          senha: false,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Campo obrigatório';
-                            }
-                            return null;
-                          },
-                          onSaved: (value) {
-                            avaliacaoModel.responsavel = value!;
-                          },
                         ),
                         const SizedBox(height: 16),
                         TextFieldCustom(
@@ -2153,6 +2342,38 @@ class _PacienteScreenState extends State<PacienteScreen> {
                           },
                           onSaved: (value) {
                             avaliacaoModel.intervencao = value!;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        TextFieldCustom(
+                          tipoTexto: TextInputType.text,
+                          hintText: ".......",
+                          labelText: "Pactuação",
+                          senha: false,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Campo obrigatório';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            avaliacaoModel.intervencao = value!;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        TextFieldCustom(
+                          tipoTexto: TextInputType.text,
+                          hintText: ".......",
+                          labelText: "Responsavel",
+                          senha: false,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Campo obrigatório';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            avaliacaoModel.responsavel = value!;
                           },
                         ),
                         const SizedBox(height: 16),
@@ -2184,6 +2405,10 @@ class _PacienteScreenState extends State<PacienteScreen> {
                           },
                         ),
                         const SizedBox(height: 16),
+                        const Text(
+                          "Adicione uma ata",
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
                         Wrap(
                           alignment: WrapAlignment.center,
                           spacing: 12,
@@ -2370,26 +2595,6 @@ class _PacienteScreenState extends State<PacienteScreen> {
                               hintText: dadosPacienteModel.endereco.estado,
                               widthFactor: 0.5,
                               valorInicial: dadosPacienteModel.endereco.estado),
-                        ],
-                        titulo: 'Dados Pessoais',
-                      );
-                    },
-                  ),
-                ),
-              ),
-              onTap2: () {
-                print("oi");
-              },
-            ),
-            ItemConteudo(
-              titulo: 'Outras Informações',
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => Consumer<PacienteProvider>(
-                    builder: (context, pacienteProvider, child) {
-                      DadosPacienteModel dadosPacienteModel = pacienteProvider.paciente!.dadosPacienteModel;
-                      return FormCategoria(
-                        fields: [
                           FieldConfig(
                               label: 'Principal Rede de Apoio/Suporte do Paciente',
                               hintText: dadosPacienteModel.outrasInformacoes.outrasInformacoes,
@@ -2413,7 +2618,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
                               isDoubleHeight: true,
                               valorInicial: dadosPacienteModel.outrasInformacoes.observacao),
                         ],
-                        titulo: 'Outras Informações',
+                        titulo: 'Dados Pessoais',
                       );
                     },
                   ),
@@ -2452,6 +2657,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                 fields: [
                                   FieldConfig(
                                       label: 'História do Caso',
+                                      maxLine: 5,
+                                      minLine: 1,
                                       hintText: 'Descreva a história do caso',
                                       valorInicial: diagnosticoPacienteModel?.historiaCasoModel!.historia,
                                       widthFactor: 1.0,
@@ -2673,10 +2880,32 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                 ...dificuldadePessoal.dificuldadePessoal!.map((dificuldade) {
                                   return [
                                     FieldConfig(
-                                      label: 'Recursos Individuais',
+                                      label: 'Dificuldades Individuais',
                                       hintText: dificuldade.dificuldadePessoal!,
                                       isDoubleHeight: true,
                                       valorInicial: dificuldade.dificuldadePessoal!,
+                                      data: formatTimesTamp(dificuldade.dataCriacao),
+                                      botaoAdicionar: true,
+                                      onTapbotaoAdicionar: () {
+                                        _dialogAdicionarDificuldade(pacienteProvider, dificuldadePessoal);
+                                      },
+                                    ),
+                                    FieldConfig(
+                                      label: 'Dificuldades Coletivas',
+                                      hintText: dificuldade.dificuldadeColetiva!,
+                                      isDoubleHeight: true,
+                                      valorInicial: dificuldade.dificuldadeColetiva!,
+                                      data: formatTimesTamp(dificuldade.dataCriacao),
+                                      botaoAdicionar: true,
+                                      onTapbotaoAdicionar: () {
+                                        _dialogAdicionarDificuldade(pacienteProvider, dificuldadePessoal);
+                                      },
+                                    ),
+                                    FieldConfig(
+                                      label: 'Dificuldades Estruturais',
+                                      hintText: dificuldade.dificuldadeEstruturais!,
+                                      isDoubleHeight: true,
+                                      valorInicial: dificuldade.dificuldadeEstruturais!,
                                       data: formatTimesTamp(dificuldade.dataCriacao),
                                       botaoAdicionar: true,
                                       onTapbotaoAdicionar: () {
@@ -2792,6 +3021,45 @@ class _PacienteScreenState extends State<PacienteScreen> {
                   print("oi");
                 }),
             ItemConteudo(
+                titulo: 'Problemas indentificados',
+                onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => Consumer<PacienteProvider>(
+                        builder: (context, pacienteProvider, child) {
+                          ProblemaModel? problemaModel = pacienteProvider.paciente!.diagnosticoModal?.problemaModel;
+
+                          if (problemaModel?.problema == null || problemaModel!.problema!.isEmpty) {
+                            return NaoEncontrado(
+                              titulo: "Não há problemas identificados",
+                              textButton: "Adicionar Problemas",
+                              onPressed: () => _dialogAdicionarProblema(pacienteProvider, problemaModel),
+                            );
+                          } else {
+                            return FormCategoria(
+                              fields: [
+                                ...problemaModel.problema!.map((problema) {
+                                  return FieldConfig(
+                                    label: 'Potencialidades',
+                                    hintText: 'Potencialidades do paciente',
+                                    valorInicial: problema.problema,
+                                    isDoubleHeight: true,
+                                    data: formatTimesTamp(problema.dataCriacao),
+                                    botaoAdicionar: true,
+                                    onTapbotaoAdicionar: () {
+                                      _dialogAdicionarProblema(pacienteProvider, problemaModel);
+                                    },
+                                  );
+                                }),
+                              ],
+                              titulo: 'Problema',
+                            );
+                          }
+                        },
+                      ),
+                    )),
+                onTap2: () {
+                  print("oi");
+                }),
+            ItemConteudo(
                 titulo: 'Outras Informações',
                 onTap: () => Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => Consumer<PacienteProvider>(
@@ -2852,11 +3120,12 @@ class _PacienteScreenState extends State<PacienteScreen> {
                 _dialogAdicionaMeta(pacienteProvider, pacienteProvider.paciente!.metasModel);
               },
               conteudos: [
+                //mensagem que tem que cadastrar
                 ItemConteudo(
                   titulo: 'Metas a Curto Prazo (Inferiores a 2 meses)',
                   onTap: () {
                     List<MetaList>? listaCurta =
-                        metaModel?.metas!.where((element) => element.tipo == EnumMeta.curta.name).toList();
+                        metaModel?.metas.where((element) => element.tipo == EnumMeta.curta.name).toList();
 
                     Navigator.of(context).push(
                       MaterialPageRoute(
@@ -2889,7 +3158,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
                   titulo: 'Metas a Médio Prazo (Até 6 meses)',
                   onTap: () {
                     List<MetaList>? listaMedia =
-                        metaModel?.metas!.where((element) => element.tipo == EnumMeta.media.name).toList();
+                        metaModel?.metas.where((element) => element.tipo == EnumMeta.media.name).toList();
 
                     Navigator.of(context).push(
                       MaterialPageRoute(
@@ -2922,7 +3191,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
                   titulo: 'Metas a Longo Prazo (Até 12 meses)',
                   onTap: () {
                     List<MetaList>? listaLonga =
-                        metaModel?.metas!.where((element) => element.tipo == EnumMeta.longa.name).toList();
+                        metaModel?.metas.where((element) => element.tipo == EnumMeta.longa.name).toList();
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => listaLonga!.isEmpty
@@ -2958,6 +3227,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
       Consumer<PacienteProvider>(
         builder: (context, value, child) {
           IntervencoesModel? intervencoesModel = value.paciente!.intervencoesModel;
+          ProblemaModel? problemaModel = value.paciente!.diagnosticoModal?.problemaModel;
+          MetaModel? metaModel = value.paciente?.metasModel;
           return buildCardPaciente(
             context,
             icon: Icons.medical_services,
@@ -2968,10 +3239,19 @@ class _PacienteScreenState extends State<PacienteScreen> {
                 _dialogAdicionaIntervencao(pacienteProvider, intervencoesModel);
               },
               conteudos: [
-                if (intervencoesModel == null || intervencoesModel.intervencoesModel?.isEmpty == true)
+                if (intervencoesModel == null || intervencoesModel.intervencoesModel.isEmpty == true)
                   ItemConteudo(
                     titulo: 'Nenhum Intervenção Cadastrada',
                     onTap: () {
+                      if (problemaModel == null || problemaModel.problema?.isEmpty == true) {
+                        snackAtencao(context, "Cadastre um problema antes de adicionar uma intervenção");
+                        return;
+                      }
+
+                      if (metaModel?.metas == null || metaModel!.metas.isEmpty) {
+                        snackAtencao(context, "Cadastre uma meta antes de adicionar uma intervenção");
+                        return;
+                      }
                       _dialogAdicionaIntervencao(pacienteProvider, intervencoesModel);
                     },
                     onTap2: () {
@@ -2979,7 +3259,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
                     },
                   )
                 else
-                  ...?intervencoesModel.intervencoesModel?.map((e) => ItemConteudo(
+                  ...intervencoesModel.intervencoesModel.map((e) => ItemConteudo(
                         titulo: 'Intervenção - ${formatTimesTamp(e.dataCriacao) ?? 'Data não disponível'}',
                         onTap: () => Navigator.of(context).push(
                           MaterialPageRoute(
@@ -3273,7 +3553,6 @@ class _PacienteScreenState extends State<PacienteScreen> {
                 text: 'Compartilhar Projeto',
                 onPressed: () async {
                   if (html.window.navigator.userAgent.contains('Mobi')) {
-                   
                     await Share.share('Aqui está o código do projeto: ${pacienteProvider.paciente!.url}',
                         subject: pacienteProvider.paciente!.url);
                   } else {

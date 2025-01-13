@@ -41,11 +41,11 @@ class CardEvolucao extends StatelessWidget {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(14),
+              const Padding(
+                padding: EdgeInsets.all(14),
                 child: Text(
                   'Gabriel Lamarca Galdino da Silva',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14,
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w600,

@@ -83,9 +83,9 @@ class _EvolucaoPacientePageState extends State<EvolucaoPacientePage> {
 
                   novoComentario.dataCriancao = Timestamp.now();
                   novoComentario.comentario = comentarioController.text;
-                  novoComentario.nome = profissionalProvider.profissional!.nome;
+                  novoComentario.nome = profissionalProvider.profissional?.nome;
 
-                  evolucao!.evolucoesModel!.add(novoComentario);
+                  evolucao?.evolucoesModel?.add(novoComentario);
 
                   await GerenciaPacienteRepository()
                       .cadastraEvolucao(evolucao!, pacienteProvider.paciente!.dadosPacienteModel.uidDocumento);
@@ -276,9 +276,9 @@ class _EvolucaoPacientePageState extends State<EvolucaoPacientePage> {
                         itemBuilder: (context, index) {
                           final evolucao = evolucoesFiltradas[index];
                           return ListTile(
-                            leading: const CircleAvatar(
-                              backgroundImage: AssetImage('assets/psicologo.jpg'),
-                            ),
+                            // leading: const CircleAvatar(
+                            //   backgroundImage: AssetImage('assets/psicologo.jpg'),
+                            // ),
                             title: Text(evolucao.nome ?? "Nome não disponível"),
                             subtitle: Text(evolucao.comentario ?? "Comentário não disponível"),
                           );

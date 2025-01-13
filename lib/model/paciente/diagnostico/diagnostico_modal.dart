@@ -5,6 +5,7 @@ import 'package:reabilita_social/model/paciente/diagnostico/doencas_clinicas_mod
 import 'package:reabilita_social/model/paciente/diagnostico/medicacoes_model.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/outras_informacoes_model.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/potencialidade_model.dart';
+import 'package:reabilita_social/model/paciente/diagnostico/problema_model.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/recurso_individuais_model.dart';
 
 class DiagnosticoModal {
@@ -16,6 +17,7 @@ class DiagnosticoModal {
   PotencialidadeModel? potencialidadeModel;
   RecursoIndividuaisModel? recursoIndividuaisModel;
   DificuldadePessoalModal? dificuldadePessoalModel;
+  ProblemaModel? problemaModel;
 
   DiagnosticoModal({
     this.desejoModel,
@@ -26,6 +28,7 @@ class DiagnosticoModal {
     this.potencialidadeModel,
     this.recursoIndividuaisModel,
     this.dificuldadePessoalModel,
+    this.problemaModel,
   });
 
   factory DiagnosticoModal.fromMap(Map<String, dynamic> data) {
@@ -47,6 +50,7 @@ class DiagnosticoModal {
       dificuldadePessoalModel: data['dificuldadePessoalModel'] != null
           ? DificuldadePessoalModal.fromMap(data['dificuldadePessoalModel'])
           : null,
+      problemaModel: data['problemaModel'] != null ? ProblemaModel.fromMap(data['problemaModel']) : null,
     );
   }
 
@@ -60,6 +64,7 @@ class DiagnosticoModal {
       'potencialidadeModel': potencialidadeModel?.toMap(),
       'recursoIndividuaisModel': recursoIndividuaisModel?.toMap(),
       'dificuldadePessoalModel': dificuldadePessoalModel?.toMap(),
+      'problemaModel': problemaModel?.toMap(),
     };
   }
 }

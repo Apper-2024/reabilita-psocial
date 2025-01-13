@@ -7,7 +7,6 @@ import 'package:reabilita_social/provider/profissional_provider.dart';
 import 'package:reabilita_social/services/firebase_service.dart';
 import 'package:reabilita_social/utils/colors.dart';
 import 'package:reabilita_social/widgets/card/card_projeto.dart';
-import 'package:reabilita_social/widgets/header.dart';
 import 'package:reabilita_social/widgets/inputText/text_search.dart';
 
 class PesquisaUsuarioScreen extends StatefulWidget {

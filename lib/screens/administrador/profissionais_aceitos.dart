@@ -70,7 +70,7 @@ class _ProfissionaisAceitosScreenState
       backgroundColor: background,
       body: Column(
         children: [
-          Center(
+          const Center(
             child: Stack(
               alignment: Alignment.center,
               children: [
@@ -79,7 +79,7 @@ class _ProfissionaisAceitosScreenState
                   color: bege,
                   size: 70,
                 ),
-                const Text(
+                Text(
                   'Gerencie todos os usuários do sistema.',
                   style: TextStyle(
                     fontSize: 18,
