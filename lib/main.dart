@@ -76,6 +76,8 @@ class MyApp extends StatelessWidget {
         '/': (context) => const VerificaConta(),
         '/login': (context) => const LoginScreen(),
         '/PesquisaMapa': (context) => const SearchPage(),
+        '/cadastro': (context) => CadastroScreen(),
+        '/loginPrimeiroAcesso': (context) => LoginPrimeiroAcesso(),
 
         //ADMINISTRADOR
         '/usuariosAdministrador': (context) => const RouteGuard(child: ProfissionaisPage()),
@@ -90,9 +92,7 @@ class MyApp extends StatelessWidget {
         //'/detalhePaciente': (context) => RouteGuard(child:  DetalhesPaciente()),
         '/menuProfissional': (context) => const RouteGuard(child: BottomMenuProfissional()),
         '/recursosProfissional': (context) => const RouteGuard(child: RecursosScreen()),
-        '/cadastro': (context) => const RouteGuard(child: CadastroScreen()),
         '/cadastroFinal': (context) => const RouteGuard(child: CadastroFinalScreen()),
-        '/loginPrimeiroAcesso': (context) => const RouteGuard(child: LoginPrimeiroAcesso()),
         '/evolucaoPaciente': (context) => const RouteGuard(child: EvolucaoPacientePage()),
         '/editarPerfil': (context) => const RouteGuard(child: EditaPerfilProf()),
         '/suporteUsuario': (context) => const RouteGuard(child: SuporteUsuario()),

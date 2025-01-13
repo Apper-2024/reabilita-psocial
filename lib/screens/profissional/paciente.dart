@@ -3346,7 +3346,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
                             print('l');
                           },
                         ))
-                    .toList()
+                    
 
                 // if (pactuacaoModel == null || pactuacaoModel.pactuacoesModel?.isEmpty == true)
                 //   ItemConteudo(

@@ -42,7 +42,7 @@ class DetalhesPactuacao extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: filteredPactuacoes == null || filteredPactuacoes.isEmpty
-            ? Center(
+            ? const Center(
                 child: Text(
                   'Nenhuma pactuação encontrada.',
                   style: TextStyle(fontSize: 18, color: preto1),
@@ -117,7 +117,7 @@ class ItemLista extends StatelessWidget {
           Expanded(
             // Permite que o texto ocupe o espaço disponível
             child: Text(
-              conteudo.tipo! + ' ' + index.toString(),
+              '${conteudo.tipo!} $index',
               style: TextStyle(
                 fontSize: 18,
                 color: Colors.green[900],
