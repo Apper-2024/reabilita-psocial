@@ -18,6 +18,15 @@ const List<String> profissoes = [
   "Psicólogo de Saúde Mental",
   "Enfermeiro Psiquiátrico/Saúde Mental"
 ];
+
+const List<String> pactuacoesList = [
+  "Paciente Psiquiátrico",
+  "Família",
+  "Técnico de Referência",
+  "RAPS",
+  "Outro Serviços/instituição/autor social",
+];
+
 const List<String> locaisDeTrabalho = [
   "CAPS I",
   "CAPS II",

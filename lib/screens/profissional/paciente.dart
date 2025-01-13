@@ -1,4 +1,5 @@
 import 'package:reabilita_social/model/paciente/diagnostico/problema_model.dart';
+import 'package:reabilita_social/screens/profissional/detalhes_pactuacao.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -45,6 +46,7 @@ class PacienteScreen extends StatefulWidget {
 }
 
 class _PacienteScreenState extends State<PacienteScreen> {
+  bool _carregando = false;
   Future<void> _dialogDiagnosticoMultiprofissional(PacienteProvider pacienteProvider) async {
     final List<Uint8List> images = [];
 
@@ -1912,7 +1914,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                       return;
                                     }
 
-                                    if (problema == null ) {
+                                    if (problema == null) {
                                       snackAtencao(context, "Preencha todos os campos");
                                       return;
                                     }
@@ -1929,7 +1931,6 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                     intervencaoModel.meta = meta!;
 
                                     intervencao ??= IntervencoesModel(intervencoesModel: []);
-
 
                                     intervencao!.intervencoesModel.add(intervencaoModel);
 
@@ -1969,12 +1970,13 @@ class _PacienteScreenState extends State<PacienteScreen> {
     PactuacaoModel pactuacaoModel = PactuacaoModel(
       prazo: '',
       responsavel: '',
+      intervencao: '',
+      tipo: '',
       dataCriacao: Timestamp.now(),
-      familia: '',
       foto: '',
-      paciente: '',
-      responsavelPactuacao: '',
     );
+
+    IntervencoesModel? intervencaoModel = pacienteProvider.paciente!.intervencoesModel;
     Uint8List? image;
 
     final formKey = GlobalKey<FormState>();
@@ -2006,6 +2008,16 @@ class _PacienteScreenState extends State<PacienteScreen> {
                           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 16),
+                        CustomDropdownButton(
+                          hint: 'Selecione o tipo',
+                          items: pactuacoesList,
+                          onChanged: (value) {
+                            setStateDialog(() {
+                              pactuacaoModel.tipo = value!;
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 16),
                         TextFieldCustom(
                           tipoTexto: TextInputType.text,
                           hintText: "ex. João",
@@ -2018,23 +2030,17 @@ class _PacienteScreenState extends State<PacienteScreen> {
                             return null;
                           },
                           onSaved: (value) {
-                            pactuacaoModel.responsavelPactuacao = value!;
+                            pactuacaoModel.responsavel = value!;
                           },
                         ),
                         const SizedBox(height: 16),
-                        TextFieldCustom(
-                          tipoTexto: TextInputType.text,
-                          hintText: "ex. Paulo",
-                          labelText: "Responsavel pelo paciente",
-                          senha: false,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Campo obrigatório';
-                            }
-                            return null;
-                          },
-                          onSaved: (value) {
-                            pactuacaoModel.responsavel = value!;
+                        CustomDropdownButton(
+                          hint: 'Selecione a intervenção',
+                          items: intervencaoModel!.intervencoesModel.map((e) => e.intervencoes!).toList(),
+                          onChanged: (value) {
+                            setStateDialog(() {
+                              pactuacaoModel.intervencao = value!;
+                            });
                           },
                         ),
                         const SizedBox(height: 16),
@@ -2054,21 +2060,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                           },
                         ),
                         const SizedBox(height: 16),
-                        TextFieldCustom(
-                          tipoTexto: TextInputType.text,
-                          hintText: ".....",
-                          labelText: "Família",
-                          senha: false,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Campo obrigatório';
-                            }
-                            return null;
-                          },
-                          onSaved: (value) {
-                            pactuacaoModel.familia = value!;
-                          },
-                        ),
+                        const Text('Selecione a imagem',
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400, color: preto1)),
                         const SizedBox(height: 16),
                         Wrap(
                           alignment: WrapAlignment.center,
@@ -2115,6 +2108,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
                             Expanded(
                               child: Botaoprincipal(
                                 text: "Cadastrar",
+                                carregando: _carregando,
                                 onPressed: () async {
                                   try {
                                     if (!formKey.currentState!.validate()) {
@@ -2125,11 +2119,14 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                       snackAtencao(context, "Selecione uma ATA");
                                       return;
                                     }
+                                    setStateDialog(() {
+                                      _carregando = true;
+                                    });
 
                                     formKey.currentState!.save();
 
                                     pactuacaoModel.dataCriacao = Timestamp.now();
-                                    pactuacaoModel.paciente = pacienteProvider.paciente!.dadosPacienteModel.nome;
+                                    // pactuacaoModel.paciente = pacienteProvider.paciente!.dadosPacienteModel.nome;
 
                                     pactuacao ??= ListPactuacaoModel(pactuacoesModel: []);
 
@@ -2143,10 +2140,16 @@ class _PacienteScreenState extends State<PacienteScreen> {
 
                                     Navigator.pop(context);
                                     Navigator.pop(context);
+                                    setStateDialog(() {
+                                      _carregando = false;
+                                    });
                                     snackSucesso(context, "Cadastrado com sucesso");
                                   } catch (e) {
                                     print("Erro: $e");
                                     snackErro(context, "Erro ao cadastrar intervenção");
+                                    setStateDialog(() {
+                                      _carregando = false;
+                                    });
                                     return;
                                   }
                                 },
@@ -2298,6 +2301,9 @@ class _PacienteScreenState extends State<PacienteScreen> {
     ListAvaliacao avaliacaoModel = ListAvaliacao(
         dataCriacao: Timestamp.now(), avaliacao: null, intervencao: '', responsavel: '', observacao: "", foto: "");
 
+    IntervencoesModel? intervencoesModel = pacienteProvider.paciente!.intervencoesModel;
+    ListPactuacaoModel? pactuacaoModel = pacienteProvider.paciente!.pactuacoesModel;
+
     Uint8List? image;
 
     final formKey = GlobalKey<FormState>();
@@ -2329,35 +2335,23 @@ class _PacienteScreenState extends State<PacienteScreen> {
                           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 16),
-                        TextFieldCustom(
-                          tipoTexto: TextInputType.text,
-                          hintText: ".......",
-                          labelText: "Intervenção",
-                          senha: false,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Campo obrigatório';
-                            }
-                            return null;
-                          },
-                          onSaved: (value) {
-                            avaliacaoModel.intervencao = value!;
+                        CustomDropdownButton(
+                          hint: 'Selecione a intervenção',
+                          items: intervencoesModel!.intervencoesModel.map((e) => e.intervencoes!).toList(),
+                          onChanged: (value) {
+                            setStateDialog(() {
+                              avaliacaoModel.intervencao = value;
+                            });
                           },
                         ),
                         const SizedBox(height: 16),
-                        TextFieldCustom(
-                          tipoTexto: TextInputType.text,
-                          hintText: ".......",
-                          labelText: "Pactuação",
-                          senha: false,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Campo obrigatório';
-                            }
-                            return null;
-                          },
-                          onSaved: (value) {
-                            avaliacaoModel.intervencao = value!;
+                        CustomDropdownButton(
+                          hint: 'Selecione a pactuação',
+                          items: pactuacaoModel!.pactuacoesModel!.map((e) => e.responsavel!).toList(),
+                          onChanged: (value) {
+                            setStateDialog(() {
+                              avaliacaoModel.pactuacao = value;
+                            });
                           },
                         ),
                         const SizedBox(height: 16),
@@ -2454,6 +2448,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
                             Expanded(
                               child: Botaoprincipal(
                                 text: "Cadastrar",
+                                carregando: _carregando,
                                 onPressed: () async {
                                   try {
                                     if (!formKey.currentState!.validate()) {
@@ -2470,6 +2465,10 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                       snackAtencao(context, "Selecione uma avaliação");
                                       return;
                                     }
+
+                                    setStateDialog(() {
+                                      _carregando = true;
+                                    });
                                     avaliacaoModel.dataCriacao = Timestamp.now();
 
                                     avaliacao ??= AvaliacaoModel(avaliacoesModel: []);
@@ -2484,10 +2483,16 @@ class _PacienteScreenState extends State<PacienteScreen> {
 
                                     Navigator.pop(context);
                                     Navigator.pop(context);
+                                    setStateDialog(() {
+                                      _carregando = false;
+                                    });
                                     snackSucesso(context, "Cadastrado com sucesso");
                                   } catch (e) {
                                     print("Erro: $e");
                                     snackErro(context, "Erro ao cadastrar intervenção");
+                                    setStateDialog(() {
+                                      _carregando = false;
+                                    });
                                     return;
                                   }
                                 },
@@ -3324,63 +3329,82 @@ class _PacienteScreenState extends State<PacienteScreen> {
                 _dialogAdicionaPactuacao(pacienteProvider, pactuacaoModel);
               },
               conteudos: [
-                if (pactuacaoModel == null || pactuacaoModel.pactuacoesModel?.isEmpty == true)
-                  ItemConteudo(
-                    titulo: 'Nenhuma pactuação cadastrada',
-                    onTap: () {
-                      _dialogAdicionaPactuacao(pacienteProvider, pactuacaoModel);
-                    },
-                    onTap2: () {
-                      print("oi");
-                    },
-                  )
-                else
-                  ...?pactuacaoModel.pactuacoesModel?.map((pactuacao) => ItemConteudo(
-                        titulo: 'Pactuação - ${formatTimesTamp(pactuacao.dataCriacao) ?? 'Data não disponível'}',
-                        onTap: () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => FormCategoria(
-                              fields: [
-                                FieldConfig(
-                                    label: 'Paciente Psiquiátrico',
-                                    hintText: 'Paciente Psiquiátrico',
-                                    valorInicial: pactuacao.paciente,
-                                    widthFactor: 1.0),
-                                FieldConfig(
-                                    label: 'Responsáveis pela Intervenção',
-                                    hintText: 'Responsáveis pela Intervenção do paciente',
-                                    widthFactor: 1.0,
-                                    valorInicial: pactuacao.responsavel),
-                                FieldConfig(
-                                    label: 'Prazo',
-                                    hintText: 'Prazo do paciente',
-                                    widthFactor: 1.0,
-                                    valorInicial: pactuacao.prazo),
-                                FieldConfig(
-                                    label: 'Família',
-                                    hintText: 'Família do paciente',
-                                    widthFactor: 1.0,
-                                    valorInicial: pactuacao.familia),
-                                FieldConfig(
-                                    label: 'Responsáveis pela Intervenção',
-                                    hintText: 'Responsáveis pela Intervenção do paciente',
-                                    widthFactor: 1.0,
-                                    valorInicial: pactuacao.responsavelPactuacao),
-                                FieldConfig(
-                                  label: 'Ata da Pactuação',
-                                  hintText: '',
-                                  imagem: pactuacao.foto!,
-                                  umaImagem: true,
+                ...pactuacoesList
+                    .map((pactuacao) => ItemConteudo(
+                          titulo: pactuacao,
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => DetalhesPactuacao(
+                                  pactuacaoModel: pactuacaoModel!,
+                                  tipo: pactuacao,
                                 ),
-                              ],
-                              titulo: 'Pactuação - ${formatTimesTamp(pactuacao.dataCriacao) ?? 'Data não disponível'}',
-                            ),
-                          ),
-                        ),
-                        onTap2: () {
-                          print("oi");
-                        },
-                      )),
+                              ),
+                            );
+                          },
+                          onTap2: () {
+                            print('l');
+                          },
+                        ))
+                    .toList()
+
+                // if (pactuacaoModel == null || pactuacaoModel.pactuacoesModel?.isEmpty == true)
+                //   ItemConteudo(
+                //     titulo: 'Nenhuma pactuação cadastrada',
+                //     onTap: () {
+                //       _dialogAdicionaPactuacao(pacienteProvider, pactuacaoModel);
+                //     },
+                //     onTap2: () {
+                //       print("oi");
+                //     },
+                //   )
+                // else
+                //   ...?pactuacaoModel.pactuacoesModel?.map((pactuacao) => ItemConteudo(
+                //         titulo: 'Pactuação - ${formatTimesTamp(pactuacao.dataCriacao) ?? 'Data não disponível'}',
+                //         onTap: () => Navigator.of(context).push(
+                //           MaterialPageRoute(
+                //             builder: (context) => FormCategoria(
+                //               fields: [
+                //                 FieldConfig(
+                //                     label: 'Paciente Psiquiátrico',
+                //                     hintText: 'Paciente Psiquiátrico',
+                //                     valorInicial: pactuacao.paciente,
+                //                     widthFactor: 1.0),
+                //                 FieldConfig(
+                //                     label: 'Responsáveis pela Intervenção',
+                //                     hintText: 'Responsáveis pela Intervenção do paciente',
+                //                     widthFactor: 1.0,
+                //                     valorInicial: pactuacao.responsavel),
+                //                 FieldConfig(
+                //                     label: 'Prazo',
+                //                     hintText: 'Prazo do paciente',
+                //                     widthFactor: 1.0,
+                //                     valorInicial: pactuacao.prazo),
+                //                 FieldConfig(
+                //                     label: 'Família',
+                //                     hintText: 'Família do paciente',
+                //                     widthFactor: 1.0,
+                //                     valorInicial: pactuacao.familia),
+                //                 FieldConfig(
+                //                     label: 'Responsáveis pela Intervenção',
+                //                     hintText: 'Responsáveis pela Intervenção do paciente',
+                //                     widthFactor: 1.0,
+                //                     valorInicial: pactuacao.responsavelPactuacao),
+                //                 FieldConfig(
+                //                   label: 'Ata da Pactuação',
+                //                   hintText: '',
+                //                   imagem: pactuacao.foto!,
+                //                   umaImagem: true,
+                //                 ),
+                //               ],
+                //               titulo: 'Pactuação - ${formatTimesTamp(pactuacao.dataCriacao) ?? 'Data não disponível'}',
+                //             ),
+                //           ),
+                //         ),
+                //         onTap2: () {
+                //           print("oi");
+                //         },
+                //       )),
               ],
             ),
           );

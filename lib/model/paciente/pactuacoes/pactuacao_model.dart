@@ -1,43 +1,50 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PactuacaoModel {
-  String? paciente;
-  String? responsavelPactuacao;
   String? prazo;
-  String? familia;
   String? responsavel;
+  String? intervencao;
+  String? tipo;
   String? foto;
   Timestamp? dataCriacao;
 
   PactuacaoModel({
-    this.paciente,
-    this.responsavelPactuacao,
     this.prazo,
-    this.familia,
     this.responsavel,
+    this.intervencao,
+    this.tipo,
     this.foto,
     this.dataCriacao,
   });
 
-  factory PactuacaoModel.fromMap(Map<String, dynamic> data) {
+  factory PactuacaoModel.fromMap(Map<String, dynamic>? data) {
+    if (data == null) {
+      return PactuacaoModel();
+    }
     return PactuacaoModel(
-      paciente: data['paciente'],
-      responsavelPactuacao: data['responsavelPactuacao'],
       prazo: data['prazo'],
-      familia: data['familia'],
       responsavel: data['responsavel'],
+      intervencao: data['intervencao'],
+      tipo: data['tipo'],
       foto: data['foto'],
       dataCriacao: data['dataCriacao'],
     );
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic>? toMap() {
+    if (prazo == null &&
+        responsavel == null &&
+        intervencao == null &&
+        tipo == null &&
+        foto == null &&
+        dataCriacao == null) {
+      return null;
+    }
     return {
-      'paciente': paciente,
-      'responsavelPactuacao': responsavelPactuacao,
       'prazo': prazo,
-      'familia': familia,
       'responsavel': responsavel,
+      'intervencao': intervencao,
+      'tipo': tipo,
       'foto': foto,
       'dataCriacao': dataCriacao,
     };
@@ -49,17 +56,23 @@ class ListPactuacaoModel {
 
   ListPactuacaoModel({this.pactuacoesModel});
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic>? toMap() {
+    if (pactuacoesModel == null) {
+      return null;
+    }
     return {
       'pactuacoesModel': pactuacoesModel?.map((pactuacao) => pactuacao.toMap()).toList(),
     };
   }
 
-  factory ListPactuacaoModel.fromMap(Map<String, dynamic> map) {
+  factory ListPactuacaoModel.fromMap(Map<String, dynamic>? map) {
+    if (map == null) {
+      return ListPactuacaoModel();
+    }
     return ListPactuacaoModel(
-      pactuacoesModel: List<PactuacaoModel>.from(
-        map['pactuacoesModel']?.map((item) => PactuacaoModel.fromMap(item)) ?? [],
-      ),
+      pactuacoesModel: (map['pactuacoesModel'] as List<dynamic>?)
+          ?.map((item) => PactuacaoModel.fromMap(item as Map<String, dynamic>?))
+          .toList(),
     );
   }
 }
