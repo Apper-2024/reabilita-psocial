@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:reabilita_social/enum/enum_status_conta.dart';
 import 'package:reabilita_social/enum/enum_tipo_usuario.dart';
 import 'package:reabilita_social/provider/administrador_provider.dart';
 import 'package:reabilita_social/provider/profissional_provider.dart';
@@ -62,7 +63,12 @@ Future<void> verificaUser(BuildContext context, User user) async {
       ProfissionalProvider profissionalProvider = ProfissionalProvider.instance;
       final profissional = await GerenciaProfissionalRepository().buscaProfissional(usuario.uid);
       profissionalProvider.setProfissional(profissional);
-      Navigator.pushNamedAndRemoveUntil(context, '/menuProfissional', (route) => false);
+
+      if (profissional.statusConta == EnumStatusConta.analise.name) {
+        Navigator.pushNamedAndRemoveUntil(context, '/paginaEspera', (route) => false);
+      } else {
+        Navigator.pushNamedAndRemoveUntil(context, '/menuProfissional', (route) => false);
+      }
     }
 
     if (usuario.tipoUsuario == EnumTipoUsuario.administrador.name) {

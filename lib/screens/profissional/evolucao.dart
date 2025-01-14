@@ -22,8 +22,7 @@ final ProfissionalProvider profissionalProvider = ProfissionalProvider.instance;
 PacienteProvider pacienteProvider = PacienteProvider.instance;
 Query _baseQuery = db
     .collection("Pacientes")
-    .where('dadosPacienteModel.uidProfisional',
-        isEqualTo: profissionalProvider.profissional!.uidProfissional)
+    .where('dadosPacienteModel.uidProfisional', isEqualTo: profissionalProvider.profissional!.uidProfissional)
     .orderBy('dadosPacienteModel.dataCriacao', descending: true);
 
 class _EvolucaoScreenState extends State<EvolucaoScreen> {
@@ -64,8 +63,7 @@ class _EvolucaoScreenState extends State<EvolucaoScreen> {
               const SizedBox(height: 16),
               StreamBuilder<QuerySnapshot>(
                 stream: _baseQuery.snapshots(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.hasError) {
                     print(snapshot.error);
                     return const Center(child: Text('Algo deu errado'));
@@ -76,22 +74,18 @@ class _EvolucaoScreenState extends State<EvolucaoScreen> {
                   }
 
                   if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                    return const Center(
-                        child: Text("Nenhum usuário encontrado"));
+                    return const Center(child: Text("Nenhum usuário encontrado"));
                   }
 
-                  final List<PacienteModel> pacientes =
-                      snapshot.data!.docs.map((doc) {
-                    return PacienteModel.fromMap(
-                        doc.data() as Map<String, dynamic>);
+                  final List<PacienteModel> pacientes = snapshot.data!.docs.map((doc) {
+                    return PacienteModel.fromMap(doc.data() as Map<String, dynamic>);
                   }).toList();
 
                   return GridView.builder(
                     itemCount: pacientes.length,
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2, // Define duas colunas
                       crossAxisSpacing: 5, // Espaçamento horizontal reduzido
                       mainAxisSpacing: 5, // Espaçamento vertical reduzido

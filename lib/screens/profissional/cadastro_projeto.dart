@@ -420,10 +420,10 @@ class _CadastroProjetoScreenState extends State<CadastroProjetoScreen> {
                         return;
                       }
 
-                      if (_image == null) {
-                        snackAtencao(context, "Selecione uma foto");
-                        return;
-                      }
+                      // if (_image == null) {
+                      //   snackAtencao(context, "Selecione uma foto");
+                      //   return;
+                      // }
 
                       setState(() {
                         _carregando = true;
@@ -439,7 +439,7 @@ class _CadastroProjetoScreenState extends State<CadastroProjetoScreen> {
                       paciente.dadosPacienteModel.dataCriacao = Timestamp.now();
 
                       await GerenciaPacienteRepository()
-                          .cadastrarPacienteNovo(paciente.dadosPacienteModel, _image!, senha);
+                          .cadastrarPacienteNovo(paciente.dadosPacienteModel, _image, senha);
 
                       setState(() {
                         _carregando = false;

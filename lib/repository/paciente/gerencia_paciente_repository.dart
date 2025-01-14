@@ -26,17 +26,18 @@ class GerenciaPacienteRepository {
   final db = FirebaseFirestore.instance;
   final storageRef = FirebaseStorage.instance.ref();
 
-  Future<void> cadastrarPacienteNovo(DadosPacienteModel paciente, Uint8List arquivo, String senha) async {
+  Future<void> cadastrarPacienteNovo(DadosPacienteModel paciente, Uint8List? arquivo, String senha) async {
     final uuid = const UuidV4().generate();
 
     final batch = db.batch();
     try {
-      final imagesRef = storageRef.child("Pacientes/${paciente.uidPaciente}/$uuid.jpg");
-      await imagesRef.putData(arquivo);
+      if (arquivo != null) {
+        final imagesRef = storageRef.child("Pacientes/${paciente.uidPaciente}/$uuid.jpg");
+        await imagesRef.putData(arquivo);
 
-      String imageUrl = await imagesRef.getDownloadURL();
-
-      paciente.urlFoto = imageUrl;
+        String imageUrl = await imagesRef.getDownloadURL();
+        paciente.urlFoto = imageUrl;
+      }
 
       final pacienteRef = db.collection("Pacientes").doc();
       paciente.uidDocumento = pacienteRef.id;

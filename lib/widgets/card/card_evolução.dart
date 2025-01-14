@@ -5,8 +5,7 @@ class CardEvolucao extends StatelessWidget {
   final String nome;
   final String imageUrl;
   final void Function()? onTap;
-  const CardEvolucao(
-      {super.key, required this.nome, required this.imageUrl, this.onTap});
+  const CardEvolucao({super.key, required this.nome, required this.imageUrl, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -41,10 +40,10 @@ class CardEvolucao extends StatelessWidget {
                   ),
                 ),
               ),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.all(14),
                 child: Text(
-                  'Gabriel Lamarca Galdino da Silva',
+                  nome,
                   style: TextStyle(
                     fontSize: 14,
                     fontFamily: 'Poppins',

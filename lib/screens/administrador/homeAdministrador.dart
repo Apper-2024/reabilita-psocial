@@ -12,8 +12,7 @@ class ProfissionaisPage extends StatefulWidget {
   State<ProfissionaisPage> createState() => _ProfissionaisPageState();
 }
 
-class _ProfissionaisPageState extends State<ProfissionaisPage>
-    with TickerProviderStateMixin {
+class _ProfissionaisPageState extends State<ProfissionaisPage> with TickerProviderStateMixin {
   late TabController _controller;
 
   @override
@@ -47,10 +46,10 @@ class _ProfissionaisPageState extends State<ProfissionaisPage>
           //     Navigator.pop(context);
           //   },
           // ),
+          leading: Container(),
           title: const Text(
             "Bem-vindo, Administrador!",
-            style: TextStyle(
-                color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
+            style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
           ),
           actions: [
             PopupMenuButton<String>(

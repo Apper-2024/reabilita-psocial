@@ -88,8 +88,8 @@ class _SearchPageState extends State<SearchPage> {
   void _openMap(String placeName) async {
     final url = Uri.encodeFull(
         'https://www.google.com/maps/search/?api=1&query=$placeName');
-    if (await canLaunch(url)) {
-      await launch(url);
+    if (await canLaunchUrl (Uri.parse(url) )) {
+      await launchUrl (Uri.parse(url));
     } else {
       throw Exception('Não foi possível abrir o mapa');
     }
@@ -101,7 +101,7 @@ class _SearchPageState extends State<SearchPage> {
       backgroundColor: background,
       appBar: AppBar(
         title: const Text(
-          'Busca Psicosocial',
+          'Busca Psicossocial',
           style: TextStyle(color: preto1),
         ),
         centerTitle: true,

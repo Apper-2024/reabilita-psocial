@@ -20,6 +20,7 @@ import 'package:reabilita_social/screens/profissional/cadastro_projeto.dart';
 import 'package:reabilita_social/screens/profissional/edita_perfil_prof.dart';
 import 'package:reabilita_social/screens/profissional/evolucao_paciente.dart';
 import 'package:reabilita_social/screens/profissional/paciente.dart';
+import 'package:reabilita_social/screens/profissional/pagina_espera.dart';
 import 'package:reabilita_social/screens/profissional/recursos.dart';
 import 'package:reabilita_social/screens/profissional/pesquisa_usuario.dart';
 import 'package:reabilita_social/screens/profissional/projetos.dart';
@@ -99,6 +100,7 @@ class MyApp extends StatelessWidget {
         '/pesquisaUsuario': (context) => const RouteGuard(child: PesquisaUsuarioScreen()),
         '/projetoScreen': (context) => const RouteGuard(child: ProjetosScreen()),
         '/referenciasTela': (context) => const RouteGuard(child: ReferenciasPage()),
+        '/paginaEspera': (context) => const RouteGuard(child: PaginaEsperaScreen()),
 
         //PACIENTE
       },

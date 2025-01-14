@@ -18,7 +18,7 @@ class DetalhesPaciente extends StatelessWidget {
   final List<ItemConteudo> conteudos;
   final bool visible;
   final void Function()? onPressed;
-  
+
   const DetalhesPaciente({
     super.key,
     required this.conteudos,
@@ -65,7 +65,12 @@ class DetalhesPaciente extends StatelessWidget {
             Center(
               child: CircleAvatar(
                 radius: 50,
-                backgroundImage: NetworkImage(pacienteProvider.paciente!.dadosPacienteModel.urlFoto),
+                backgroundImage: pacienteProvider.paciente!.dadosPacienteModel.urlFoto.isNotEmpty
+                    ? NetworkImage(pacienteProvider.paciente!.dadosPacienteModel.urlFoto)
+                    : null,
+                child: pacienteProvider.paciente!.dadosPacienteModel.urlFoto.isEmpty
+                    ? const Icon(Icons.person, size: 50)
+                    : null,
               ),
             ),
             const SizedBox(height: 10),

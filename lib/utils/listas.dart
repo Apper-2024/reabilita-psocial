@@ -27,6 +27,13 @@ const List<String> pactuacoesList = [
   "Outro Serviços/instituição/autor social",
 ];
 
+const List<String> dificuldadesList = [
+  "Dificuldades Pessoais",
+  "Dificuldades Coletivas",
+  "Dificuldades Estruturais",
+
+];
+
 const List<String> locaisDeTrabalho = [
   "CAPS I",
   "CAPS II",

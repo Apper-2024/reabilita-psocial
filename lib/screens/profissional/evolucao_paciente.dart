@@ -140,30 +140,34 @@ class _EvolucaoPacientePageState extends State<EvolucaoPacientePage> {
             final evolucaoModel = pacienteProvider?.evolucoesModel;
 
             return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Center(
-                  child: Column(
-                    children: [
-                      ClipOval(
-                        child: Image.network(
-                          pacienteProvider!.dadosPacienteModel.urlFoto,
-                          width: 78,
-                          height: 78,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      Text(
-                        pacienteProvider.dadosPacienteModel.nome,
-                        style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        pacienteProvider.dadosPacienteModel.outrasInformacoes.observacao ?? '',
-                        style: const TextStyle(color: Colors.grey),
-                      ),
-                    ],
-                  ),
+                Column(
+                  children: [
+                    ClipOval(
+                      child: pacienteProvider!.dadosPacienteModel.urlFoto != ''
+                          ? Image.network(
+                              pacienteProvider.dadosPacienteModel.urlFoto,
+                              width: 78,
+                              height: 78,
+                              fit: BoxFit.cover,
+                            )
+                          : Icon(
+                              Icons.person,
+                              size: 78,
+                              color: Colors.grey,
+                            ),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      pacienteProvider.dadosPacienteModel.nome,
+                      style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      pacienteProvider.dadosPacienteModel.outrasInformacoes.observacao ?? '',
+                      style: const TextStyle(color: Colors.grey),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 16),
                 TableCalendar(

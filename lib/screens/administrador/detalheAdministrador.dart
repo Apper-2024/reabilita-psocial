@@ -32,14 +32,9 @@ class _DetalheAdministradorState extends State<DetalheAdministrador> {
 
   Future<void> _fetchUserData() async {
     try {
-      final String collection = widget.userType == 'Administrador'
-          ? 'Administrador'
-          : 'Profissionais';
+      final String collection = widget.userType == 'Administrador' ? 'Administrador' : 'Profissionais';
 
-      final docSnapshot = await _firestore
-          .collection(collection)
-          .doc(widget.uidDocumento)
-          .get();
+      final docSnapshot = await _firestore.collection(collection).doc(widget.uidDocumento).get();
 
       if (docSnapshot.exists) {
         setState(() {
@@ -57,20 +52,13 @@ class _DetalheAdministradorState extends State<DetalheAdministrador> {
     setState(() => _isLoading = true);
 
     try {
-      final String collection = widget.userType == 'Administrador'
-          ? 'Administrador'
-          : 'Profissionais';
+      final String collection = widget.userType == 'Administrador' ? 'Administrador' : 'Profissionais';
 
-      await _firestore
-          .collection(collection)
-          .doc(widget.uidDocumento)
-          .update({'statusConta': novoStatus});
+      await _firestore.collection(collection).doc(widget.uidDocumento).update({'statusConta': novoStatus});
 
       snackSucesso(
         context,
-        novoStatus == 'ativo'
-            ? 'Usuário ativado com sucesso!'
-            : 'Usuário suspenso!',
+        novoStatus == 'ativo' ? 'Usuário ativado com sucesso!' : 'Usuário suspenso!',
       );
 
       setState(() {
@@ -109,10 +97,9 @@ class _DetalheAdministradorState extends State<DetalheAdministrador> {
         automaticallyImplyLeading: false, // Remove seta padrão
         title: Text('Detalhes do ${widget.userType}'),
         centerTitle: true,
-        leading: GestureDetector(
+        leading: InkWell(
           onTap: () {
             Navigator.pushNamed(context, "/usuariosAdministrador");
-          
           },
           child: const Padding(
             padding: EdgeInsets.only(left: 12.0),
@@ -138,18 +125,12 @@ class _DetalheAdministradorState extends State<DetalheAdministrador> {
             InfoTile(title: 'Email', value: _userData!['email']),
             InfoTile(title: 'Telefone', value: _userData!['telefone']),
             InfoTile(title: 'Status', value: _userData!['statusConta']),
-            if (_userData!.containsKey('cpf'))
-              InfoTile(title: 'CPF', value: _userData!['cpf']),
-            if (_userData!.containsKey('profissao'))
-              InfoTile(title: 'Profissão', value: _userData!['profissao']),
+            if (_userData!.containsKey('cpf')) InfoTile(title: 'CPF', value: _userData!['cpf']),
+            if (_userData!.containsKey('profissao')) InfoTile(title: 'Profissão', value: _userData!['profissao']),
             if (_userData!.containsKey('localTrabalho'))
-              InfoTile(
-                  title: 'Local de Trabalho',
-                  value: _userData!['localTrabalho']),
-            if (_userData!.containsKey('raca'))
-              InfoTile(title: 'Raça', value: _userData!['raca']),
+              InfoTile(title: 'Local de Trabalho', value: _userData!['localTrabalho']),
+            if (_userData!.containsKey('raca')) InfoTile(title: 'Raça', value: _userData!['raca']),
             const SizedBox(height: 16),
-
             if (_userData!.containsKey('endereco'))
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -161,27 +142,13 @@ class _DetalheAdministradorState extends State<DetalheAdministrador> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  InfoTile(
-                      title: 'Rua',
-                      value: _userData!['endereco']['rua'] ?? 'N/A'),
-                  InfoTile(
-                      title: 'Número',
-                      value: _userData!['endereco']['numero'] ?? 'N/A'),
-                  InfoTile(
-                      title: 'Bairro',
-                      value: _userData!['endereco']['bairro'] ?? 'N/A'),
-                  InfoTile(
-                      title: 'Complemento',
-                      value: _userData!['endereco']['complemento'] ?? 'N/A'),
-                  InfoTile(
-                      title: 'Cidade',
-                      value: _userData!['endereco']['cidade'] ?? 'N/A'),
-                  InfoTile(
-                      title: 'Estado',
-                      value: _userData!['endereco']['estado'] ?? 'N/A'),
-                  InfoTile(
-                      title: 'CEP',
-                      value: _userData!['endereco']['cep'] ?? 'N/A'),
+                  InfoTile(title: 'Rua', value: _userData!['endereco']['rua'] ?? 'N/A'),
+                  InfoTile(title: 'Número', value: _userData!['endereco']['numero'] ?? 'N/A'),
+                  InfoTile(title: 'Bairro', value: _userData!['endereco']['bairro'] ?? 'N/A'),
+                  InfoTile(title: 'Complemento', value: _userData!['endereco']['complemento'] ?? 'N/A'),
+                  InfoTile(title: 'Cidade', value: _userData!['endereco']['cidade'] ?? 'N/A'),
+                  InfoTile(title: 'Estado', value: _userData!['endereco']['estado'] ?? 'N/A'),
+                  InfoTile(title: 'CEP', value: _userData!['endereco']['cep'] ?? 'N/A'),
                 ],
               ),
           ],

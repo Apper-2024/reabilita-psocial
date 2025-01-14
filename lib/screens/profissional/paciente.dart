@@ -1379,9 +1379,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
   Future<void> _dialogAdicionarDificuldade(
       PacienteProvider pacienteProvider, DificuldadePessoalModal? dificuldades) async {
     ListaDificuldadePessoal dificuldadePessoalModel = ListaDificuldadePessoal(
-      dificuldadePessoal: "",
-      dificuldadeColetiva: "",
-      dificuldadeEstruturais: "",
+      dificuldade: "",
+      tipoDificuldade: "",
       dataCriacao: Timestamp.now(),
     );
 
@@ -1417,7 +1416,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
                         TextFieldCustom(
                           tipoTexto: TextInputType.text,
                           hintText: ".....",
-                          labelText: "Dificuldades Pessoais",
+                          labelText: "Dificuldade",
                           senha: false,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -1426,39 +1425,17 @@ class _PacienteScreenState extends State<PacienteScreen> {
                             return null;
                           },
                           onSaved: (value) {
-                            dificuldadePessoalModel.dificuldadePessoal = value!;
+                            dificuldadePessoalModel.dificuldade = value!;
                           },
                         ),
                         const SizedBox(height: 16),
-                        TextFieldCustom(
-                          tipoTexto: TextInputType.text,
-                          hintText: ".....",
-                          labelText: "Dificuldades Coletivas",
-                          senha: false,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Campo obrigatório';
-                            }
-                            return null;
-                          },
-                          onSaved: (value) {
-                            dificuldadePessoalModel.dificuldadeColetiva = value!;
-                          },
-                        ),
-                        const SizedBox(height: 16),
-                        TextFieldCustom(
-                          tipoTexto: TextInputType.text,
-                          hintText: ".....",
-                          labelText: "Dificuldades Estruturais",
-                          senha: false,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Campo obrigatório';
-                            }
-                            return null;
-                          },
-                          onSaved: (value) {
-                            dificuldadePessoalModel.dificuldadeEstruturais = value!;
+                        CustomDropdownButton(
+                          hint: 'Selecione o tipo de dificuldade',
+                          items: dificuldadesList,
+                          onChanged: (value) {
+                            setStateDialog(() {
+                              dificuldadePessoalModel.tipoDificuldade = value!;
+                            });
                           },
                         ),
                         const SizedBox(height: 32),
@@ -1484,7 +1461,13 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                       return;
                                     }
 
+                                    if (dificuldadePessoalModel.tipoDificuldade == null) {
+                                      snackAtencao(context, "Preencha o tipo de dificuldade");
+                                      return;
+                                    }
+
                                     formKey.currentState!.save();
+
                                     dificuldadePessoalModel.dataCriacao = Timestamp.now();
 
                                     dificuldades ??= DificuldadePessoalModal(dificuldadePessoal: []);
@@ -2885,32 +2868,10 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                 ...dificuldadePessoal.dificuldadePessoal!.map((dificuldade) {
                                   return [
                                     FieldConfig(
-                                      label: 'Dificuldades Individuais',
-                                      hintText: dificuldade.dificuldadePessoal!,
+                                      label: dificuldade.tipoDificuldade!,
+                                      hintText: dificuldade.dificuldade!,
                                       isDoubleHeight: true,
-                                      valorInicial: dificuldade.dificuldadePessoal!,
-                                      data: formatTimesTamp(dificuldade.dataCriacao),
-                                      botaoAdicionar: true,
-                                      onTapbotaoAdicionar: () {
-                                        _dialogAdicionarDificuldade(pacienteProvider, dificuldadePessoal);
-                                      },
-                                    ),
-                                    FieldConfig(
-                                      label: 'Dificuldades Coletivas',
-                                      hintText: dificuldade.dificuldadeColetiva!,
-                                      isDoubleHeight: true,
-                                      valorInicial: dificuldade.dificuldadeColetiva!,
-                                      data: formatTimesTamp(dificuldade.dataCriacao),
-                                      botaoAdicionar: true,
-                                      onTapbotaoAdicionar: () {
-                                        _dialogAdicionarDificuldade(pacienteProvider, dificuldadePessoal);
-                                      },
-                                    ),
-                                    FieldConfig(
-                                      label: 'Dificuldades Estruturais',
-                                      hintText: dificuldade.dificuldadeEstruturais!,
-                                      isDoubleHeight: true,
-                                      valorInicial: dificuldade.dificuldadeEstruturais!,
+                                      valorInicial: dificuldade.dificuldade!,
                                       data: formatTimesTamp(dificuldade.dataCriacao),
                                       botaoAdicionar: true,
                                       onTapbotaoAdicionar: () {
@@ -3329,24 +3290,22 @@ class _PacienteScreenState extends State<PacienteScreen> {
                 _dialogAdicionaPactuacao(pacienteProvider, pactuacaoModel);
               },
               conteudos: [
-                ...pactuacoesList
-                    .map((pactuacao) => ItemConteudo(
-                          titulo: pactuacao,
-                          onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => DetalhesPactuacao(
-                                  pactuacaoModel: pactuacaoModel!,
-                                  tipo: pactuacao,
-                                ),
-                              ),
-                            );
-                          },
-                          onTap2: () {
-                            print('l');
-                          },
-                        ))
-                    
+                ...pactuacoesList.map((pactuacao) => ItemConteudo(
+                      titulo: pactuacao,
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => DetalhesPactuacao(
+                              pactuacaoModel: pactuacaoModel!,
+                              tipo: pactuacao,
+                            ),
+                          ),
+                        );
+                      },
+                      onTap2: () {
+                        print('l');
+                      },
+                    ))
 
                 // if (pactuacaoModel == null || pactuacaoModel.pactuacoesModel?.isEmpty == true)
                 //   ItemConteudo(
