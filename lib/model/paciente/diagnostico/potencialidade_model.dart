@@ -19,6 +19,11 @@ class Potencialidade {
       'dataCriacao': dataCriacao,
     };
   }
+    void updateFromValue(String value) {
+    potencialidade = value;
+  }
+
+  
 }
 
 class PotencialidadeModel {
@@ -38,5 +43,26 @@ class PotencialidadeModel {
     return {
       'potencialidades': potencialidades?.map((potencialidade) => potencialidade.toMap()).toList(),
     };
+  }
+
+  
+  void updateFromList(List<String> values) {
+    if (values.isNotEmpty) {
+      if (potencialidades != null) {
+        for (int i = 0; i < values.length; i++) {
+          if (i < potencialidades!.length) {
+            potencialidades![i].updateFromValue(values[i]);
+          } else if (values[i].isNotEmpty) {
+            potencialidades!.add(Potencialidade(potencialidade: values[i], dataCriacao: Timestamp.now()));
+          }
+        }
+        // Remove potencialidades extras se a nova lista for menor
+        if (potencialidades!.length > values.length) {
+          potencialidades!.removeRange(values.length, potencialidades!.length);
+        }
+      } else {
+        potencialidades = values.where((value) => value.isNotEmpty).map((value) => Potencialidade(potencialidade: value, dataCriacao: Timestamp.now())).toList();
+      }
+    }
   }
 }

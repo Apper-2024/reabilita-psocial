@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:reabilita_social/model/paciente/agenda/agenda_model.dart';
 import 'package:reabilita_social/model/paciente/avaliacao/avaliacao_model.dart';
+import 'package:reabilita_social/model/paciente/dadosPaciente/dados_paciente_model.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/desejo_model.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/diagnostico_multiprofissional_model.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/dificuldade_pessoal_model.dart';
@@ -32,13 +33,28 @@ class PacienteProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void setDadosPaciente(DadosPacienteModel u) {
+    _paciente?.dadosPacienteModel = u;
+    notifyListeners();
+  }
+
   void setHistoria(HistoriaCasoModel u) {
     _paciente?.diagnosticoModal?.historiaCasoModel = u;
     notifyListeners();
   }
 
+  void setOnlyHistoria(String u) {
+    _paciente?.diagnosticoModal?.historiaCasoModel?.historia = u;
+    notifyListeners();
+  }
+
   void setUpdateFotoHistoria(String u) {
     _paciente?.diagnosticoModal?.historiaCasoModel!.foto!.add(u);
+    notifyListeners();
+  }
+
+  void setUpdateDiagnosticoLista(List<DiagnosticoMultiprofissionaisModel> u) {
+    _paciente?.diagnosticoModal?.historiaCasoModel?.diagnosticos = u;
     notifyListeners();
   }
 
@@ -53,7 +69,7 @@ class PacienteProvider with ChangeNotifier {
   }
 
   void setUpdateHabilidade(Habilidades u) {
-    _paciente?.diagnosticoModal?.recursoIndividuaisModel!.habilidades!.add(u);
+    // _paciente?.diagnosticoModal?.recursoIndividuaisModel!.habilidades!.add(u);
     notifyListeners();
   }
 
@@ -62,8 +78,7 @@ class PacienteProvider with ChangeNotifier {
     notifyListeners();
   }
 
-
-    void setUpdateProblema(ProblemaModel u) {
+  void setUpdateProblema(ProblemaModel u) {
     _paciente?.diagnosticoModal?.problemaModel = u;
     notifyListeners();
   }
@@ -112,10 +127,12 @@ class PacienteProvider with ChangeNotifier {
     _paciente?.avaliacoesModel = u;
     notifyListeners();
   }
+
   void setUpdateDificuldades(DificuldadePessoalModal u) {
     _paciente?.diagnosticoModal?.dificuldadePessoalModel = u;
     notifyListeners();
   }
+
   void setUpdateEvolucao(ListEvolucao u) {
     _paciente?.evolucoesModel?.evolucoesModel ??= [];
 

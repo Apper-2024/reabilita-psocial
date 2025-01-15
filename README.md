@@ -24,7 +24,7 @@ EX DO TÉCNICO, FALTOU ACENTO
 
 pense... HÁ INFORMAÇÕES
 
-experimentar colocar foto na ultima opcaoj
+experimentar colocar foto na ultima opcao
 
 	DIAGNOSTICO
 

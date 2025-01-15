@@ -19,6 +19,10 @@ class Problema {
       'dataCriacao': dataCriacao,
     };
   }
+
+  void updateFromValue(String value) {
+    problema = value;
+  }
 }
 
 class ProblemaModel {
@@ -36,7 +40,36 @@ class ProblemaModel {
 
   Map<String, dynamic> toMap() {
     return {
-      'problema': problema?.map((potencialidade) => potencialidade.toMap()).toList(),
+      'problema': problema?.map((item) => item.toMap()).toList(),
     };
+  }
+
+  void updateFromList(List<String> values) {
+    if (values.isNotEmpty) {
+      if (problema != null) {
+        for (int i = 0; i < values.length; i++) {
+          if (i < problema!.length) {
+            problema![i].updateFromValue(values[i]);
+          } else if (values[i].isNotEmpty) {
+            problema!.add(Problema(
+              problema: values[i],
+              dataCriacao: Timestamp.now(),
+            ));
+          }
+        }
+        // Remove problemas extras se a nova lista for menor
+        if (problema!.length > values.length) {
+          problema!.removeRange(values.length, problema!.length);
+        }
+      } else {
+        problema = values
+            .where((value) => value.isNotEmpty)
+            .map((value) => Problema(
+                  problema: value,
+                  dataCriacao: Timestamp.now(),
+                ))
+            .toList();
+      }
+    }
   }
 }

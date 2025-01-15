@@ -23,8 +23,28 @@ class DesejoModel {
       'sonhoVida': sonhoVida?.map((item) => item.toMap()).toList(),
     };
   }
-}
 
+  void updateFromList(List<String> values) {
+    if (values.isNotEmpty) {
+      desejos = values[0];
+      if (sonhoVida != null) {
+        for (int i = 1; i < values.length; i++) {
+          if (i - 1 < sonhoVida!.length) {
+            sonhoVida![i - 1].updateFromValue(values[i]);
+          } else if (values[i].isNotEmpty) {
+            sonhoVida!.add(SonhoVidaModel(sonhoVida: values[i], dataCriacao: Timestamp.now()));
+          }
+        }
+        // Remove sonhos extras se a nova lista for menor
+        if (sonhoVida!.length > values.length - 1) {
+          sonhoVida!.removeRange(values.length - 1, sonhoVida!.length);
+        }
+      } else {
+        sonhoVida = values.sublist(1).where((value) => value.isNotEmpty).map((value) => SonhoVidaModel(sonhoVida: value, dataCriacao: Timestamp.now())).toList();
+      }
+    }
+  }
+}
 class SonhoVidaModel {
   String? sonhoVida;
   Timestamp? dataCriacao;
@@ -43,5 +63,9 @@ class SonhoVidaModel {
       'sonhoVida': sonhoVida,
       'dataCriacao': dataCriacao,
     };
+  }
+
+  void updateFromValue(String value) {
+    sonhoVida = value;
   }
 }
