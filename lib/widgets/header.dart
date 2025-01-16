@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:reabilita_social/provider/profissional_provider.dart';
 import 'package:reabilita_social/repository/auth/auth_repository.dart';
@@ -21,20 +22,19 @@ class Header extends StatelessWidget {
               width: 60,
               height: 60,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(
-                    10), // Forma intermediária entre oval e quadrado
+                borderRadius: BorderRadius.circular(10), // Forma intermediária entre oval e quadrado
                 image: DecorationImage(
-                  image:
-                      NetworkImage(profissionalProvider.profissional!.urlFoto),
+                  image: NetworkImage(profissionalProvider.profissional!.urlFoto),
                   fit: BoxFit.cover,
                 ),
               ),
             ),
             InkWell(
-              onTap: () {
-                AuthRepository().signOut(); // Remove autenticação do Firebase
-                Navigator.pushNamedAndRemoveUntil(context, '/login',
-                    (route) => false); // Redireciona para o login
+              onTap: () async {
+              AuthRepository().signOut(); // Remove autenticação do Firebase
+              Navigator.pushNamedAndRemoveUntil(context, '/login',
+                  (route) => false); // Redireciona para o login
+            
               },
               child: Container(
                 padding: const EdgeInsets.all(8.0),

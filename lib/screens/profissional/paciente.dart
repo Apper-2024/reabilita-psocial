@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:collection/collection.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:reabilita_social/model/paciente/diagnostico/problema_model.dart';
+import 'package:reabilita_social/provider/profissional_provider.dart';
 import 'package:reabilita_social/screens/profissional/detalhes_pactuacao.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -38,6 +42,7 @@ import 'package:reabilita_social/widgets/dropdown_custom.dart';
 import 'package:reabilita_social/widgets/nao_encontrado.dart';
 import 'package:reabilita_social/widgets/text_field_custom.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:http/http.dart' as http;
 
 class PacienteScreen extends StatefulWidget {
   const PacienteScreen({super.key});
@@ -47,7 +52,9 @@ class PacienteScreen extends StatefulWidget {
 }
 
 class _PacienteScreenState extends State<PacienteScreen> {
+  final AgendaList agendaList = AgendaList(email: []);
   bool _carregando = false;
+
   Future<void> _dialogDiagnosticoMultiprofissional(PacienteProvider pacienteProvider) async {
     final List<Uint8List> images = [];
 
@@ -2163,7 +2170,19 @@ class _PacienteScreenState extends State<PacienteScreen> {
   }
 
   Future<void> _dialogAdicionaEstudoCaso(PacienteProvider pacienteProvider, AgendaModel? agenda) async {
-    AgendaList agendaList = AgendaList(dataCriacao: Timestamp.now(), participantes: "", pauta: "");
+    AgendaList agendaList = AgendaList(dataCriacao: Timestamp.now(), participantes: "", pauta: "", email: []);
+    ProfissionalProvider profissionalProvider = ProfissionalProvider.instance;
+    TextEditingController controllerObservacao = TextEditingController();
+    final TextEditingController controllerEmail = TextEditingController();
+
+    void addTag(String tag, StateSetter setStateDialog) {
+      if (tag.isNotEmpty && !agendaList.email.contains(tag)) {
+        setStateDialog(() {
+          agendaList.email.add(tag);
+        });
+        controllerEmail.clear();
+      }
+    }
 
     final formKey = GlobalKey<FormState>();
     return showDialog<void>(
@@ -2227,6 +2246,51 @@ class _PacienteScreenState extends State<PacienteScreen> {
                             agendaList.pauta = value!;
                           },
                         ),
+                        const SizedBox(height: 16),
+                        Wrap(
+                          spacing: 8.0,
+                          children: agendaList.email.map((tag) {
+                            return Chip(
+                              label: Text(tag),
+                              onDeleted: () {
+                                setStateDialog(() {
+                                  agendaList.email.remove(tag);
+                                });
+                              },
+                            );
+                          }).toList(),
+                        ),
+                        const SizedBox(height: 16),
+                        TextFieldCustom(
+                          tipoTexto: TextInputType.text,
+                          hintText: "ex. joao@gmail.com",
+                          labelText: "E-mail dos participantes, escreva o e-mail e pressione enter",
+                          senha: false,
+                          formController: controllerEmail,
+                          onFieldSubmitted: (value) {
+                            if (!EmailValidator.validate(value)) {
+                              snackAtencao(context, "E-mail inválido");
+                              return;
+                            }
+                            addTag(value, setStateDialog);
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        TextFieldCustom(
+                          tipoTexto: TextInputType.multiline,
+                          hintText: "ex. Escreva uma mensagem para os participantes convidando para reunião",
+                          labelText: "Observações da reunião",
+                          senha: false,
+                          minLines: 5,
+                          maxLines: 7,
+                          formController: controllerObservacao,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Campo obrigatório';
+                            }
+                            return null;
+                          },
+                        ),
                         const SizedBox(height: 32),
                         Row(
                           children: [
@@ -2243,12 +2307,22 @@ class _PacienteScreenState extends State<PacienteScreen> {
                             Expanded(
                               child: Botaoprincipal(
                                 text: "Cadastrar",
+                                carregando: _carregando,
                                 onPressed: () async {
                                   try {
                                     if (!formKey.currentState!.validate()) {
                                       snackAtencao(context, "Preencha todos os campos");
                                       return;
                                     }
+
+                                    if (agendaList.email.isEmpty) {
+                                      snackAtencao(context, "Adicione pelo menos um e-mail");
+                                      return;
+                                    }
+
+                                    setStateDialog(() {
+                                      _carregando = true;
+                                    });
 
                                     formKey.currentState!.save();
 
@@ -2262,13 +2336,35 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                       agenda!,
                                       pacienteProvider.paciente!.dadosPacienteModel.uidDocumento,
                                     );
-
                                     pacienteProvider.setUpdateAgenda(agenda!);
 
+                                    var url =
+                                        Uri.parse("https://us-central1-reabilitapsocial.cloudfunctions.net/sendEmails");
+
+                                    var response = await http.post(
+                                      url,
+                                      headers: {'Content-Type': 'application/json'},
+                                      body: jsonEncode({
+                                        'emailList': agendaList.email,
+                                        'subject': 'Convite para Agenda do ${profissionalProvider.profissional!.nome}',
+                                        'text': controllerObservacao.text
+                                      }),
+                                    );
+
+                                    if (response.statusCode != 200) {
+                                      snackAtencao(context, 'Falha ao enviar email');
+                                    }
+
                                     Navigator.pop(context);
                                     Navigator.pop(context);
+                                    setStateDialog(() {
+                                      _carregando = false;
+                                    });
                                     snackSucesso(context, "Cadastrado com sucesso");
                                   } catch (e) {
+                                    setStateDialog(() {
+                                      _carregando = false;
+                                    });
                                     print("Erro: $e");
                                     snackErro(context, "Erro ao cadastrar intervenção");
                                     return;
@@ -4786,18 +4882,29 @@ class _PacienteScreenState extends State<PacienteScreen> {
                             builder: (context) => FormCategoria(
                               fields: [
                                 FieldConfig(
-                                    label: 'Data da Reunião',
-                                    hintText: formatTimesTamp(agendas.dataCriacao)!,
+                                    label: 'Pauta da Reunião',
+                                    hintText: 'Pauta da reuniao',
+                                    minLine: 2,
+                                    maxLine: 5,
                                     widthFactor: 0.5,
-                                    valorInicial: formatTimesTamp(agendas.dataCriacao)),
+                                    valorInicial: agendas.pauta),
                                 FieldConfig(
-                                    label: 'Pauta',
+                                    label: 'Participantes',
                                     hintText: 'pauta da reuniao',
                                     widthFactor: 0.5,
-                                    valorInicial: formatTimesTamp(agendas.dataCriacao)),
+                                    minLine: 2,
+                                    maxLine: 5,
+                                    valorInicial: agendas.participantes),
                                 FieldConfig(
-                                    label: 'Quem é necessário participar?',
-                                    hintText: 'Nomes',
+                                    label: 'E-mail dos participantes',
+                                    hintText: 'E-mail dos participantes',
+                                    widthFactor: 1.0,
+                                    minLine: 2,
+                                    maxLine: 5,
+                                    valorInicial: agendas.email.join(', ')),
+                                FieldConfig(
+                                    label: 'Data da reunião',
+                                    hintText: '',
                                     widthFactor: 1.0,
                                     isDoubleHeight: true,
                                     valorInicial: formatTimesTamp(agendas.dataCriacao)),

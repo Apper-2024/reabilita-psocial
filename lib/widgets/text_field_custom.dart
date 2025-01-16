@@ -18,6 +18,8 @@ class TextFieldCustom extends StatelessWidget {
   final String? valorInicial;
   final int? maxLines;
   final int? minLines;
+  final void Function(String)? onFieldSubmitted;
+
   const TextFieldCustom(
       {super.key,
       required this.labelText,
@@ -34,7 +36,8 @@ class TextFieldCustom extends StatelessWidget {
       this.onSaved,
       this.valorInicial,
       this.maxLines,
-      this.minLines});
+      this.minLines,
+      this.onFieldSubmitted});
 
   @override
   Widget build(BuildContext context) => TextFormField(
@@ -43,6 +46,7 @@ class TextFieldCustom extends StatelessWidget {
         onChanged: onChanged,
         inputFormatters: inputFormatters,
         keyboardType: tipoTexto,
+        onFieldSubmitted: onFieldSubmitted,
         validator: validator,
         maxLength: caracterMax,
         obscureText: senha ?? false,

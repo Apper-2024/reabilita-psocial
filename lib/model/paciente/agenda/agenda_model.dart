@@ -1,29 +1,36 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AgendaList {
-  Timestamp? dataCriacao;
-  String? pauta;
+  List<String> email;
   String? participantes;
+  String? pauta;
+  Timestamp? dataCriacao;
+  DateTime? selecionarData;
+  
 
   AgendaList({
-    this.dataCriacao,
+    required this.email,
     this.pauta,
     this.participantes,
+    this.dataCriacao,
+    this.selecionarData
   });
 
   Map<String, dynamic> toMap() {
     return {
-      'dataCriacao': dataCriacao,
+      'email': email,
       'pauta': pauta,
       'participantes': participantes,
+      'dataCriacao': dataCriacao,
     };
   }
 
   factory AgendaList.fromMap(Map<String, dynamic> map) {
     return AgendaList(
-      dataCriacao: map['dataCriacao'],
+      email: List<String>.from(map['email']),
       pauta: map['pauta'],
       participantes: map['participantes'],
+      dataCriacao: map['dataCriacao'],
     );
   }
 }
