@@ -58,7 +58,7 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
             widget.onChanged!(value);
           }
         },
-        items: widget.items.map<DropdownMenuItem<String>>((String value) {
+        items: widget.items.toSet().toList().map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
             value: value,
             child: Text(value),

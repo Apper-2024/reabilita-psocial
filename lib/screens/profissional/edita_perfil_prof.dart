@@ -305,7 +305,7 @@ class _EditaPerfilProfState extends State<EditaPerfilProf> {
                       ),
                       const SizedBox(height: 24),
                       Botaoprincipal(
-                        text: "Salvar",
+                        text: "Salvar Alterações",
                         onPressed: _salvarAlteracoes,
                       ),
                     ],

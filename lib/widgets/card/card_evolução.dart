@@ -41,10 +41,10 @@ class CardEvolucao extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.all(14),
+                padding: const EdgeInsets.all(14),
                 child: Text(
                   nome,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 14,
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w600,

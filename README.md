@@ -8,59 +8,57 @@
 
 	DADOS DO PACIENTE
 
-x para sair do vídeo
+x para sair do vídeo //FEITO
 
-salvar no form a ultima alteração - dado do paciente e outros forms
+salvar no form a ultima alteração - dado do paciente e outros forms //FEITO
 
-genero faltou acento dados pessoais - masculino
+genero faltou acento dados pessoais - masculino //FEITO
 
-tirar profissional da saude e colocar psicologo, diarista, advogado
+tirar profissional da saude e colocar psicologo, diarista, advogado //FEITO
 
-selecioanr foto do paciente
+selecioanr foto do paciente //FEITO
 
-descer outras informacoes entre tecnico e entre pense 
+descer outras informacoes entre tecnico e entre pense //FEITO
 
-EX DO TÉCNICO, FALTOU ACENTO
+EX DO TÉCNICO, FALTOU ACENTO //FEITO
 
-pense... HÁ INFORMAÇÕES
+pense... HÁ INFORMAÇÕES //FEITO
 
-experimentar colocar foto na ultima opcao
+experimentar colocar foto na ultima opcao //FEITO
 
 	DIAGNOSTICO
 
-Enter para quebrar a linha
+Enter para quebrar a linha  //FEITO
 
-criar novo diagnóstico
+criar novo diagnóstico //FEITO
 
-criar novo diag multiprof no modal
+criar novo diag multiprof no modal //FEITO
 
-modal - faltou acento, responsavel
+modal - faltou acento, responsavel //FEITO
 
-conselho de classe e região no lugar de cpf CRP - SP: 3256
+conselho de classe e região no lugar de cpf CRP - SP: 3256 //FEITO
 
-conselho abaixo da profissao
+conselho abaixo da profissao //FEITO
 
-imagem do paciente 
+imagem do paciente //FEITO
 
-anexar arquivos no lugar da imagem
+anexar arquivos no lugar da imagem // DPS
 
 	METAS
 
-adionar metas no floating
+adionar metas no floating //FEITO
 
 	INTERVENCAO
 
-título da intervencao pelo titulo
+detalhe, em responsavel colocar ator social //FEITO
 
-detalhe, em responsavel colocar ator social
+detalhe - trocar meta por prazo //FEITO
 
-detalhe - trocar meta por prazo
-
-icone da agenda
+icone da agenda //FEITO
 
 	PACTUACAO
 
-cadastro de pactuacao mudar para Ata da pactuação e docs
+cadastro de pactuacao mudar para Ata da pactuação e docs //FEITO E DPS
 
 	AGENDA DE ESTUDOS
 
@@ -70,9 +68,7 @@ enviar para email e whatzapp a angenda de estudos
 
 	AVALIACAO DO PRP
 
-adicionar a ata
-
-observacao opcional
+observacao opcional // FEITOS
 
 	FALTA REFERENCIAS
 

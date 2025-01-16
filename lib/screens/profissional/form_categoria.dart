@@ -160,7 +160,7 @@ class FormCategoriaState extends State<FormCategoria> {
               label: field.label,
               images: field.images,
               onTapContainer: field.onTapContainer,
-              onDeleteImage: field.onDeleteImage as void Function(String)?,
+              onDeleteImage: field.onDeleteImage,
             ),
           ),
         );
@@ -233,12 +233,12 @@ class FormCategoriaState extends State<FormCategoria> {
                     controller: field.controller,
                   ),
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Visibility(
                       visible: field.iconEdit,
-                      child: Center(child: IconButton(onPressed: field.onTapIconEdit, icon: Icon(Icons.edit)))),
+                      child: Center(child: IconButton(onPressed: field.onTapIconEdit, icon: const Icon(Icons.edit)))),
                 ),
               ],
             ),
@@ -253,7 +253,7 @@ class FormCategoriaState extends State<FormCategoria> {
                   padding: const EdgeInsets.symmetric(horizontal: 64),
                   child: Botaoprincipal(
                     onPressed: field.onTapbotaoAdicionar!,
-                    text: 'Criar novo',
+                    text: field.textBotao!,
                   ),
                 ),
               ),
@@ -456,8 +456,8 @@ class DoubleHeightInput extends StatelessWidget {
             labelText: label,
             valorInicial: valorInicial,
             senha: false,
-            tipoTexto: TextInputType.text,
             hintText: hintText,
+            tipoTexto: TextInputType.multiline,
             maxLines: maxLines,
             minLines: minLines,
             formController: controller,

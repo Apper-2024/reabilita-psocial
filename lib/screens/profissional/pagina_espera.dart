@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:reabilita_social/provider/profissional_provider.dart';
-import 'package:reabilita_social/screens/video.dart';
 import '../../utils/colors.dart';
 import '../../widgets/header.dart';
 
@@ -57,7 +56,7 @@ class _PaginaEsperaScreenState extends State<PaginaEsperaScreen> {
                     ),
                     const SizedBox(height: 30),
 
-                    Center(
+                    const Center(
                         child: Text(
                       "Aguarde a aprovação da sua conta para começar a utilizar o aplicativo.",
                       style: TextStyle(fontSize: 16, color: preto1),

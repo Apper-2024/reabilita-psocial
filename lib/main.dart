@@ -77,8 +77,8 @@ class MyApp extends StatelessWidget {
         '/': (context) => const VerificaConta(),
         '/login': (context) => const LoginScreen(),
         '/PesquisaMapa': (context) => const SearchPage(),
-        '/cadastro': (context) => CadastroScreen(),
-        '/loginPrimeiroAcesso': (context) => LoginPrimeiroAcesso(),
+        '/cadastro': (context) => const CadastroScreen(),
+        '/loginPrimeiroAcesso': (context) => const LoginPrimeiroAcesso(),
 
         //ADMINISTRADOR
         '/usuariosAdministrador': (context) => const RouteGuard(child: ProfissionaisPage()),

@@ -22,7 +22,21 @@ class _HomeScreenState extends State<HomeScreen> {
           borderRadius: BorderRadius.circular(16.0),
         ),
         insetPadding: const EdgeInsets.all(16.0),
-        child: const VideoPlayerWidget(videoPath: 'assets/video/PRP.mp4'),
+        child: Stack(
+          children: [
+            const VideoPlayerWidget(videoPath: 'assets/video/PRP.mp4'),
+            Positioned(
+              top: 8.0,
+              right: 8.0,
+              child: IconButton(
+                icon: const Icon(Icons.close),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
