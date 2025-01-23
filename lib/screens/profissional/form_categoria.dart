@@ -32,6 +32,12 @@ class FieldConfig {
   final void Function()? onTapBotao;
   final int? maxLine;
   final int? minLine;
+  final TextEditingController? controller;
+  final ValueChanged<String?>? onChangedRadio;
+  final bool carregando;
+  final bool iconEdit;
+  final void Function()? onTapIconEdit;
+  final void Function(String)? onDeleteImage;
 
   FieldConfig({
     required this.label,
@@ -58,7 +64,12 @@ class FieldConfig {
     this.onTapBotao,
     this.maxLine,
     this.minLine,
-  });
+    this.onChangedRadio,
+    this.carregando = false,
+    this.iconEdit = false,
+    this.onTapIconEdit,
+    this.onDeleteImage,
+  }) : controller = TextEditingController(text: valorInicial);
 }
 
 class FormCategoria extends StatefulWidget {
@@ -71,15 +82,38 @@ class FormCategoria extends StatefulWidget {
     required this.fields,
   });
   @override
-  _FormCategoriaState createState() => _FormCategoriaState();
+  FormCategoriaState createState() => FormCategoriaState();
 }
 
-class _FormCategoriaState extends State<FormCategoria> {
+class FormCategoriaState extends State<FormCategoria> {
+  @override
+  void dispose() {
+    for (var field in widget.fields) {
+      field.controller?.dispose();
+    }
+    super.dispose();
+  }
+
+  Map<String, String> getFormValues() {
+    Map<String, String> formValues = {};
+    for (var field in widget.fields) {
+      formValues[field.label] = field.controller!.text;
+    }
+    return formValues;
+  }
+
+  List<String> getFormValuesList() {
+    List<String> formValues = [];
+    for (var field in widget.fields) {
+      formValues.add(field.controller!.text);
+    }
+    return formValues;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: background,
-     
       appBar: AppBar(
         title: Text(
           widget.titulo,
@@ -126,10 +160,11 @@ class _FormCategoriaState extends State<FormCategoria> {
               label: field.label,
               images: field.images,
               onTapContainer: field.onTapContainer,
+              onDeleteImage: field.onDeleteImage,
             ),
           ),
         );
-      }else if (field.umaImagem) {
+      } else if (field.umaImagem) {
         if (tempRow.isNotEmpty) {
           rows.add(Row(children: tempRow));
           tempRow = [];
@@ -144,7 +179,7 @@ class _FormCategoriaState extends State<FormCategoria> {
             ),
           ),
         );
-      }  else if (field.isRadioField) {
+      } else if (field.isRadioField) {
         if (tempRow.isNotEmpty) {
           rows.add(Row(children: tempRow));
           tempRow = [];
@@ -152,7 +187,11 @@ class _FormCategoriaState extends State<FormCategoria> {
         rows.add(
           Padding(
             padding: const EdgeInsets.only(bottom: 16.0),
-            child: RadioField(label: field.label, value: field.hintText),
+            child: RadioField(
+              label: field.label,
+              value: field.hintText,
+              onChangedRadio: field.onChangedRadio,
+            ),
           ),
         );
       } else if (field.isDropdownField) {
@@ -164,7 +203,7 @@ class _FormCategoriaState extends State<FormCategoria> {
           Padding(
             padding: const EdgeInsets.only(bottom: 16.0),
             child: CustomDropdownButton(
-                dropdownValue: field.valorInicial,
+                dropdownValue: field.hintText,
                 items: field.dropdownItems!,
                 hint: field.hintText,
                 onChanged: field.onChangedDropdown),
@@ -178,16 +217,30 @@ class _FormCategoriaState extends State<FormCategoria> {
         rows.add(
           Padding(
             padding: const EdgeInsets.only(bottom: 16.0),
-            child: DoubleHeightInput(
-              data: field.data,
-              subtopico: field.subtopico,
-              valorInicial: field.valorInicial,
-              label: field.label,
-              hintText: field.hintText,
-              width: MediaQuery.of(context).size.width,
-              hasDate: field.hasDate,
-              maxLines: field.maxLine,
-              minLines: field.minLine,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: DoubleHeightInput(
+                    data: field.data,
+                    subtopico: field.subtopico,
+                    label: field.label,
+                    hintText: field.hintText,
+                    width: MediaQuery.of(context).size.width,
+                    hasDate: field.hasDate,
+                    maxLines: field.maxLine,
+                    minLines: field.minLine,
+                    controller: field.controller,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Visibility(
+                      visible: field.iconEdit,
+                      child: Center(child: IconButton(onPressed: field.onTapIconEdit, icon: const Icon(Icons.edit)))),
+                ),
+              ],
             ),
           ),
         );
@@ -200,7 +253,7 @@ class _FormCategoriaState extends State<FormCategoria> {
                   padding: const EdgeInsets.symmetric(horizontal: 64),
                   child: Botaoprincipal(
                     onPressed: field.onTapbotaoAdicionar!,
-                    text: 'Criar novo',
+                    text: field.textBotao!,
                   ),
                 ),
               ),
@@ -215,7 +268,7 @@ class _FormCategoriaState extends State<FormCategoria> {
         rows.add(
           Padding(
             padding: const EdgeInsets.only(bottom: 16.0, top: 16.0),
-            child: Botaoprincipal(text: field.textBotao!, onPressed: field.onTapBotao!),
+            child: Botaoprincipal(text: field.textBotao!, onPressed: field.onTapBotao!, carregando: field.carregando),
           ),
         );
       } else if (field.widthFactor == 1.0) {
@@ -230,10 +283,10 @@ class _FormCategoriaState extends State<FormCategoria> {
               data: field.data,
               subtopico: field.subtopico,
               label: field.label,
-              valorInicial: field.valorInicial,
               hintText: field.hintText,
               width: MediaQuery.of(context).size.width,
               hasDate: field.hasDate,
+              controller: field.controller,
             ),
           ),
         );
@@ -242,11 +295,11 @@ class _FormCategoriaState extends State<FormCategoria> {
           Padding(
             padding: const EdgeInsets.only(right: 8.0, bottom: 16.0),
             child: CustomInputForm(
-              valorInicial: field.valorInicial,
               label: field.label,
               hintText: field.hintText,
               width: MediaQuery.of(context).size.width * 0.45,
               hasDate: field.hasDate,
+              controller: field.controller,
             ),
           ),
         );
@@ -278,7 +331,7 @@ class CustomInputForm extends StatelessWidget {
   final String? subtopico;
   final double width;
   final bool hasDate;
-
+  final TextEditingController? controller;
   const CustomInputForm({
     super.key,
     required this.label,
@@ -288,6 +341,7 @@ class CustomInputForm extends StatelessWidget {
     this.subtopico,
     required this.width,
     this.hasDate = false,
+    this.controller,
   });
 
   @override
@@ -314,6 +368,7 @@ class CustomInputForm extends StatelessWidget {
             senha: false,
             tipoTexto: TextInputType.text,
             hintText: hintText,
+            formController: controller,
           ),
           if (subtopico != null)
             Text(subtopico!,
@@ -364,7 +419,7 @@ class DoubleHeightInput extends StatelessWidget {
   final bool hasDate;
   final int? maxLines;
   final int? minLines;
-
+  final TextEditingController? controller;
   const DoubleHeightInput({
     super.key,
     required this.label,
@@ -376,6 +431,7 @@ class DoubleHeightInput extends StatelessWidget {
     this.hasDate = false,
     this.maxLines,
     this.minLines,
+    this.controller,
   });
 
   @override
@@ -400,10 +456,11 @@ class DoubleHeightInput extends StatelessWidget {
             labelText: label,
             valorInicial: valorInicial,
             senha: false,
-            tipoTexto: TextInputType.text,
             hintText: hintText,
+            tipoTexto: TextInputType.multiline,
             maxLines: maxLines,
             minLines: minLines,
+            formController: controller,
           ),
           if (subtopico != null)
             Text(subtopico!,
@@ -440,8 +497,8 @@ class DoubleHeightInput extends StatelessWidget {
 class RadioField extends StatefulWidget {
   final String label;
   final String value;
-
-  const RadioField({super.key, required this.label, required this.value});
+  final ValueChanged<String?>? onChangedRadio;
+  const RadioField({super.key, required this.label, required this.value, this.onChangedRadio});
 
   @override
   _RadioFieldState createState() => _RadioFieldState();
@@ -475,6 +532,7 @@ class _RadioFieldState extends State<RadioField> {
                 onChanged: (value) {
                   setState(() {
                     _curatelado = value;
+                    widget.onChangedRadio?.call(value);
                   });
                 },
                 activeColor: verde1,
@@ -486,6 +544,7 @@ class _RadioFieldState extends State<RadioField> {
                 onChanged: (value) {
                   setState(() {
                     _curatelado = value;
+                    widget.onChangedRadio?.call(value);
                   });
                 },
                 activeColor: verde1,
@@ -503,8 +562,9 @@ class ImageField extends StatelessWidget {
   final String label;
   final List<String>? images;
   final void Function()? onTapContainer;
+  final void Function(String)? onDeleteImage;
 
-  const ImageField({super.key, required this.label, this.images, this.onTapContainer});
+  const ImageField({super.key, required this.label, this.images, this.onTapContainer, this.onDeleteImage});
 
   @override
   Widget build(BuildContext context) {
@@ -526,11 +586,26 @@ class ImageField extends StatelessWidget {
           runSpacing: 8,
           children: [
             if (images != null)
-              ...images!.map((image) => Container(
-                    width: MediaQuery.of(context).size.width * 0.22,
-                    height: MediaQuery.of(context).size.width * 0.22,
-                    color: Colors.grey[300],
-                    child: Image.network(image, fit: BoxFit.cover),
+              ...images!.map((image) => Stack(
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.22,
+                        height: MediaQuery.of(context).size.width * 0.22,
+                        color: Colors.grey[300],
+                        child: Image.network(image, fit: BoxFit.cover),
+                      ),
+                      Positioned(
+                        top: 0,
+                        right: 0,
+                        child: InkWell(
+                          onTap: () => onDeleteImage?.call(image),
+                          child: Container(
+                            color: Colors.black54,
+                            child: const Icon(Icons.close, color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ],
                   )),
             if (imagesLista != null)
               ...imagesLista.map((image) => Container(
@@ -577,11 +652,11 @@ class ImageField2 extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         Container(
-              width: MediaQuery.of(context).size.width * 0.22,
-              height: MediaQuery.of(context).size.width * 0.22,
-              color: Colors.grey[300],
-              child: Image.network(image!, fit: BoxFit.cover),
-            ),
+          width: MediaQuery.of(context).size.width * 0.22,
+          height: MediaQuery.of(context).size.width * 0.22,
+          color: Colors.grey[300],
+          child: Image.network(image!, fit: BoxFit.cover),
+        ),
       ],
     );
   }

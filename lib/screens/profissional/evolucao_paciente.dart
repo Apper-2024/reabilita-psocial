@@ -152,7 +152,7 @@ class _EvolucaoPacientePageState extends State<EvolucaoPacientePage> {
                               height: 78,
                               fit: BoxFit.cover,
                             )
-                          : Icon(
+                          : const Icon(
                               Icons.person,
                               size: 78,
                               color: Colors.grey,

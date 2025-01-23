@@ -18,6 +18,8 @@ class TextFieldCustom extends StatelessWidget {
   final String? valorInicial;
   final int? maxLines;
   final int? minLines;
+  final void Function(String)? onFieldSubmitted;
+
   const TextFieldCustom(
       {super.key,
       required this.labelText,
@@ -34,7 +36,8 @@ class TextFieldCustom extends StatelessWidget {
       this.onSaved,
       this.valorInicial,
       this.maxLines,
-      this.minLines});
+      this.minLines,
+      this.onFieldSubmitted});
 
   @override
   Widget build(BuildContext context) => TextFormField(
@@ -43,14 +46,14 @@ class TextFieldCustom extends StatelessWidget {
         onChanged: onChanged,
         inputFormatters: inputFormatters,
         keyboardType: tipoTexto,
+        onFieldSubmitted: onFieldSubmitted,
         validator: validator,
         maxLength: caracterMax,
         obscureText: senha ?? false,
         maxLines: maxLines ?? 1,
         minLines: minLines ?? 1,
         initialValue: valorInicial,
-        buildCounter: (context,
-            {required currentLength, required isFocused, required maxLength}) {
+        buildCounter: (context, {required currentLength, required isFocused, required maxLength}) {
           return null;
         },
         cursorColor: preto1,
@@ -58,14 +61,11 @@ class TextFieldCustom extends StatelessWidget {
         decoration: InputDecoration(
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(
-                  color: preto1,
-                  width: 1), // Borda preta quando não está focado
+              borderSide: const BorderSide(color: preto1, width: 1), // Borda preta quando não está focado
             ),
             labelText: labelText,
             hintText: hintText,
-            hintStyle: const TextStyle(
-                color: cinza1, fontWeight: FontWeight.w600, fontSize: 12),
+            hintStyle: const TextStyle(color: cinza1, fontWeight: FontWeight.w600, fontSize: 12),
             suffixIcon: suffixIcon,
             prefixIcon: prefixIcon,
             border: OutlineInputBorder(
@@ -76,8 +76,7 @@ class TextFieldCustom extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
               borderSide: const BorderSide(color: verde1, width: 2),
             ),
-            floatingLabelStyle: const TextStyle(
-                color: verde1), // Define a cor do label quando focado
+            floatingLabelStyle: const TextStyle(color: verde1), // Define a cor do label quando focado
             alignLabelWithHint: true),
       );
 }

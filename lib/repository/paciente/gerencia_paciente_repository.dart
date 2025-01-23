@@ -253,6 +253,26 @@ class GerenciaPacienteRepository {
     }
   }
 
+  Future<void> editarOutrasInformacoes(ListaOutrasInformacoes outrasInfo, String uidPaciente) async {
+    final batch = db.batch();
+
+    try {
+      final pacienteRef = db.collection("Pacientes").doc(uidPaciente);
+
+      batch.update(pacienteRef, {
+        'diagnosticoModal.outrasInformacoesModel': outrasInfo.toMap(),
+      });
+
+      // Commit do batch
+      await batch.commit();
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorRepository.handleFirebaseException(e);
+    } catch (e) {
+      print(e);
+      throw 'Ops, algo deu errado. Tente novamente mais tarde!';
+    }
+  }
+
   Future<void> cadastrarMetas(MetaModel meta, String uidPaciente) async {
     final batch = db.batch();
 
@@ -323,6 +343,26 @@ class GerenciaPacienteRepository {
     }
   }
 
+  Future<void> editarPactuacao(String uidPaciente, ListPactuacaoModel pactuacaoModel) async {
+    final batch = db.batch();
+
+    try {
+      final pacienteRef = db.collection("Pacientes").doc(uidPaciente);
+
+      batch.update(pacienteRef, {
+        'pactuacoesModel': pactuacaoModel.toMap(),
+      });
+
+      // Commit do batch
+      await batch.commit();
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorRepository.handleFirebaseException(e);
+    } catch (e) {
+      print(e);
+      throw 'Ops, algo deu errado. Tente novamente mais tarde!';
+    }
+  }
+
   Future<void> cadastrarAgenda(AgendaModel agenda, String uidPaciente) async {
     final batch = db.batch();
 
@@ -357,6 +397,26 @@ class GerenciaPacienteRepository {
 
       avaliacao.avaliacoesModel?.add(avaliacaoModel);
 
+      final pacienteRef = db.collection("Pacientes").doc(uidPaciente);
+
+      batch.update(pacienteRef, {
+        'avaliacoesModel': avaliacao.toMap(),
+      });
+
+      // Commit do batch
+      await batch.commit();
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorRepository.handleFirebaseException(e);
+    } catch (e) {
+      print(e);
+      throw 'Ops, algo deu errado. Tente novamente mais tarde!';
+    }
+  }
+
+  Future<void> editarAvaliacao(AvaliacaoModel avaliacao, String uidPaciente) async {
+    final batch = db.batch();
+
+    try {
       final pacienteRef = db.collection("Pacientes").doc(uidPaciente);
 
       batch.update(pacienteRef, {
@@ -462,6 +522,47 @@ class GerenciaPacienteRepository {
       });
 
       // Commit do batch
+      await batch.commit();
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorRepository.handleFirebaseException(e);
+    } catch (e) {
+      print(e);
+      throw 'Ops, algo deu errado. Tente novamente mais tarde!';
+    }
+  }
+
+  Future<void> updatehistoria(String historia, String uidPaciente) async {
+    final batch = db.batch();
+
+    try {
+      final pacienteRef = db.collection("Pacientes").doc(uidPaciente);
+
+      batch.update(pacienteRef, {
+        'diagnosticoModal.historiaCasoModel.historia': historia,
+      });
+
+      // Commit do batch
+      await batch.commit();
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorRepository.handleFirebaseException(e);
+    } catch (e) {
+      print(e);
+      throw 'Ops, algo deu errado. Tente novamente mais tarde!';
+    }
+  }
+
+  Future<void> deleteImage(List<String> fotos, String url, String uidPaciente) async {
+    final batch = db.batch();
+
+    final storageRef = FirebaseStorage.instance.ref();
+    final pacienteRef = db.collection("Pacientes").doc(uidPaciente);
+
+    try {
+      await storageRef.child(url).delete();
+
+      batch.update(pacienteRef, {
+        'diagnosticoModal.historiaCasoModel.foto': fotos,
+      });
       await batch.commit();
     } on FirebaseException catch (e) {
       throw FirebaseErrorRepository.handleFirebaseException(e);

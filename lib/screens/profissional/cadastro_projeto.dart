@@ -191,7 +191,7 @@ class _CadastroProjetoScreenState extends State<CadastroProjetoScreen> {
                 const SizedBox(height: 16),
                 CustomDropdownButton(
                   dropdownValue: paciente.dadosPacienteModel.genero,
-                  hint: 'Género',
+                  hint: 'Gênero',
                   items: generos,
                   onChanged: (value) {
                     setState(() {
@@ -202,7 +202,7 @@ class _CadastroProjetoScreenState extends State<CadastroProjetoScreen> {
                 const SizedBox(height: 16),
                 TextFieldCustom(
                   tipoTexto: TextInputType.text,
-                  hintText: "ex. Profissional da Saúde",
+                  hintText: "ex. Diarista, advogado, psicólogo...",
                   labelText: "Profissão",
                   senha: false,
                   validator: (value) {
@@ -261,32 +261,7 @@ class _CadastroProjetoScreenState extends State<CadastroProjetoScreen> {
                   },
                 ),
                 const SizedBox(height: 16),
-                InkWell(
-                  onTap: () {
-                    ImagePickerUtil.pegarFoto(context, (foto) {
-                      setState(() {
-                        _image = foto;
-                      });
-                    });
-                  },
-                  child: const Text(
-                    "Tire uma foto ou selecione uma imagem",
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600, color: preto1),
-                  ),
-                ),
-                if (_image != null) Anexo(arquivoBytes: _image!),
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Outras Informações",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: verde1,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 6),
+
                 //levar para paciente - a baixo
                 const Align(
                   alignment: Alignment.centerLeft,
@@ -301,7 +276,7 @@ class _CadastroProjetoScreenState extends State<CadastroProjetoScreen> {
                 ),
                 const SizedBox(height: 6),
                 TextFieldCustom(
-                  tipoTexto: TextInputType.text,
+                  tipoTexto: TextInputType.multiline,
                   hintText: "ex. João - (16) 99999-9999",
                   labelText: "Nomes, contatos, endereços",
                   senha: false,
@@ -372,7 +347,7 @@ class _CadastroProjetoScreenState extends State<CadastroProjetoScreen> {
                 TextFieldCustom(
                   tipoTexto: TextInputType.text,
                   hintText: "ex. José",
-                  labelText: "Tecnico de Referência",
+                  labelText: "Técnico de Referência",
                   senha: false,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -385,11 +360,24 @@ class _CadastroProjetoScreenState extends State<CadastroProjetoScreen> {
                   },
                 ),
                 const SizedBox(height: 16),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Outras Informações",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: verde1,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 6),
+
                 TextFieldCustom(
-                  tipoTexto: TextInputType.text,
+                  tipoTexto: TextInputType.multiline,
                   hintText: "Outras informações",
                   labelText:
-                      "Pense... Há informação muito importante para ajudar no processo de reabilitação psicossocial?",
+                      "Pense... Há informações muito importantes para ajudar no processo de reabilitação psicossocial?",
                   senha: false,
                   minLines: 3,
                   maxLines: 5,
@@ -403,9 +391,24 @@ class _CadastroProjetoScreenState extends State<CadastroProjetoScreen> {
                     paciente.dadosPacienteModel.outrasInformacoes.observacao = value!;
                   },
                 ),
+                const SizedBox(height: 16),
+                InkWell(
+                  onTap: () {
+                    ImagePickerUtil.pegarFoto(context, (foto) {
+                      setState(() {
+                        _image = foto;
+                      });
+                    });
+                  },
+                  child: const Text(
+                    "Tire uma foto ou selecione uma imagem do Paciente",
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600, color: preto1),
+                  ),
+                ),
+                if (_image != null) Anexo(arquivoBytes: _image!),
                 const SizedBox(height: 32),
                 Botaoprincipal(
-                  text: "Cadastrar",
+                  text: "Finalizar Cadastro do Projeto",
                   carregando: _carregando,
                   onPressed: () async {
                     try {
@@ -416,7 +419,7 @@ class _CadastroProjetoScreenState extends State<CadastroProjetoScreen> {
                       _formKey.currentState!.save();
 
                       if (paciente.dadosPacienteModel.genero == null) {
-                        snackAtencao(context, "Selecione o género");
+                        snackAtencao(context, "Selecione o gênero");
                         return;
                       }
 

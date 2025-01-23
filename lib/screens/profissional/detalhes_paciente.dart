@@ -18,12 +18,13 @@ class DetalhesPaciente extends StatelessWidget {
   final List<ItemConteudo> conteudos;
   final bool visible;
   final void Function()? onPressed;
+  final String? textoBtn;
 
-  const DetalhesPaciente({
-    super.key,
+  const DetalhesPaciente({super.key, 
     required this.conteudos,
     required this.visible,
     this.onPressed,
+    this.textoBtn,
   });
 
   @override
@@ -36,10 +37,18 @@ class DetalhesPaciente extends StatelessWidget {
       backgroundColor: background,
       floatingActionButton: Visibility(
         visible: visible,
-        child: FloatingActionButton(
+        child: FloatingActionButton.extended(
           onPressed: onPressed,
+          icon: const Icon(
+            Icons.add,
+            color: Colors.white,
+          ),
+          label: Text(
+            textoBtn ?? 'Adicionar',
+            
+            style: const TextStyle(color: Colors.white),
+          ),
           backgroundColor: Colors.green[900],
-          child: const Icon(Icons.add, color: Colors.white),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,

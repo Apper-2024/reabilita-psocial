@@ -1,7 +1,8 @@
 const functions = require("firebase-functions");
 const axios = require("axios");
 const cors = require('cors')({ origin: true });
-
+const { sendEmails } = require('./email');
+exports.sendEmails = sendEmails;
 const GOOGLE_MAPS_API_KEY = "AIzaSyAoSesmAI2cUK5YF4PWUXJOc_TjhdhA7o4";
 
 /**
