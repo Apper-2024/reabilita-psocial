@@ -77,3 +77,5 @@ observacao opcional
 	FALTA REFERENCIAS
 
 	CREDITOS DESENV
+
+	ARRUAMR LOGO
