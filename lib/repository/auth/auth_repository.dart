@@ -10,8 +10,10 @@ class AuthRepository {
 
   Future<User> fazerLogin(String email, String senha) async {
     try {
-      final userCredential = await auth.signInWithEmailAndPassword(email: email, password: senha);
+      final userCredential =
+          await auth.signInWithEmailAndPassword(email: email, password: senha);
 
+      print("email e senha foi");
       return userCredential.user!;
     } on FirebaseAuthException catch (e) {
       throw FirebaseErrorRepository.handleFirebaseAuthException(e);
@@ -36,7 +38,8 @@ class AuthRepository {
 
   Future<UserCredential> criarUsuario(String email, String senha) async {
     try {
-      final user = await auth.createUserWithEmailAndPassword(email: email, password: senha);
+      final user = await auth.createUserWithEmailAndPassword(
+          email: email, password: senha);
       return user;
     } on FirebaseAuthException catch (e) {
       throw FirebaseErrorRepository.handleFirebaseAuthException(e);
@@ -47,13 +50,18 @@ class AuthRepository {
 
   Future<UsuarioModel?> buscaUsuario(String uid) async {
     try {
-      final responsavelSnapshot = await db.collection('Usuarios').doc(uid).get();
+      final responsavelSnapshot =
+          await db.collection('Usuarios').doc(uid).get();
       if (responsavelSnapshot.exists) {
-        return UsuarioModel.fromMap(responsavelSnapshot.data() as Map<String, dynamic>);
+        final usuarioData = responsavelSnapshot.data() as Map<String, dynamic>;
+        final usuarioModel = UsuarioModel.fromMap(usuarioData);
+
+        return usuarioModel;
       }
     } on FirebaseException catch (e) {
       throw FirebaseErrorRepository.handleFirebaseException(e);
     } catch (e) {
+      print('Erro inesperado: $e');
       throw 'Ops, algo deu errado. Tente novamente mais tarde!';
     }
     return null;

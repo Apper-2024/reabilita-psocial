@@ -5,11 +5,11 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 
 class UserService {
+  List<String> generos = ['Masculino', 'Feminino', 'Outro'];
   static final _auth = FirebaseAuth.instance;
   static final _firestore = FirebaseFirestore.instance;
   static final _storage = FirebaseStorage.instance;
 
-  // Função para pegar imagem
   static Future<Uint8List?> pickImage() async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.camera) ??
@@ -17,41 +17,40 @@ class UserService {
     return pickedFile != null ? await pickedFile.readAsBytes() : null;
   }
 
-  // Upload da imagem no Storage
   static Future<String> _uploadImage(String uid, Uint8List file) async {
     final ref = _storage.ref().child('users').child('$uid.jpg');
     await ref.putData(file);
     return await ref.getDownloadURL();
   }
 
-  // Cria usuário no Firebase
   static Future<void> createUser({
     required String userType,
     required Map<String, dynamic> userData,
     required Uint8List imageFile,
   }) async {
-    // Criação no Auth
+    final lowerCaseUserType = userType.toLowerCase();
+
     UserCredential cred = await _auth.createUserWithEmailAndPassword(
       email: userData['email'],
       password: '123456',
     );
 
-    // Upload da imagem
     String imageUrl = await _uploadImage(cred.user!.uid, imageFile);
 
-    // Dados base
     Map<String, dynamic> firestoreData = {
       'nome': userData['nome'],
       'email': userData['email'],
       'telefone': userData['telefone'],
       'statusConta': 'ativo',
       'urlFoto': imageUrl,
-      'tipoUsuario': userType,
+      'tipoUsuario': lowerCaseUserType,
+      'dataCriacao': FieldValue.serverTimestamp(),
+      'genero': userData['genero'],
+      'dataNascimento': userData['dataNascimento'],
     };
 
-    // Ajusta os dados e collection com base no tipo de usuário
     String collectionPath = '';
-    if (userType == 'Profissional') {
+    if (lowerCaseUserType == 'profissional') {
       collectionPath = 'Profissionais';
       firestoreData.addAll({
         'cpf': userData['cpf'],
@@ -66,18 +65,27 @@ class UserService {
           'cidade': userData['cidade'],
           'estado': userData['estado'],
           'complemento': userData['complemento'],
-        }
+        },
+        'uidProfissional': cred.user!.uid,
       });
-    } else if (userType == 'Administrador') {
+    } else if (lowerCaseUserType == 'administrador') {
       collectionPath = 'Administrador';
+      firestoreData.addAll({
+        'uidAdministrador': cred.user!.uid,
+      });
     }
 
-    // Salva os dados no Firestore
     if (collectionPath.isNotEmpty) {
       await _firestore
           .collection(collectionPath)
           .doc(cred.user!.uid)
           .set(firestoreData);
+
+      await _firestore.collection('Usuarios').doc(cred.user!.uid).set({
+        'email': userData['email'],
+        'tipoUsuario': lowerCaseUserType,
+        'uid': cred.user!.uid,
+      });
     } else {
       throw Exception('Tipo de usuário inválido');
     }

@@ -14,12 +14,44 @@ class GerenciaProfissionalRepository {
 
   Future<ProfissionalModel> buscaProfissional(String uid) async {
     try {
+      print('Buscando profissional com UID: $uid');
       final unidadeDoc = await db.collection('Profissionais').doc(uid).get();
 
-      return ProfissionalModel.fromMap(unidadeDoc.data()!);
+      // Verificando se o documento existe
+      if (unidadeDoc.exists) {
+        print('Documento encontrado, processando dados...');
+        final data = unidadeDoc.data()!;
+
+        // Verificando os dados antes de criar o modelo
+        print('Dados do profissional: $data');
+
+        // Verificando cada campo para garantir que não esteja nulo
+        print('Nome: ${data['nome']}');
+        print('Email: ${data['email']}');
+        print('Telefone: ${data['telefone']}');
+        print('Gênero: ${data['genero']}');
+        print('CPF: ${data['cpf']}');
+        print('Raça: ${data['raça']}');
+        print('Profissão: ${data['profissao']}');
+        print('Local de Trabalho: ${data['localTrabalho']}');
+        print('Endereço: ${data['endereco']}');
+        print('Tipo de Usuário: ${data['tipoUsuario']}');
+        print('Status de Conta: ${data['statusConta']}');
+        print('URL da Foto: ${data['urlFoto']}');
+        print('Data de Nascimento: ${data['dataNascimento']}');
+        print('UID Profissional: ${data['uidProfissional']}');
+
+        // Criando o modelo com os dados obtidos
+        return ProfissionalModel.fromMap(data);
+      } else {
+        print('Documento não encontrado para o UID: $uid');
+        throw 'Profissional não encontrado.';
+      }
     } on FirebaseException catch (e) {
+      print('Erro FirebaseException: $e');
       throw FirebaseErrorRepository.handleFirebaseException(e);
     } catch (e) {
+      print('Erro inesperado: $e');
       throw 'Ops, algo deu errado. Tente novamente mais tarde!';
     }
   }

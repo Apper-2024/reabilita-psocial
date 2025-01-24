@@ -32,15 +32,13 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 20),
               Center(
                 child: Image.asset(
                   "assets/imagens/logo.png",
-                  height: 120,
+                  height: 300,
                 ),
               ),
               const SizedBox(height: 30),
-
               const Center(
                 child: Text(
                   'Olá, bem-vindo de volta ao Reabilita Social!',
@@ -149,8 +147,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         text: 'Login',
                         onPressed: () async {
                           try {
-                            final usuario =
-                                await AuthRepository().fazerLogin(emailController.text, senhaController.text);
+                            final usuario = await AuthRepository().fazerLogin(
+                                emailController.text, senhaController.text);
                             verificaUser(context, usuario);
                           } catch (e) {
                             snackErro(context, e.toString());

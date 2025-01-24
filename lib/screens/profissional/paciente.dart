@@ -55,7 +55,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
   final AgendaList agendaList = AgendaList(email: []);
   bool _carregando = false;
 
-  Future<void> _dialogDiagnosticoMultiprofissional(PacienteProvider pacienteProvider) async {
+  Future<void> _dialogDiagnosticoMultiprofissional(
+      PacienteProvider pacienteProvider) async {
     final List<Uint8List> images = [];
 
     HistoriaCasoModel historiaCasoModel = HistoriaCasoModel(
@@ -64,7 +65,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
       foto: [],
       dataCriacao: null,
     );
-    DiagnosticoMultiprofissionaisModel diagnosticoMultiprofissionaisModel = DiagnosticoMultiprofissionaisModel(
+    DiagnosticoMultiprofissionaisModel diagnosticoMultiprofissionaisModel =
+        DiagnosticoMultiprofissionaisModel(
       diagnosticos: '',
       dataCriacao: null,
       nomeResponsavel: '', //tirar
@@ -98,7 +100,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                       children: [
                         const Text(
                           'Cadastro de Diagnóstico Multiprofissional',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 16),
                         TextFieldCustom(
@@ -133,7 +136,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                             return null;
                           },
                           onSaved: (value) {
-                            diagnosticoMultiprofissionaisModel.diagnosticos = value!;
+                            diagnosticoMultiprofissionaisModel.diagnosticos =
+                                value!;
                           },
                         ),
                         const SizedBox(height: 16),
@@ -150,18 +154,21 @@ class _PacienteScreenState extends State<PacienteScreen> {
                             return null;
                           },
                           onSaved: (value) {
-                            diagnosticoMultiprofissionaisModel.nomeResponsavel = value!;
+                            diagnosticoMultiprofissionaisModel.nomeResponsavel =
+                                value!;
                           },
                         ),
                         const SizedBox(height: 16),
                         //vai ter que pegar
                         CustomDropdownButton(
                           hint: "Profissão",
-                          dropdownValue: diagnosticoMultiprofissionaisModel.profissaoResponsavel,
+                          dropdownValue: diagnosticoMultiprofissionaisModel
+                              .profissaoResponsavel,
                           items: profissoes,
                           onChanged: (value) {
                             setStateDialog(() {
-                              diagnosticoMultiprofissionaisModel.profissaoResponsavel = value!;
+                              diagnosticoMultiprofissionaisModel
+                                  .profissaoResponsavel = value!;
                             });
                           },
                         ),
@@ -184,8 +191,9 @@ class _PacienteScreenState extends State<PacienteScreen> {
                         ),
                         const SizedBox(height: 16),
                         const Text(
-                          'Selecione laudos, ou imagens relevantes para o caso.',
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                          'Selecione laudos, imagens ou documentos relevantes para o caso.',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w400),
                         ),
                         const SizedBox(height: 16),
                         Wrap(
@@ -194,10 +202,13 @@ class _PacienteScreenState extends State<PacienteScreen> {
                           children: [
                             if (images.isNotEmpty)
                               ...images.map((image) => Container(
-                                    width: MediaQuery.of(context).size.width * 0.22,
-                                    height: MediaQuery.of(context).size.width * 0.22,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.22,
+                                    height: MediaQuery.of(context).size.width *
+                                        0.22,
                                     color: Colors.grey[300],
-                                    child: Image.memory(image, fit: BoxFit.cover),
+                                    child:
+                                        Image.memory(image, fit: BoxFit.cover),
                                   )),
                             if ((images.length ?? 0) < 3)
                               InkWell(
@@ -209,8 +220,10 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                   });
                                 },
                                 child: Container(
-                                  width: MediaQuery.of(context).size.width * 0.22,
-                                  height: MediaQuery.of(context).size.width * 0.22,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.22,
+                                  height:
+                                      MediaQuery.of(context).size.width * 0.22,
                                   color: Colors.grey[300],
                                   child: const Icon(Icons.add_a_photo),
                                 ),
@@ -236,7 +249,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                 onPressed: () async {
                                   try {
                                     if (!formKey.currentState!.validate()) {
-                                      snackAtencao(context, "Preencha todos os campos");
+                                      snackAtencao(
+                                          context, "Preencha todos os campos");
                                       return;
                                     }
                                     // if (images.isEmpty) {
@@ -244,23 +258,31 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                     //   return;
                                     // }
                                     formKey.currentState!.save();
-                                    diagnosticoMultiprofissionaisModel.dataCriacao = Timestamp.now();
-                                    historiaCasoModel.dataCriacao = Timestamp.now();
+                                    diagnosticoMultiprofissionaisModel
+                                        .dataCriacao = Timestamp.now();
+                                    historiaCasoModel.dataCriacao =
+                                        Timestamp.now();
 
-                                    historiaCasoModel.diagnosticos?.add(diagnosticoMultiprofissionaisModel);
+                                    historiaCasoModel.diagnosticos?.add(
+                                        diagnosticoMultiprofissionaisModel);
 
-                                    await GerenciaPacienteRepository().cadastrarHistoria(
+                                    await GerenciaPacienteRepository()
+                                        .cadastrarHistoria(
                                       historiaCasoModel,
                                       images,
-                                      pacienteProvider.paciente!.dadosPacienteModel.uidDocumento,
+                                      pacienteProvider.paciente!
+                                          .dadosPacienteModel.uidDocumento,
                                     );
 
-                                    pacienteProvider.setHistoria(historiaCasoModel);
+                                    pacienteProvider
+                                        .setHistoria(historiaCasoModel);
 
                                     Navigator.pop(context);
-                                    snackSucesso(context, "Cadastrado com sucesso");
+                                    snackSucesso(
+                                        context, "Cadastrado com sucesso");
                                   } catch (e) {
-                                    snackErro(context, "Erro ao cadastrar diagnóstico multiprofissional");
+                                    snackErro(context,
+                                        "Erro ao cadastrar diagnóstico multiprofissional");
                                     return;
                                   }
                                 },
@@ -280,8 +302,10 @@ class _PacienteScreenState extends State<PacienteScreen> {
     );
   }
 
-  Future<void> _dialogUpdateDiagnosticoMulti(HistoriaCasoModel historia, PacienteProvider pacienteProvider) async {
-    DiagnosticoMultiprofissionaisModel diagnosticoMultiprofissionaisModel = DiagnosticoMultiprofissionaisModel(
+  Future<void> _dialogUpdateDiagnosticoMulti(
+      HistoriaCasoModel historia, PacienteProvider pacienteProvider) async {
+    DiagnosticoMultiprofissionaisModel diagnosticoMultiprofissionaisModel =
+        DiagnosticoMultiprofissionaisModel(
       diagnosticos: '',
       dataCriacao: null,
       nomeResponsavel: '',
@@ -314,7 +338,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                       children: [
                         const Text(
                           'Cadastro de Diagnóstico Multiprofissional',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 16),
                         TextFieldCustom(
@@ -329,7 +354,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                             return null;
                           },
                           onSaved: (value) {
-                            diagnosticoMultiprofissionaisModel.diagnosticos = value!;
+                            diagnosticoMultiprofissionaisModel.diagnosticos =
+                                value!;
                           },
                         ),
                         const SizedBox(height: 16),
@@ -362,17 +388,20 @@ class _PacienteScreenState extends State<PacienteScreen> {
                             return null;
                           },
                           onSaved: (value) {
-                            diagnosticoMultiprofissionaisModel.nomeResponsavel = value!;
+                            diagnosticoMultiprofissionaisModel.nomeResponsavel =
+                                value!;
                           },
                         ),
                         const SizedBox(height: 16),
                         CustomDropdownButton(
                           hint: "Profissão",
-                          dropdownValue: diagnosticoMultiprofissionaisModel.profissaoResponsavel,
+                          dropdownValue: diagnosticoMultiprofissionaisModel
+                              .profissaoResponsavel,
                           items: profissoes,
                           onChanged: (value) {
                             setStateDialog(() {
-                              diagnosticoMultiprofissionaisModel.profissaoResponsavel = value!;
+                              diagnosticoMultiprofissionaisModel
+                                  .profissaoResponsavel = value!;
                             });
                           },
                         ),
@@ -395,22 +424,29 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                 onPressed: () async {
                                   try {
                                     if (!formKey.currentState!.validate()) {
-                                      snackAtencao(context, "Preencha todos os campos");
+                                      snackAtencao(
+                                          context, "Preencha todos os campos");
                                       return;
                                     }
                                     formKey.currentState!.save();
-                                    diagnosticoMultiprofissionaisModel.dataCriacao = Timestamp.now();
+                                    diagnosticoMultiprofissionaisModel
+                                        .dataCriacao = Timestamp.now();
 
-                                    historia.diagnosticos?.add(diagnosticoMultiprofissionaisModel);
-                                    await GerenciaPacienteRepository().updateDiagnostico(
+                                    historia.diagnosticos?.add(
+                                        diagnosticoMultiprofissionaisModel);
+                                    await GerenciaPacienteRepository()
+                                        .updateDiagnostico(
                                       historia.diagnosticos,
-                                      pacienteProvider.paciente!.dadosPacienteModel.uidDocumento,
+                                      pacienteProvider.paciente!
+                                          .dadosPacienteModel.uidDocumento,
                                     );
                                     pacienteProvider.setHistoria(historia);
                                     Navigator.pop(context);
-                                    snackSucesso(context, "Cadastrado com sucesso");
+                                    snackSucesso(
+                                        context, "Cadastrado com sucesso");
                                   } catch (e) {
-                                    snackErro(context, "Erro ao cadastrar diagnóstico multiprofissional");
+                                    snackErro(context,
+                                        "Erro ao cadastrar diagnóstico multiprofissional");
                                     return;
                                   }
                                 },
@@ -430,8 +466,10 @@ class _PacienteScreenState extends State<PacienteScreen> {
     );
   }
 
-  Future<void> _dialogAdicionarRecursoIndividual(PacienteProvider pacienteProvider) async {
-    Habilidades habilidade = Habilidades(dataCriacao: Timestamp.now(), habilidades: '');
+  Future<void> _dialogAdicionarRecursoIndividual(
+      PacienteProvider pacienteProvider) async {
+    Habilidades habilidade =
+        Habilidades(dataCriacao: Timestamp.now(), habilidades: '');
     RecursoIndividuaisModel recursoIndividuaisModel = RecursoIndividuaisModel(
       habilidades: [],
       recursoIndividual: '',
@@ -462,7 +500,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                       children: [
                         const Text(
                           'Cadastro de Recursos Individuais',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 16),
                         TextFieldCustom(
@@ -515,23 +554,29 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                 onPressed: () async {
                                   try {
                                     if (!formKey.currentState!.validate()) {
-                                      snackAtencao(context, "Preencha todos os campos");
+                                      snackAtencao(
+                                          context, "Preencha todos os campos");
                                       return;
                                     }
                                     formKey.currentState!.save();
                                     habilidade.dataCriacao = Timestamp.now();
 
-                                    recursoIndividuaisModel.habilidades?.add(habilidade);
+                                    recursoIndividuaisModel.habilidades
+                                        ?.add(habilidade);
 
-                                    await GerenciaPacienteRepository().cadastraRecursoIndividual(
+                                    await GerenciaPacienteRepository()
+                                        .cadastraRecursoIndividual(
                                       recursoIndividuaisModel,
-                                      pacienteProvider.paciente!.dadosPacienteModel.uidDocumento,
+                                      pacienteProvider.paciente!
+                                          .dadosPacienteModel.uidDocumento,
                                     );
 
                                     Navigator.pop(context);
-                                    snackSucesso(context, "Cadastrado com sucesso");
+                                    snackSucesso(
+                                        context, "Cadastrado com sucesso");
                                   } catch (e) {
-                                    snackErro(context, "Erro ao cadastrar, tente novamente mais tarde");
+                                    snackErro(context,
+                                        "Erro ao cadastrar, tente novamente mais tarde");
                                     return;
                                   }
                                 },
@@ -551,9 +596,10 @@ class _PacienteScreenState extends State<PacienteScreen> {
     );
   }
 
-  Future<void> _dialogAdicionarHabilidade(
-      PacienteProvider pacienteProvider, RecursoIndividuaisModel recursoIndividuaisModel) async {
-    Habilidades habilidade = Habilidades(dataCriacao: Timestamp.now(), habilidades: '');
+  Future<void> _dialogAdicionarHabilidade(PacienteProvider pacienteProvider,
+      RecursoIndividuaisModel recursoIndividuaisModel) async {
+    Habilidades habilidade =
+        Habilidades(dataCriacao: Timestamp.now(), habilidades: '');
     final formKey = GlobalKey<FormState>();
     return showDialog<void>(
       context: context,
@@ -580,7 +626,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                       children: [
                         const Text(
                           'Cadastro de Recursos Individuais',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 16),
                         TextFieldCustom(
@@ -618,7 +665,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                 onPressed: () async {
                                   try {
                                     if (!formKey.currentState!.validate()) {
-                                      snackAtencao(context, "Preencha todos os campos");
+                                      snackAtencao(
+                                          context, "Preencha todos os campos");
                                       return;
                                     }
                                     setStateDialog(() {
@@ -627,24 +675,30 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                     formKey.currentState!.save();
                                     habilidade.dataCriacao = Timestamp.now();
 
-                                    recursoIndividuaisModel.habilidades?.add(habilidade);
+                                    recursoIndividuaisModel.habilidades
+                                        ?.add(habilidade);
 
-                                    await GerenciaPacienteRepository().cadastraHabilidades(
+                                    await GerenciaPacienteRepository()
+                                        .cadastraHabilidades(
                                       recursoIndividuaisModel.habilidades!,
-                                      pacienteProvider.paciente!.dadosPacienteModel.uidDocumento,
+                                      pacienteProvider.paciente!
+                                          .dadosPacienteModel.uidDocumento,
                                     );
 
-                                    pacienteProvider.setUpdateHabilidade(habilidade);
+                                    pacienteProvider
+                                        .setUpdateHabilidade(habilidade);
                                     setStateDialog(() {
                                       _carregando = false;
                                     });
                                     Navigator.pop(context);
-                                    snackSucesso(context, "Cadastrado com sucesso");
+                                    snackSucesso(
+                                        context, "Cadastrado com sucesso");
                                   } catch (e) {
                                     setStateDialog(() {
                                       _carregando = false;
                                     });
-                                    snackErro(context, "Erro ao cadastrar, tente novamente mais tarde");
+                                    snackErro(context,
+                                        "Erro ao cadastrar, tente novamente mais tarde");
                                     return;
                                   }
                                 },
@@ -664,9 +718,10 @@ class _PacienteScreenState extends State<PacienteScreen> {
     );
   }
 
-  Future<void> _dialogAdicionarPotencialidade(
-      PacienteProvider pacienteProvider, PotencialidadeModel? potencialidadeModel) async {
-    Potencialidade potencialidade = Potencialidade(dataCriacao: Timestamp.now(), potencialidade: '');
+  Future<void> _dialogAdicionarPotencialidade(PacienteProvider pacienteProvider,
+      PotencialidadeModel? potencialidadeModel) async {
+    Potencialidade potencialidade =
+        Potencialidade(dataCriacao: Timestamp.now(), potencialidade: '');
     final formKey = GlobalKey<FormState>();
     return showDialog<void>(
       context: context,
@@ -693,7 +748,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                       children: [
                         const Text(
                           'Cadastro de potencialidades',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 16),
                         TextFieldCustom(
@@ -730,30 +786,39 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                 onPressed: () async {
                                   try {
                                     if (!formKey.currentState!.validate()) {
-                                      snackAtencao(context, "Preencha todos os campos");
+                                      snackAtencao(
+                                          context, "Preencha todos os campos");
                                       return;
                                     }
                                     formKey.currentState!.save();
-                                    potencialidade.dataCriacao = Timestamp.now();
+                                    potencialidade.dataCriacao =
+                                        Timestamp.now();
 
                                     // Inicialize a lista de potencialidades se estiver nula
-                                    potencialidadeModel ??= PotencialidadeModel(potencialidades: []);
+                                    potencialidadeModel ??= PotencialidadeModel(
+                                        potencialidades: []);
                                     potencialidadeModel?.potencialidades ??= [];
 
                                     // Adicione a nova potencialidade à lista
-                                    potencialidadeModel?.potencialidades!.add(potencialidade);
+                                    potencialidadeModel?.potencialidades!
+                                        .add(potencialidade);
 
-                                    await GerenciaPacienteRepository().cadastraPotencialidade(
+                                    await GerenciaPacienteRepository()
+                                        .cadastraPotencialidade(
                                       potencialidadeModel!,
-                                      pacienteProvider.paciente!.dadosPacienteModel.uidDocumento,
+                                      pacienteProvider.paciente!
+                                          .dadosPacienteModel.uidDocumento,
                                     );
 
-                                    pacienteProvider.setUpdatePotencialidade(potencialidadeModel!);
+                                    pacienteProvider.setUpdatePotencialidade(
+                                        potencialidadeModel!);
 
                                     Navigator.pop(context);
-                                    snackSucesso(context, "Cadastrado com sucesso");
+                                    snackSucesso(
+                                        context, "Cadastrado com sucesso");
                                   } catch (e) {
-                                    snackErro(context, "Erro ao cadastrar, tente novamente mais tarde");
+                                    snackErro(context,
+                                        "Erro ao cadastrar, tente novamente mais tarde");
                                   }
                                 },
                               ),
@@ -772,8 +837,10 @@ class _PacienteScreenState extends State<PacienteScreen> {
     );
   }
 
-  Future<void> _dialogAdicionarProblema(PacienteProvider pacienteProvider, ProblemaModel? problema) async {
-    Problema problemaModel = Problema(dataCriacao: Timestamp.now(), problema: '');
+  Future<void> _dialogAdicionarProblema(
+      PacienteProvider pacienteProvider, ProblemaModel? problema) async {
+    Problema problemaModel =
+        Problema(dataCriacao: Timestamp.now(), problema: '');
 
     final formKey = GlobalKey<FormState>();
     return showDialog<void>(
@@ -801,7 +868,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                       children: [
                         const Text(
                           'Cadastro de problemas',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 16),
                         TextFieldCustom(
@@ -838,7 +906,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                 onPressed: () async {
                                   try {
                                     if (!formKey.currentState!.validate()) {
-                                      snackAtencao(context, "Preencha todos os campos");
+                                      snackAtencao(
+                                          context, "Preencha todos os campos");
                                       return;
                                     }
                                     formKey.currentState!.save();
@@ -851,17 +920,22 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                     // Adicione a nova potencialidade à lista
                                     problema?.problema!.add(problemaModel);
 
-                                    await GerenciaPacienteRepository().cadastraProblema(
+                                    await GerenciaPacienteRepository()
+                                        .cadastraProblema(
                                       problema!,
-                                      pacienteProvider.paciente!.dadosPacienteModel.uidDocumento,
+                                      pacienteProvider.paciente!
+                                          .dadosPacienteModel.uidDocumento,
                                     );
 
-                                    pacienteProvider.setUpdateProblema(problema!);
+                                    pacienteProvider
+                                        .setUpdateProblema(problema!);
 
                                     Navigator.pop(context);
-                                    snackSucesso(context, "Cadastrado com sucesso");
+                                    snackSucesso(
+                                        context, "Cadastrado com sucesso");
                                   } catch (e) {
-                                    snackErro(context, "Erro ao cadastrar, tente novamente mais tarde");
+                                    snackErro(context,
+                                        "Erro ao cadastrar, tente novamente mais tarde");
                                   }
                                 },
                               ),
@@ -886,7 +960,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
       sonhoVida: [],
     );
 
-    SonhoVidaModel sonhoVidaModel = SonhoVidaModel(sonhoVida: '', dataCriacao: Timestamp.now());
+    SonhoVidaModel sonhoVidaModel =
+        SonhoVidaModel(sonhoVida: '', dataCriacao: Timestamp.now());
 
     final formKey = GlobalKey<FormState>();
     return showDialog<void>(
@@ -914,7 +989,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                       children: [
                         const Text(
                           'Cadastro de Diagnóstico Multiprofissional',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 16),
                         TextFieldCustom(
@@ -967,25 +1043,32 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                 onPressed: () async {
                                   try {
                                     if (!formKey.currentState!.validate()) {
-                                      snackAtencao(context, "Preencha todos os campos");
+                                      snackAtencao(
+                                          context, "Preencha todos os campos");
                                       return;
                                     }
 
                                     formKey.currentState!.save();
-                                    sonhoVidaModel.dataCriacao = Timestamp.now();
+                                    sonhoVidaModel.dataCriacao =
+                                        Timestamp.now();
                                     desejoModel.sonhoVida?.add(sonhoVidaModel);
 
-                                    await GerenciaPacienteRepository().cadastrarDesejosSonhos(
+                                    await GerenciaPacienteRepository()
+                                        .cadastrarDesejosSonhos(
                                       desejoModel,
-                                      pacienteProvider.paciente!.dadosPacienteModel.uidDocumento,
+                                      pacienteProvider.paciente!
+                                          .dadosPacienteModel.uidDocumento,
                                     );
 
-                                    pacienteProvider.setUpdateDesejo(desejoModel);
+                                    pacienteProvider
+                                        .setUpdateDesejo(desejoModel);
 
                                     Navigator.pop(context);
-                                    snackSucesso(context, "Cadastrado com sucesso");
+                                    snackSucesso(
+                                        context, "Cadastrado com sucesso");
                                   } catch (e) {
-                                    snackErro(context, "Erro ao cadastrar diagnóstico multiprofissional");
+                                    snackErro(context,
+                                        "Erro ao cadastrar diagnóstico multiprofissional");
                                     return;
                                   }
                                 },
@@ -1005,8 +1088,10 @@ class _PacienteScreenState extends State<PacienteScreen> {
     );
   }
 
-  Future<void> _dialogAdicionarSonhos(PacienteProvider pacienteProvider, DesejoModel desejo) async {
-    SonhoVidaModel sonhoVidaModel = SonhoVidaModel(sonhoVida: '', dataCriacao: Timestamp.now());
+  Future<void> _dialogAdicionarSonhos(
+      PacienteProvider pacienteProvider, DesejoModel desejo) async {
+    SonhoVidaModel sonhoVidaModel =
+        SonhoVidaModel(sonhoVida: '', dataCriacao: Timestamp.now());
 
     final formKey = GlobalKey<FormState>();
     return showDialog<void>(
@@ -1034,7 +1119,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                       children: [
                         const Text(
                           'Cadastro de Diagnóstico Multiprofissional',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 16),
                         TextFieldCustom(
@@ -1071,24 +1157,30 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                 onPressed: () async {
                                   try {
                                     if (!formKey.currentState!.validate()) {
-                                      snackAtencao(context, "Preencha todos os campos");
+                                      snackAtencao(
+                                          context, "Preencha todos os campos");
                                       return;
                                     }
 
                                     formKey.currentState!.save();
-                                    sonhoVidaModel.dataCriacao = Timestamp.now();
+                                    sonhoVidaModel.dataCriacao =
+                                        Timestamp.now();
                                     desejo.sonhoVida?.add(sonhoVidaModel);
-                                    await GerenciaPacienteRepository().cadastrarSonhos(
+                                    await GerenciaPacienteRepository()
+                                        .cadastrarSonhos(
                                       desejo,
-                                      pacienteProvider.paciente!.dadosPacienteModel.uidDocumento,
+                                      pacienteProvider.paciente!
+                                          .dadosPacienteModel.uidDocumento,
                                     );
 
                                     pacienteProvider.setUpdateDesejo(desejo);
 
                                     Navigator.pop(context);
-                                    snackSucesso(context, "Cadastrado com sucesso");
+                                    snackSucesso(
+                                        context, "Cadastrado com sucesso");
                                   } catch (e) {
-                                    snackErro(context, "Erro ao cadastrar diagnóstico multiprofissional");
+                                    snackErro(context,
+                                        "Erro ao cadastrar diagnóstico multiprofissional");
                                     return;
                                   }
                                 },
@@ -1108,9 +1200,15 @@ class _PacienteScreenState extends State<PacienteScreen> {
     );
   }
 
-  Future<void> _dialogAdicionarMedicamento(PacienteProvider pacienteProvider, ListaDeMedicacoes? medicacoes) async {
+  Future<void> _dialogAdicionarMedicamento(
+      PacienteProvider pacienteProvider, ListaDeMedicacoes? medicacoes) async {
     MedicacoesModel medicacoesModel = MedicacoesModel(
-        medicacao: "", posologia: "", quantidade: "", frequencia: "", via: "", dataCriacao: Timestamp.now());
+        medicacao: "",
+        posologia: "",
+        quantidade: "",
+        frequencia: "",
+        via: "",
+        dataCriacao: Timestamp.now());
 
     final formKey = GlobalKey<FormState>();
     return showDialog<void>(
@@ -1138,7 +1236,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                       children: [
                         const Text(
                           'Cadastro de Medicamentos',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 16),
                         TextFieldCustom(
@@ -1239,30 +1338,39 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                 onPressed: () async {
                                   try {
                                     if (!formKey.currentState!.validate()) {
-                                      snackAtencao(context, "Preencha todos os campos");
+                                      snackAtencao(
+                                          context, "Preencha todos os campos");
                                       return;
                                     }
 
                                     formKey.currentState!.save();
-                                    medicacoesModel.dataCriacao = Timestamp.now();
+                                    medicacoesModel.dataCriacao =
+                                        Timestamp.now();
 
-                                    medicacoes ??= ListaDeMedicacoes(medicacoes: []);
+                                    medicacoes ??=
+                                        ListaDeMedicacoes(medicacoes: []);
 
                                     medicacoes!.medicacoes.add(medicacoesModel);
-                                    print("Medicações: ${medicacoes!.medicacoes}");
+                                    print(
+                                        "Medicações: ${medicacoes!.medicacoes}");
 
-                                    await GerenciaPacienteRepository().cadastrarMedicacoes(
+                                    await GerenciaPacienteRepository()
+                                        .cadastrarMedicacoes(
                                       medicacoes!,
-                                      pacienteProvider.paciente!.dadosPacienteModel.uidDocumento,
+                                      pacienteProvider.paciente!
+                                          .dadosPacienteModel.uidDocumento,
                                     );
 
-                                    pacienteProvider.setUpdateMedicacoes(medicacoes!);
+                                    pacienteProvider
+                                        .setUpdateMedicacoes(medicacoes!);
 
                                     Navigator.pop(context);
-                                    snackSucesso(context, "Cadastrado com sucesso");
+                                    snackSucesso(
+                                        context, "Cadastrado com sucesso");
                                   } catch (e) {
                                     print("Erro: $e");
-                                    snackErro(context, "Erro ao cadastrar medicações");
+                                    snackErro(context,
+                                        "Erro ao cadastrar medicações");
                                     return;
                                   }
                                 },
@@ -1282,7 +1390,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
     );
   }
 
-  Future<void> _dialogAdicionarDoencaClinica(PacienteProvider pacienteProvider, ListaDoencaClinica? doencas) async {
+  Future<void> _dialogAdicionarDoencaClinica(
+      PacienteProvider pacienteProvider, ListaDoencaClinica? doencas) async {
     DoencaClinicaModel doencaClinicaModel = DoencaClinicaModel(
       doencaClinica: "",
       dataCriacao: Timestamp.now(),
@@ -1314,12 +1423,14 @@ class _PacienteScreenState extends State<PacienteScreen> {
                       children: [
                         const Text(
                           'Cadastro de Doença Clínica',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 16),
                         TextFieldCustom(
                           tipoTexto: TextInputType.text,
-                          hintText: "Ex. Diabetes Mellitus, Hipertensão Arterial, etc...",
+                          hintText:
+                              "Ex. Diabetes Mellitus, Hipertensão Arterial, etc...",
                           labelText: "Doença Clínica",
                           senha: false,
                           validator: (value) {
@@ -1351,29 +1462,37 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                 onPressed: () async {
                                   try {
                                     if (!formKey.currentState!.validate()) {
-                                      snackAtencao(context, "Preencha todos os campos");
+                                      snackAtencao(
+                                          context, "Preencha todos os campos");
                                       return;
                                     }
 
                                     formKey.currentState!.save();
-                                    doencaClinicaModel.dataCriacao = Timestamp.now();
+                                    doencaClinicaModel.dataCriacao =
+                                        Timestamp.now();
 
-                                    doencas ??= ListaDoencaClinica(doencasClinicas: []);
+                                    doencas ??=
+                                        ListaDoencaClinica(doencasClinicas: []);
 
-                                    doencas!.doencasClinicas?.add(doencaClinicaModel);
+                                    doencas!.doencasClinicas
+                                        ?.add(doencaClinicaModel);
 
-                                    await GerenciaPacienteRepository().cadastrarDoenca(
+                                    await GerenciaPacienteRepository()
+                                        .cadastrarDoenca(
                                       doencas!,
-                                      pacienteProvider.paciente!.dadosPacienteModel.uidDocumento,
+                                      pacienteProvider.paciente!
+                                          .dadosPacienteModel.uidDocumento,
                                     );
 
                                     pacienteProvider.setUpdateDoenca(doencas!);
 
                                     Navigator.pop(context);
-                                    snackSucesso(context, "Cadastrado com sucesso");
+                                    snackSucesso(
+                                        context, "Cadastrado com sucesso");
                                   } catch (e) {
                                     print("Erro: $e");
-                                    snackErro(context, "Erro ao cadastrar doença clínica");
+                                    snackErro(context,
+                                        "Erro ao cadastrar doença clínica");
                                     return;
                                   }
                                 },
@@ -1393,8 +1512,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
     );
   }
 
-  Future<void> _dialogAdicionarDificuldade(
-      PacienteProvider pacienteProvider, DificuldadePessoalModal? dificuldades) async {
+  Future<void> _dialogAdicionarDificuldade(PacienteProvider pacienteProvider,
+      DificuldadePessoalModal? dificuldades) async {
     ListaDificuldadePessoal dificuldadePessoalModel = ListaDificuldadePessoal(
       dificuldade: "",
       tipoDificuldade: "",
@@ -1427,7 +1546,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                       children: [
                         const Text(
                           'Cadastro dificuldades Pessoais',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 16),
                         TextFieldCustom(
@@ -1474,35 +1594,47 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                 onPressed: () async {
                                   try {
                                     if (!formKey.currentState!.validate()) {
-                                      snackAtencao(context, "Preencha todos os campos");
+                                      snackAtencao(
+                                          context, "Preencha todos os campos");
                                       return;
                                     }
 
-                                    if (dificuldadePessoalModel.tipoDificuldade == null) {
-                                      snackAtencao(context, "Preencha o tipo de dificuldade");
+                                    if (dificuldadePessoalModel
+                                            .tipoDificuldade ==
+                                        null) {
+                                      snackAtencao(context,
+                                          "Preencha o tipo de dificuldade");
                                       return;
                                     }
 
                                     formKey.currentState!.save();
 
-                                    dificuldadePessoalModel.dataCriacao = Timestamp.now();
+                                    dificuldadePessoalModel.dataCriacao =
+                                        Timestamp.now();
 
-                                    dificuldades ??= DificuldadePessoalModal(dificuldadePessoal: []);
+                                    dificuldades ??= DificuldadePessoalModal(
+                                        dificuldadePessoal: []);
 
-                                    dificuldades!.dificuldadePessoal?.add(dificuldadePessoalModel);
+                                    dificuldades!.dificuldadePessoal
+                                        ?.add(dificuldadePessoalModel);
 
-                                    await GerenciaPacienteRepository().cadastrarDificuldades(
+                                    await GerenciaPacienteRepository()
+                                        .cadastrarDificuldades(
                                       dificuldades!,
-                                      pacienteProvider.paciente!.dadosPacienteModel.uidDocumento,
+                                      pacienteProvider.paciente!
+                                          .dadosPacienteModel.uidDocumento,
                                     );
 
-                                    pacienteProvider.setUpdateDificuldades(dificuldades!);
+                                    pacienteProvider
+                                        .setUpdateDificuldades(dificuldades!);
 
                                     Navigator.pop(context);
-                                    snackSucesso(context, "Cadastrado com sucesso");
+                                    snackSucesso(
+                                        context, "Cadastrado com sucesso");
                                   } catch (e) {
                                     print("Erro: $e");
-                                    snackErro(context, "Erro ao cadastrar dificuldade pessoal");
+                                    snackErro(context,
+                                        "Erro ao cadastrar dificuldade pessoal");
                                     return;
                                   }
                                 },
@@ -1523,9 +1655,11 @@ class _PacienteScreenState extends State<PacienteScreen> {
   }
 
   Future<void> _dialogAdicionarOutrasInformacoes(
-      PacienteProvider pacienteProvider, ListaOutrasInformacoes? outrasInformacoes) async {
+      PacienteProvider pacienteProvider,
+      ListaOutrasInformacoes? outrasInformacoes) async {
     OutrasInformacoesDiagnosticoModel outrasInformacoesModel =
-        OutrasInformacoesDiagnosticoModel(dataCriacao: Timestamp.now(), outrasInformacoes: '');
+        OutrasInformacoesDiagnosticoModel(
+            dataCriacao: Timestamp.now(), outrasInformacoes: '');
 
     final formKey = GlobalKey<FormState>();
     return showDialog<void>(
@@ -1553,12 +1687,14 @@ class _PacienteScreenState extends State<PacienteScreen> {
                       children: [
                         const Text(
                           'Cadastro de Outras Informações',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 16),
                         TextFieldCustom(
                           tipoTexto: TextInputType.text,
-                          hintText: "ex. Adicione informações relevantes sobre o paciente",
+                          hintText:
+                              "ex. Adicione informações relevantes sobre o paciente",
                           labelText: "Outras Informações",
                           senha: false,
                           validator: (value) {
@@ -1590,29 +1726,39 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                 onPressed: () async {
                                   try {
                                     if (!formKey.currentState!.validate()) {
-                                      snackAtencao(context, "Preencha todos os campos");
+                                      snackAtencao(
+                                          context, "Preencha todos os campos");
                                       return;
                                     }
 
                                     formKey.currentState!.save();
-                                    outrasInformacoesModel.dataCriacao = Timestamp.now();
+                                    outrasInformacoesModel.dataCriacao =
+                                        Timestamp.now();
 
-                                    outrasInformacoes ??= ListaOutrasInformacoes(listaOutrasInformacoes: []);
+                                    outrasInformacoes ??=
+                                        ListaOutrasInformacoes(
+                                            listaOutrasInformacoes: []);
 
-                                    outrasInformacoes!.listaOutrasInformacoes?.add(outrasInformacoesModel);
+                                    outrasInformacoes!.listaOutrasInformacoes
+                                        ?.add(outrasInformacoesModel);
 
-                                    await GerenciaPacienteRepository().cadastrarOutrasInformacoes(
+                                    await GerenciaPacienteRepository()
+                                        .cadastrarOutrasInformacoes(
                                       outrasInformacoes!,
-                                      pacienteProvider.paciente!.dadosPacienteModel.uidDocumento,
+                                      pacienteProvider.paciente!
+                                          .dadosPacienteModel.uidDocumento,
                                     );
 
-                                    pacienteProvider.setUpdateOutrasInformacoes(outrasInformacoes!);
+                                    pacienteProvider.setUpdateOutrasInformacoes(
+                                        outrasInformacoes!);
 
                                     Navigator.pop(context);
-                                    snackSucesso(context, "Cadastrado com sucesso");
+                                    snackSucesso(
+                                        context, "Cadastrado com sucesso");
                                   } catch (e) {
                                     print("Erro: $e");
-                                    snackErro(context, "Erro ao cadastrar doença clínica");
+                                    snackErro(context,
+                                        "Erro ao cadastrar doença clínica");
                                     return;
                                   }
                                 },
@@ -1632,8 +1778,10 @@ class _PacienteScreenState extends State<PacienteScreen> {
     );
   }
 
-  Future<void> _dialogAdicionaMeta(PacienteProvider pacienteProvider, MetaModel? meta) async {
-    MetaList metaModel = MetaList(dataCriacao: Timestamp.now(), meta: '', tipo: null);
+  Future<void> _dialogAdicionaMeta(
+      PacienteProvider pacienteProvider, MetaModel? meta) async {
+    MetaList metaModel =
+        MetaList(dataCriacao: Timestamp.now(), meta: '', tipo: null);
 
     final formKey = GlobalKey<FormState>();
     return showDialog<void>(
@@ -1661,7 +1809,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                       children: [
                         const Text(
                           'Cadastro de Metas',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 16),
                         TextFieldCustom(
@@ -1683,7 +1832,9 @@ class _PacienteScreenState extends State<PacienteScreen> {
                         CustomDropdownButton(
                           hint: "Tipo de meta",
                           dropdownValue: metaModel.tipo,
-                          items: EnumMeta.values.map((e) => e.toString().split('.').last).toList(),
+                          items: EnumMeta.values
+                              .map((e) => e.toString().split('.').last)
+                              .toList(),
                           onChanged: (value) {
                             setStateDialog(() {
                               metaModel.tipo = value!;
@@ -1709,12 +1860,14 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                 onPressed: () async {
                                   try {
                                     if (!formKey.currentState!.validate()) {
-                                      snackAtencao(context, "Preencha todos os campos");
+                                      snackAtencao(
+                                          context, "Preencha todos os campos");
                                       return;
                                     }
                                     formKey.currentState!.save();
                                     if (metaModel.tipo == null) {
-                                      snackAtencao(context, "Selecione o tipo de meta");
+                                      snackAtencao(
+                                          context, "Selecione o tipo de meta");
                                       return;
                                     }
 
@@ -1724,18 +1877,22 @@ class _PacienteScreenState extends State<PacienteScreen> {
 
                                     meta!.metas.add(metaModel);
 
-                                    await GerenciaPacienteRepository().cadastrarMetas(
+                                    await GerenciaPacienteRepository()
+                                        .cadastrarMetas(
                                       meta!,
-                                      pacienteProvider.paciente!.dadosPacienteModel.uidDocumento,
+                                      pacienteProvider.paciente!
+                                          .dadosPacienteModel.uidDocumento,
                                     );
 
                                     pacienteProvider.setUpdateMeta(meta!);
 
                                     Navigator.pop(context);
-                                    snackSucesso(context, "Cadastrado com sucesso");
+                                    snackSucesso(
+                                        context, "Cadastrado com sucesso");
                                   } catch (e) {
                                     print("Erro: $e");
-                                    snackErro(context, "Erro ao cadastrar Metas");
+                                    snackErro(
+                                        context, "Erro ao cadastrar Metas");
                                     return;
                                   }
                                 },
@@ -1755,13 +1912,20 @@ class _PacienteScreenState extends State<PacienteScreen> {
     );
   }
 
-  Future<void> _dialogAdicionaIntervencao(PacienteProvider pacienteProvider, IntervencoesModel? intervencao) async {
+  Future<void> _dialogAdicionaIntervencao(
+      PacienteProvider pacienteProvider, IntervencoesModel? intervencao) async {
     String? problema;
     String? meta;
 
     ListIntervencoesModel intervencaoModel = ListIntervencoesModel(
-        dataCriacao: Timestamp.now(), intervencoes: '', meta: "", nomeResponsavel: '', prazo: '', problema: '');
-    ProblemaModel? problemaModel = pacienteProvider.paciente?.diagnosticoModal?.problemaModel;
+        dataCriacao: Timestamp.now(),
+        intervencoes: '',
+        meta: "",
+        nomeResponsavel: '',
+        prazo: '',
+        problema: '');
+    ProblemaModel? problemaModel =
+        pacienteProvider.paciente?.diagnosticoModal?.problemaModel;
     MetaModel? metaModel = pacienteProvider.paciente?.metasModel;
 
     final formKey = GlobalKey<FormState>();
@@ -1790,12 +1954,15 @@ class _PacienteScreenState extends State<PacienteScreen> {
                       children: [
                         const Text(
                           'Cadastro de Intervenções',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 16),
                         CustomDropdownButton(
                           hint: 'Selecione o problema',
-                          items: problemaModel!.problema!.map((e) => e.problema!).toList(),
+                          items: problemaModel!.problema!
+                              .map((e) => e.problema!)
+                              .toList(),
                           onChanged: (value) {
                             setStateDialog(() {
                               problema = value;
@@ -1910,43 +2077,54 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                 onPressed: () async {
                                   try {
                                     if (!formKey.currentState!.validate()) {
-                                      snackAtencao(context, "Preencha todos os campos");
+                                      snackAtencao(
+                                          context, "Preencha todos os campos");
                                       return;
                                     }
 
                                     if (problema == null) {
-                                      snackAtencao(context, "Preencha todos os campos");
+                                      snackAtencao(
+                                          context, "Preencha todos os campos");
                                       return;
                                     }
 
                                     if (meta == null) {
-                                      snackAtencao(context, "Preencha todos os campos");
+                                      snackAtencao(
+                                          context, "Preencha todos os campos");
                                       return;
                                     }
 
                                     formKey.currentState!.save();
 
-                                    intervencaoModel.dataCriacao = Timestamp.now();
+                                    intervencaoModel.dataCriacao =
+                                        Timestamp.now();
                                     intervencaoModel.problema = problema!;
                                     intervencaoModel.meta = meta!;
 
-                                    intervencao ??= IntervencoesModel(intervencoesModel: []);
+                                    intervencao ??= IntervencoesModel(
+                                        intervencoesModel: []);
 
-                                    intervencao!.intervencoesModel.add(intervencaoModel);
+                                    intervencao!.intervencoesModel
+                                        .add(intervencaoModel);
 
-                                    await GerenciaPacienteRepository().cadastrarIntervencao(
+                                    await GerenciaPacienteRepository()
+                                        .cadastrarIntervencao(
                                       intervencao!,
-                                      pacienteProvider.paciente!.dadosPacienteModel.uidDocumento,
+                                      pacienteProvider.paciente!
+                                          .dadosPacienteModel.uidDocumento,
                                     );
 
-                                    pacienteProvider.setUpdateIntervencao(intervencao!);
+                                    pacienteProvider
+                                        .setUpdateIntervencao(intervencao!);
 
                                     Navigator.pop(context);
                                     Navigator.pop(context);
-                                    snackSucesso(context, "Cadastrado com sucesso");
+                                    snackSucesso(
+                                        context, "Cadastrado com sucesso");
                                   } catch (e) {
                                     print("Erro: $e");
-                                    snackErro(context, "Erro ao cadastrar intervenção");
+                                    snackErro(context,
+                                        "Erro ao cadastrar intervenção");
                                     return;
                                   }
                                 },
@@ -1966,7 +2144,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
     );
   }
 
-  Future<void> _dialogAdicionaPactuacao(PacienteProvider pacienteProvider, ListPactuacaoModel? pactuacao) async {
+  Future<void> _dialogAdicionaPactuacao(
+      PacienteProvider pacienteProvider, ListPactuacaoModel? pactuacao) async {
     PactuacaoModel pactuacaoModel = PactuacaoModel(
       prazo: '',
       responsavel: '',
@@ -1976,7 +2155,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
       foto: '',
     );
 
-    IntervencoesModel? intervencaoModel = pacienteProvider.paciente!.intervencoesModel;
+    IntervencoesModel? intervencaoModel =
+        pacienteProvider.paciente!.intervencoesModel;
     Uint8List? image;
 
     final formKey = GlobalKey<FormState>();
@@ -2005,7 +2185,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                       children: [
                         const Text(
                           'Cadastro de Pactuação',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 16),
                         CustomDropdownButton(
@@ -2036,7 +2217,9 @@ class _PacienteScreenState extends State<PacienteScreen> {
                         const SizedBox(height: 16),
                         CustomDropdownButton(
                           hint: 'Selecione a intervenção',
-                          items: intervencaoModel!.intervencoesModel.map((e) => e.intervencoes!).toList(),
+                          items: intervencaoModel!.intervencoesModel
+                              .map((e) => e.intervencoes!)
+                              .toList(),
                           onChanged: (value) {
                             setStateDialog(() {
                               pactuacaoModel.intervencao = value!;
@@ -2061,7 +2244,10 @@ class _PacienteScreenState extends State<PacienteScreen> {
                         ),
                         const SizedBox(height: 16),
                         const Text('Ata da Pactuação/Documentos',
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400, color: preto1)),
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w400,
+                                color: preto1)),
                         const SizedBox(height: 16),
                         Wrap(
                           alignment: WrapAlignment.center,
@@ -2070,7 +2256,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                             if (image != null)
                               Container(
                                 width: MediaQuery.of(context).size.width * 0.22,
-                                height: MediaQuery.of(context).size.width * 0.22,
+                                height:
+                                    MediaQuery.of(context).size.width * 0.22,
                                 color: Colors.grey[300],
                                 child: Image.memory(image!, fit: BoxFit.cover),
                               ),
@@ -2084,8 +2271,10 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                   });
                                 },
                                 child: Container(
-                                  width: MediaQuery.of(context).size.width * 0.22,
-                                  height: MediaQuery.of(context).size.width * 0.22,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.22,
+                                  height:
+                                      MediaQuery.of(context).size.width * 0.22,
                                   color: Colors.grey[300],
                                   child: const Icon(Icons.add_a_photo),
                                 ),
@@ -2112,11 +2301,13 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                 onPressed: () async {
                                   try {
                                     if (!formKey.currentState!.validate()) {
-                                      snackAtencao(context, "Preencha todos os campos");
+                                      snackAtencao(
+                                          context, "Preencha todos os campos");
                                       return;
                                     }
                                     if (image == null) {
-                                      snackAtencao(context, "Selecione uma ATA");
+                                      snackAtencao(
+                                          context, "Selecione uma ATA");
                                       return;
                                     }
                                     setStateDialog(() {
@@ -2125,28 +2316,37 @@ class _PacienteScreenState extends State<PacienteScreen> {
 
                                     formKey.currentState!.save();
 
-                                    pactuacaoModel.dataCriacao = Timestamp.now();
+                                    pactuacaoModel.dataCriacao =
+                                        Timestamp.now();
                                     // pactuacaoModel.paciente = pacienteProvider.paciente!.dadosPacienteModel.nome;
 
-                                    pactuacao ??= ListPactuacaoModel(pactuacoesModel: []);
+                                    pactuacao ??=
+                                        ListPactuacaoModel(pactuacoesModel: []);
 
-                                    await GerenciaPacienteRepository().cadastrarPactuacao(
-                                        pactuacao!,
-                                        pacienteProvider.paciente!.dadosPacienteModel.uidDocumento,
-                                        pactuacaoModel,
-                                        image!);
+                                    await GerenciaPacienteRepository()
+                                        .cadastrarPactuacao(
+                                            pactuacao!,
+                                            pacienteProvider
+                                                .paciente!
+                                                .dadosPacienteModel
+                                                .uidDocumento,
+                                            pactuacaoModel,
+                                            image!);
 
-                                    pacienteProvider.setUpdatePactuacao(pactuacao!);
+                                    pacienteProvider
+                                        .setUpdatePactuacao(pactuacao!);
 
                                     Navigator.pop(context);
                                     Navigator.pop(context);
                                     setStateDialog(() {
                                       _carregando = false;
                                     });
-                                    snackSucesso(context, "Cadastrado com sucesso");
+                                    snackSucesso(
+                                        context, "Cadastrado com sucesso");
                                   } catch (e) {
                                     print("Erro: $e");
-                                    snackErro(context, "Erro ao cadastrar intervenção");
+                                    snackErro(context,
+                                        "Erro ao cadastrar intervenção");
                                     setStateDialog(() {
                                       _carregando = false;
                                     });
@@ -2169,8 +2369,10 @@ class _PacienteScreenState extends State<PacienteScreen> {
     );
   }
 
-  Future<void> _dialogAdicionaEstudoCaso(PacienteProvider pacienteProvider, AgendaModel? agenda) async {
-    AgendaList agendaList = AgendaList(dataCriacao: Timestamp.now(), participantes: "", pauta: "", email: []);
+  Future<void> _dialogAdicionaEstudoCaso(
+      PacienteProvider pacienteProvider, AgendaModel? agenda) async {
+    AgendaList agendaList = AgendaList(
+        dataCriacao: Timestamp.now(), participantes: "", pauta: "", email: []);
     ProfissionalProvider profissionalProvider = ProfissionalProvider.instance;
     TextEditingController controllerObservacao = TextEditingController();
     final TextEditingController controllerEmail = TextEditingController();
@@ -2210,7 +2412,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                       children: [
                         const Text(
                           'Cadastro de Agenda de Estudos',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 16),
                         TextFieldCustom(
@@ -2264,21 +2467,23 @@ class _PacienteScreenState extends State<PacienteScreen> {
                         TextFieldCustom(
                           tipoTexto: TextInputType.text,
                           hintText: "ex. joao@gmail.com",
-                          labelText: "E-mail dos participantes, escreva o e-mail e pressione enter",
+                          labelText:
+                              "E-mail dos participantes, escreva o e-mail e pressione enter",
                           senha: false,
                           formController: controllerEmail,
                           onFieldSubmitted: (value) {
-                            if (!EmailValidator.validate(value)) {
-                              snackAtencao(context, "E-mail inválido");
-                              return;
-                            }
+                            // if (!EmailValidator.validate(value)) {
+                            //   snackAtencao(context, "E-mail inválido");
+                            //   return;
+                            // }
                             addTag(value, setStateDialog);
                           },
                         ),
                         const SizedBox(height: 16),
                         TextFieldCustom(
                           tipoTexto: TextInputType.multiline,
-                          hintText: "ex. Escreva uma mensagem para os participantes convidando para reunião",
+                          hintText:
+                              "ex. Escreva uma mensagem para os participantes convidando para reunião",
                           labelText: "Observações da reunião",
                           senha: false,
                           minLines: 5,
@@ -2311,12 +2516,14 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                 onPressed: () async {
                                   try {
                                     if (!formKey.currentState!.validate()) {
-                                      snackAtencao(context, "Preencha todos os campos");
+                                      snackAtencao(
+                                          context, "Preencha todos os campos");
                                       return;
                                     }
 
                                     if (agendaList.email.isEmpty) {
-                                      snackAtencao(context, "Adicione pelo menos um e-mail");
+                                      snackAtencao(context,
+                                          "Adicione pelo menos um e-mail");
                                       return;
                                     }
 
@@ -2328,31 +2535,38 @@ class _PacienteScreenState extends State<PacienteScreen> {
 
                                     agendaList.dataCriacao = Timestamp.now();
 
-                                    agenda ??= AgendaModel(listaAgendaModel: []);
+                                    agenda ??=
+                                        AgendaModel(listaAgendaModel: []);
 
                                     agenda!.listaAgendaModel?.add(agendaList);
 
-                                    await GerenciaPacienteRepository().cadastrarAgenda(
+                                    await GerenciaPacienteRepository()
+                                        .cadastrarAgenda(
                                       agenda!,
-                                      pacienteProvider.paciente!.dadosPacienteModel.uidDocumento,
+                                      pacienteProvider.paciente!
+                                          .dadosPacienteModel.uidDocumento,
                                     );
                                     pacienteProvider.setUpdateAgenda(agenda!);
 
-                                    var url =
-                                        Uri.parse("https://us-central1-reabilitapsocial.cloudfunctions.net/sendEmails");
+                                    var url = Uri.parse(
+                                        "https://us-central1-reabilitapsocial.cloudfunctions.net/sendEmails");
 
                                     var response = await http.post(
                                       url,
-                                      headers: {'Content-Type': 'application/json'},
+                                      headers: {
+                                        'Content-Type': 'application/json'
+                                      },
                                       body: jsonEncode({
                                         'emailList': agendaList.email,
-                                        'subject': 'Convite para Agenda do ${profissionalProvider.profissional!.nome}',
+                                        'subject':
+                                            'Convite para Agenda do ${profissionalProvider.profissional!.nome}',
                                         'text': controllerObservacao.text
                                       }),
                                     );
 
                                     if (response.statusCode != 200) {
-                                      snackAtencao(context, 'Falha ao enviar email');
+                                      snackAtencao(
+                                          context, 'Falha ao enviar email');
                                     }
 
                                     Navigator.pop(context);
@@ -2360,13 +2574,15 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                     setStateDialog(() {
                                       _carregando = false;
                                     });
-                                    snackSucesso(context, "Cadastrado com sucesso");
+                                    snackSucesso(
+                                        context, "Cadastrado com sucesso");
                                   } catch (e) {
                                     setStateDialog(() {
                                       _carregando = false;
                                     });
                                     print("Erro: $e");
-                                    snackErro(context, "Erro ao cadastrar intervenção");
+                                    snackErro(context,
+                                        "Erro ao cadastrar intervenção");
                                     return;
                                   }
                                 },
@@ -2386,12 +2602,20 @@ class _PacienteScreenState extends State<PacienteScreen> {
     );
   }
 
-  Future<void> _dialogAvaliacaoProgramada(PacienteProvider pacienteProvider, AvaliacaoModel? avaliacao) async {
+  Future<void> _dialogAvaliacaoProgramada(
+      PacienteProvider pacienteProvider, AvaliacaoModel? avaliacao) async {
     ListAvaliacao avaliacaoModel = ListAvaliacao(
-        dataCriacao: Timestamp.now(), avaliacao: null, intervencao: '', responsavel: '', observacao: "", foto: "");
+        dataCriacao: Timestamp.now(),
+        avaliacao: null,
+        intervencao: '',
+        responsavel: '',
+        observacao: "",
+        foto: "");
 
-    IntervencoesModel? intervencoesModel = pacienteProvider.paciente!.intervencoesModel;
-    ListPactuacaoModel? pactuacaoModel = pacienteProvider.paciente!.pactuacoesModel;
+    IntervencoesModel? intervencoesModel =
+        pacienteProvider.paciente!.intervencoesModel;
+    ListPactuacaoModel? pactuacaoModel =
+        pacienteProvider.paciente!.pactuacoesModel;
 
     Uint8List? image;
 
@@ -2421,12 +2645,15 @@ class _PacienteScreenState extends State<PacienteScreen> {
                       children: [
                         const Text(
                           'Avaliação Programada do PRP (a cada 2 meses)',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 16),
                         CustomDropdownButton(
                           hint: 'Selecione a intervenção',
-                          items: intervencoesModel!.intervencoesModel.map((e) => e.intervencoes!).toList(),
+                          items: intervencoesModel!.intervencoesModel
+                              .map((e) => e.intervencoes!)
+                              .toList(),
                           onChanged: (value) {
                             setStateDialog(() {
                               avaliacaoModel.intervencao = value;
@@ -2436,7 +2663,9 @@ class _PacienteScreenState extends State<PacienteScreen> {
                         const SizedBox(height: 16),
                         CustomDropdownButton(
                           hint: 'Selecione a pactuação',
-                          items: pactuacaoModel!.pactuacoesModel!.map((e) => e.responsavel!).toList(),
+                          items: pactuacaoModel!.pactuacoesModel!
+                              .map((e) => e.responsavel!)
+                              .toList(),
                           onChanged: (value) {
                             setStateDialog(() {
                               avaliacaoModel.pactuacao = value;
@@ -2484,7 +2713,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                         const SizedBox(height: 16),
                         const Text(
                           "Adicione uma ata",
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                         Wrap(
                           alignment: WrapAlignment.center,
@@ -2493,7 +2723,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                             if (image != null)
                               Container(
                                 width: MediaQuery.of(context).size.width * 0.22,
-                                height: MediaQuery.of(context).size.width * 0.22,
+                                height:
+                                    MediaQuery.of(context).size.width * 0.22,
                                 color: Colors.grey[300],
                                 child: Image.memory(image!, fit: BoxFit.cover),
                               ),
@@ -2507,8 +2738,10 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                   });
                                 },
                                 child: Container(
-                                  width: MediaQuery.of(context).size.width * 0.22,
-                                  height: MediaQuery.of(context).size.width * 0.22,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.22,
+                                  height:
+                                      MediaQuery.of(context).size.width * 0.22,
                                   color: Colors.grey[300],
                                   child: const Icon(Icons.add_a_photo),
                                 ),
@@ -2535,44 +2768,56 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                 onPressed: () async {
                                   try {
                                     if (!formKey.currentState!.validate()) {
-                                      snackAtencao(context, "Preencha todos os campos");
+                                      snackAtencao(
+                                          context, "Preencha todos os campos");
                                       return;
                                     }
                                     if (image == null) {
-                                      snackAtencao(context, "Selecione uma imagem");
+                                      snackAtencao(
+                                          context, "Selecione uma imagem");
                                       return;
                                     }
 
                                     formKey.currentState!.save();
                                     if (avaliacaoModel.avaliacao == null) {
-                                      snackAtencao(context, "Selecione uma avaliação");
+                                      snackAtencao(
+                                          context, "Selecione uma avaliação");
                                       return;
                                     }
 
                                     setStateDialog(() {
                                       _carregando = true;
                                     });
-                                    avaliacaoModel.dataCriacao = Timestamp.now();
+                                    avaliacaoModel.dataCriacao =
+                                        Timestamp.now();
 
-                                    avaliacao ??= AvaliacaoModel(avaliacoesModel: []);
+                                    avaliacao ??=
+                                        AvaliacaoModel(avaliacoesModel: []);
 
-                                    await GerenciaPacienteRepository().cadastrarAvaliacao(
-                                        avaliacao!,
-                                        pacienteProvider.paciente!.dadosPacienteModel.uidDocumento,
-                                        avaliacaoModel,
-                                        image!);
+                                    await GerenciaPacienteRepository()
+                                        .cadastrarAvaliacao(
+                                            avaliacao!,
+                                            pacienteProvider
+                                                .paciente!
+                                                .dadosPacienteModel
+                                                .uidDocumento,
+                                            avaliacaoModel,
+                                            image!);
 
-                                    pacienteProvider.setUpdateAvaliacoes(avaliacao!);
+                                    pacienteProvider
+                                        .setUpdateAvaliacoes(avaliacao!);
 
                                     Navigator.pop(context);
                                     Navigator.pop(context);
                                     setStateDialog(() {
                                       _carregando = false;
                                     });
-                                    snackSucesso(context, "Cadastrado com sucesso");
+                                    snackSucesso(
+                                        context, "Cadastrado com sucesso");
                                   } catch (e) {
                                     print("Erro: $e");
-                                    snackErro(context, "Erro ao cadastrar intervenção");
+                                    snackErro(context,
+                                        "Erro ao cadastrar intervenção");
                                     setStateDialog(() {
                                       _carregando = false;
                                     });
@@ -2596,8 +2841,11 @@ class _PacienteScreenState extends State<PacienteScreen> {
   }
 
   ////edicao
-  Future<void> _dialogEditarDiagnostico(DiagnosticoMultiprofissionaisModel diagnostico,
-      PacienteProvider pacienteProvider, List<DiagnosticoMultiprofissionaisModel> listaDiagnostico, int index) async {
+  Future<void> _dialogEditarDiagnostico(
+      DiagnosticoMultiprofissionaisModel diagnostico,
+      PacienteProvider pacienteProvider,
+      List<DiagnosticoMultiprofissionaisModel> listaDiagnostico,
+      int index) async {
     final formKey = GlobalKey<FormState>();
     return showDialog<void>(
       context: context,
@@ -2624,7 +2872,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                       children: [
                         const Text(
                           'Cadastro de Diagnóstico Multiprofissional',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 16),
 
@@ -2717,7 +2966,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                 onPressed: () async {
                                   try {
                                     if (!formKey.currentState!.validate()) {
-                                      snackAtencao(context, "Preencha todos os campos");
+                                      snackAtencao(
+                                          context, "Preencha todos os campos");
                                       return;
                                     }
                                     setStateDialog(() {
@@ -2727,22 +2977,27 @@ class _PacienteScreenState extends State<PacienteScreen> {
 
                                     listaDiagnostico[index] = diagnostico;
 
-                                    await GerenciaPacienteRepository().updateRecursoIndividual(
+                                    await GerenciaPacienteRepository()
+                                        .updateRecursoIndividual(
                                       listaDiagnostico,
-                                      pacienteProvider.paciente!.dadosPacienteModel.uidDocumento,
+                                      pacienteProvider.paciente!
+                                          .dadosPacienteModel.uidDocumento,
                                     );
 
-                                    pacienteProvider.setUpdateDiagnosticoLista(listaDiagnostico);
+                                    pacienteProvider.setUpdateDiagnosticoLista(
+                                        listaDiagnostico);
                                     setStateDialog(() {
                                       _carregando = false;
                                     });
                                     Navigator.pop(context);
-                                    snackSucesso(context, "Cadastrado com sucesso");
+                                    snackSucesso(
+                                        context, "Cadastrado com sucesso");
                                   } catch (e) {
                                     setStateDialog(() {
                                       _carregando = false;
                                     });
-                                    snackErro(context, "Erro ao cadastrar diagnóstico multiprofissional");
+                                    snackErro(context,
+                                        "Erro ao cadastrar diagnóstico multiprofissional");
                                     Navigator.pop(context);
 
                                     return;
@@ -2764,10 +3019,14 @@ class _PacienteScreenState extends State<PacienteScreen> {
     );
   }
 
-  Future<void> _dialogEditarDificuldade(ListaDificuldadePessoal dificuldade, PacienteProvider pacienteProvider,
-      DificuldadePessoalModal dificuldadeLista, int index) async {
+  Future<void> _dialogEditarDificuldade(
+      ListaDificuldadePessoal dificuldade,
+      PacienteProvider pacienteProvider,
+      DificuldadePessoalModal dificuldadeLista,
+      int index) async {
     final formKey = GlobalKey<FormState>();
-    DificuldadePessoalModal? dificuldadeModel = pacienteProvider.paciente!.diagnosticoModal?.dificuldadePessoalModel;
+    DificuldadePessoalModal? dificuldadeModel =
+        pacienteProvider.paciente!.diagnosticoModal?.dificuldadePessoalModel;
     return showDialog<void>(
       context: context,
       barrierDismissible: true,
@@ -2793,7 +3052,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                       children: [
                         const Text(
                           'Editar Dificuldade Pessoal',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 16),
 
@@ -2820,7 +3080,9 @@ class _PacienteScreenState extends State<PacienteScreen> {
                         CustomDropdownButton(
                           hint: "Profissão",
                           dropdownValue: dificuldade.tipoDificuldade,
-                          items: dificuldadeModel!.dificuldadePessoal!.map((e) => e.tipoDificuldade!).toList(),
+                          items: dificuldadeModel!.dificuldadePessoal!
+                              .map((e) => e.tipoDificuldade!)
+                              .toList(),
                           onChanged: (value) {
                             setStateDialog(() {
                               dificuldade.tipoDificuldade = value!;
@@ -2850,7 +3112,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                 onPressed: () async {
                                   try {
                                     if (!formKey.currentState!.validate()) {
-                                      snackAtencao(context, "Preencha todos os campos");
+                                      snackAtencao(
+                                          context, "Preencha todos os campos");
                                       return;
                                     }
                                     setStateDialog(() {
@@ -2858,24 +3121,31 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                     });
                                     formKey.currentState!.save();
 
-                                    dificuldadeLista.dificuldadePessoal?[index] = dificuldade;
+                                    dificuldadeLista
+                                            .dificuldadePessoal?[index] =
+                                        dificuldade;
 
-                                    await GerenciaPacienteRepository().cadastrarDificuldades(
+                                    await GerenciaPacienteRepository()
+                                        .cadastrarDificuldades(
                                       dificuldadeLista,
-                                      pacienteProvider.paciente!.dadosPacienteModel.uidDocumento,
+                                      pacienteProvider.paciente!
+                                          .dadosPacienteModel.uidDocumento,
                                     );
 
-                                    pacienteProvider.setUpdateDificuldades(dificuldadeLista);
+                                    pacienteProvider.setUpdateDificuldades(
+                                        dificuldadeLista);
                                     setStateDialog(() {
                                       _carregando = false;
                                     });
                                     Navigator.pop(context);
-                                    snackSucesso(context, "Cadastrado com sucesso");
+                                    snackSucesso(
+                                        context, "Cadastrado com sucesso");
                                   } catch (e) {
                                     setStateDialog(() {
                                       _carregando = false;
                                     });
-                                    snackErro(context, "Erro ao cadastrar diagnóstico multiprofissional");
+                                    snackErro(context,
+                                        "Erro ao cadastrar diagnóstico multiprofissional");
                                     Navigator.pop(context);
 
                                     return;
@@ -2898,9 +3168,17 @@ class _PacienteScreenState extends State<PacienteScreen> {
   }
 
   Future<void> _dialogEditarMedicamento(
-      ListaDeMedicacoes? medicacoes, MedicacoesModel medicacao, PacienteProvider pacienteProvider, int index) async {
+      ListaDeMedicacoes? medicacoes,
+      MedicacoesModel medicacao,
+      PacienteProvider pacienteProvider,
+      int index) async {
     MedicacoesModel medicacoesModel = MedicacoesModel(
-        medicacao: "", posologia: "", quantidade: "", frequencia: "", via: "", dataCriacao: Timestamp.now());
+        medicacao: "",
+        posologia: "",
+        quantidade: "",
+        frequencia: "",
+        via: "",
+        dataCriacao: Timestamp.now());
 
     final formKey = GlobalKey<FormState>();
     return showDialog<void>(
@@ -2928,7 +3206,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                       children: [
                         const Text(
                           'Editar Medicamento',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 16),
                         TextFieldCustom(
@@ -3034,7 +3313,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                 onPressed: () async {
                                   try {
                                     if (!formKey.currentState!.validate()) {
-                                      snackAtencao(context, "Preencha todos os campos");
+                                      snackAtencao(
+                                          context, "Preencha todos os campos");
                                       return;
                                     }
                                     setStateDialog(() {
@@ -3044,22 +3324,27 @@ class _PacienteScreenState extends State<PacienteScreen> {
 
                                     medicacoes?.medicacoes[index] = medicacao;
 
-                                    await GerenciaPacienteRepository().cadastrarMedicacoes(
+                                    await GerenciaPacienteRepository()
+                                        .cadastrarMedicacoes(
                                       medicacoes!,
-                                      pacienteProvider.paciente!.dadosPacienteModel.uidDocumento,
+                                      pacienteProvider.paciente!
+                                          .dadosPacienteModel.uidDocumento,
                                     );
 
-                                    pacienteProvider.setUpdateMedicacoes(medicacoes);
+                                    pacienteProvider
+                                        .setUpdateMedicacoes(medicacoes);
                                     setStateDialog(() {
                                       _carregando = false;
                                     });
                                     Navigator.pop(context);
-                                    snackSucesso(context, "Cadastrado com sucesso");
+                                    snackSucesso(
+                                        context, "Cadastrado com sucesso");
                                   } catch (e) {
                                     setStateDialog(() {
                                       _carregando = false;
                                     });
-                                    snackErro(context, "Erro ao cadastrar diagnóstico multiprofissional");
+                                    snackErro(context,
+                                        "Erro ao cadastrar diagnóstico multiprofissional");
                                     Navigator.pop(context);
 
                                     return;
@@ -3081,7 +3366,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
     );
   }
 
-  Future<void> _dialogEditarMeta(PacienteProvider pacienteProvider, MetaModel? metas, MetaList meta, int index) async {
+  Future<void> _dialogEditarMeta(PacienteProvider pacienteProvider,
+      MetaModel? metas, MetaList meta, int index) async {
     final formKey = GlobalKey<FormState>();
     return showDialog<void>(
       context: context,
@@ -3108,7 +3394,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                       children: [
                         const Text(
                           'Editar Meta',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 16),
                         TextFieldCustom(
@@ -3131,7 +3418,9 @@ class _PacienteScreenState extends State<PacienteScreen> {
                         CustomDropdownButton(
                           hint: "Tipo de meta",
                           dropdownValue: meta.tipo,
-                          items: EnumMeta.values.map((e) => e.toString().split('.').last).toList(),
+                          items: EnumMeta.values
+                              .map((e) => e.toString().split('.').last)
+                              .toList(),
                           onChanged: (value) {
                             setStateDialog(() {
                               meta.tipo = value!;
@@ -3158,7 +3447,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                 onPressed: () async {
                                   try {
                                     if (!formKey.currentState!.validate()) {
-                                      snackAtencao(context, "Preencha todos os campos");
+                                      snackAtencao(
+                                          context, "Preencha todos os campos");
                                       return;
                                     }
                                     setStateDialog(() {
@@ -3168,9 +3458,11 @@ class _PacienteScreenState extends State<PacienteScreen> {
 
                                     metas?.metas[index] = meta;
 
-                                    await GerenciaPacienteRepository().cadastrarMetas(
+                                    await GerenciaPacienteRepository()
+                                        .cadastrarMetas(
                                       metas!,
-                                      pacienteProvider.paciente!.dadosPacienteModel.uidDocumento,
+                                      pacienteProvider.paciente!
+                                          .dadosPacienteModel.uidDocumento,
                                     );
 
                                     pacienteProvider.setUpdateMeta(metas);
@@ -3178,7 +3470,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                       _carregando = false;
                                     });
                                     Navigator.pop(context);
-                                    snackSucesso(context, "Cadastrado com sucesso");
+                                    snackSucesso(
+                                        context, "Cadastrado com sucesso");
                                   } catch (e) {
                                     setStateDialog(() {
                                       _carregando = false;
@@ -3205,12 +3498,16 @@ class _PacienteScreenState extends State<PacienteScreen> {
     );
   }
 
-  Future<void> _dialogEditarIntervencao(PacienteProvider pacienteProvider, IntervencoesModel? intervencoes,
-      ListIntervencoesModel intervencao, int index) async {
+  Future<void> _dialogEditarIntervencao(
+      PacienteProvider pacienteProvider,
+      IntervencoesModel? intervencoes,
+      ListIntervencoesModel intervencao,
+      int index) async {
     String? problema;
     String? meta;
 
-    ProblemaModel? problemaModel = pacienteProvider.paciente?.diagnosticoModal?.problemaModel;
+    ProblemaModel? problemaModel =
+        pacienteProvider.paciente?.diagnosticoModal?.problemaModel;
     MetaModel? metaModel = pacienteProvider.paciente?.metasModel;
 
     final formKey = GlobalKey<FormState>();
@@ -3239,13 +3536,16 @@ class _PacienteScreenState extends State<PacienteScreen> {
                       children: [
                         const Text(
                           'Editar Intervenção',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 16),
                         CustomDropdownButton(
                           hint: 'Selecione o problema',
                           dropdownValue: intervencao.problema,
-                          items: problemaModel!.problema!.map((e) => e.problema!).toList(),
+                          items: problemaModel!.problema!
+                              .map((e) => e.problema!)
+                              .toList(),
                           onChanged: (value) {
                             setStateDialog(() {
                               intervencao.problema = value;
@@ -3333,7 +3633,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                 onPressed: () async {
                                   try {
                                     if (!formKey.currentState!.validate()) {
-                                      snackAtencao(context, "Preencha todos os campos");
+                                      snackAtencao(
+                                          context, "Preencha todos os campos");
                                       return;
                                     }
                                     setStateDialog(() {
@@ -3341,18 +3642,23 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                     });
                                     formKey.currentState!.save();
 
-                                    intervencoes?.intervencoesModel[index] = intervencao;
+                                    intervencoes?.intervencoesModel[index] =
+                                        intervencao;
 
-                                    await GerenciaPacienteRepository().cadastrarIntervencao(
+                                    await GerenciaPacienteRepository()
+                                        .cadastrarIntervencao(
                                       intervencoes!,
-                                      pacienteProvider.paciente!.dadosPacienteModel.uidDocumento,
+                                      pacienteProvider.paciente!
+                                          .dadosPacienteModel.uidDocumento,
                                     );
 
-                                    pacienteProvider.setUpdateIntervencao(intervencoes);
+                                    pacienteProvider
+                                        .setUpdateIntervencao(intervencoes);
                                     setStateDialog(() {
                                       _carregando = false;
                                     });
-                                    snackSucesso(context, "Cadastrado com sucesso");
+                                    snackSucesso(
+                                        context, "Cadastrado com sucesso");
                                     Navigator.pop(context);
                                     Navigator.pop(context);
                                     Navigator.pop(context);
@@ -3360,7 +3666,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                     setStateDialog(() {
                                       _carregando = false;
                                     });
-                                    snackErro(context, "Erro ao cadastrar Intervenção");
+                                    snackErro(context,
+                                        "Erro ao cadastrar Intervenção");
                                     Navigator.pop(context);
                                     Navigator.pop(context);
                                     Navigator.pop(context);
@@ -3385,9 +3692,14 @@ class _PacienteScreenState extends State<PacienteScreen> {
   }
 
   Future<void> _dialogEditarAvaliacaoProgramada(
-      PacienteProvider pacienteProvider, AvaliacaoModel? avaliacoes, ListAvaliacao avaliacao, int index) async {
-    IntervencoesModel? intervencoesModel = pacienteProvider.paciente!.intervencoesModel;
-    ListPactuacaoModel? pactuacaoModel = pacienteProvider.paciente!.pactuacoesModel;
+      PacienteProvider pacienteProvider,
+      AvaliacaoModel? avaliacoes,
+      ListAvaliacao avaliacao,
+      int index) async {
+    IntervencoesModel? intervencoesModel =
+        pacienteProvider.paciente!.intervencoesModel;
+    ListPactuacaoModel? pactuacaoModel =
+        pacienteProvider.paciente!.pactuacoesModel;
 
     final formKey = GlobalKey<FormState>();
     return showDialog<void>(
@@ -3415,13 +3727,16 @@ class _PacienteScreenState extends State<PacienteScreen> {
                       children: [
                         const Text(
                           'Editar Avaliação Programada do PRP (a cada 2 meses)',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 16),
                         CustomDropdownButton(
                           hint: 'Selecione a intervenção',
                           dropdownValue: avaliacao.intervencao,
-                          items: intervencoesModel!.intervencoesModel.map((e) => e.intervencoes!).toList(),
+                          items: intervencoesModel!.intervencoesModel
+                              .map((e) => e.intervencoes!)
+                              .toList(),
                           onChanged: (value) {
                             setStateDialog(() {
                               avaliacao.intervencao = value;
@@ -3432,7 +3747,9 @@ class _PacienteScreenState extends State<PacienteScreen> {
                         CustomDropdownButton(
                           hint: 'Selecione a pactuação',
                           dropdownValue: avaliacao.pactuacao,
-                          items: pactuacaoModel!.pactuacoesModel!.map((e) => e.responsavel!).toList(),
+                          items: pactuacaoModel!.pactuacoesModel!
+                              .map((e) => e.responsavel!)
+                              .toList(),
                           onChanged: (value) {
                             setStateDialog(() {
                               avaliacao.pactuacao = value;
@@ -3500,7 +3817,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                 onPressed: () async {
                                   try {
                                     if (!formKey.currentState!.validate()) {
-                                      snackAtencao(context, "Preencha todos os campos");
+                                      snackAtencao(
+                                          context, "Preencha todos os campos");
                                       return;
                                     }
                                     setStateDialog(() {
@@ -3508,18 +3826,23 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                     });
                                     formKey.currentState!.save();
 
-                                    avaliacoes?.avaliacoesModel![index] = avaliacao;
+                                    avaliacoes?.avaliacoesModel![index] =
+                                        avaliacao;
 
-                                    await GerenciaPacienteRepository().editarAvaliacao(
+                                    await GerenciaPacienteRepository()
+                                        .editarAvaliacao(
                                       avaliacoes!,
-                                      pacienteProvider.paciente!.dadosPacienteModel.uidDocumento,
+                                      pacienteProvider.paciente!
+                                          .dadosPacienteModel.uidDocumento,
                                     );
 
-                                    pacienteProvider.setUpdateAvaliacoes(avaliacoes);
+                                    pacienteProvider
+                                        .setUpdateAvaliacoes(avaliacoes);
                                     setStateDialog(() {
                                       _carregando = false;
                                     });
-                                    snackSucesso(context, "Editado com sucesso");
+                                    snackSucesso(
+                                        context, "Editado com sucesso");
                                     Navigator.pop(context);
                                     Navigator.pop(context);
                                     Navigator.pop(context);
@@ -3527,7 +3850,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                     setStateDialog(() {
                                       _carregando = false;
                                     });
-                                    snackErro(context, "Erro ao cadastrar Intervenção");
+                                    snackErro(context,
+                                        "Erro ao cadastrar Intervenção");
                                     Navigator.pop(context);
                                     Navigator.pop(context);
                                     Navigator.pop(context);
@@ -3553,8 +3877,10 @@ class _PacienteScreenState extends State<PacienteScreen> {
 
   @override
   Widget build(BuildContext context) {
-    PacienteProvider pacienteProvider = Provider.of<PacienteProvider>(context, listen: true);
-    DadosPacienteModel dadosPacienteModel = pacienteProvider.paciente!.dadosPacienteModel;
+    PacienteProvider pacienteProvider =
+        Provider.of<PacienteProvider>(context, listen: true);
+    DadosPacienteModel dadosPacienteModel =
+        pacienteProvider.paciente!.dadosPacienteModel;
 
     List<Widget> listaCard = [
       buildCardPaciente(
@@ -3572,8 +3898,10 @@ class _PacienteScreenState extends State<PacienteScreen> {
                   MaterialPageRoute(
                     builder: (context) => Consumer<PacienteProvider>(
                       builder: (context, pacienteProvider, child) {
-                        DadosPacienteModel dadosPacienteModel = pacienteProvider.paciente!.dadosPacienteModel;
-                        bool curatelado = dadosPacienteModel.outrasInformacoes.pacienteCuratelado;
+                        DadosPacienteModel dadosPacienteModel =
+                            pacienteProvider.paciente!.dadosPacienteModel;
+                        bool curatelado = dadosPacienteModel
+                            .outrasInformacoes.pacienteCuratelado;
                         bool carregandoPaciente = false;
                         return FormCategoria(
                           key: formKey,
@@ -3585,8 +3913,12 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                 valorInicial: dadosPacienteModel.nome),
                             FieldConfig(
                                 label: 'Idade',
-                                hintText: calculaIdade(dadosPacienteModel.dataNascimento).toString(),
-                                valorInicial: calculaIdade(dadosPacienteModel.dataNascimento).toString(),
+                                hintText: calculaIdade(
+                                        dadosPacienteModel.dataNascimento)
+                                    .toString(),
+                                valorInicial: calculaIdade(
+                                        dadosPacienteModel.dataNascimento)
+                                    .toString(),
                                 widthFactor: 0.5),
                             FieldConfig(
                               label: 'Gênero',
@@ -3595,7 +3927,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                               valorInicial: dadosPacienteModel.genero!,
                               onChangedDropdown: (value) {
                                 dadosPacienteModel.genero = value!;
-                                pacienteProvider.setPaciente(pacienteProvider.paciente!);
+                                pacienteProvider
+                                    .setPaciente(pacienteProvider.paciente!);
                               },
                               hintText: dadosPacienteModel.genero!,
                               widthFactor: 0.5,
@@ -3655,15 +3988,24 @@ class _PacienteScreenState extends State<PacienteScreen> {
                               widthFactor: 0.5,
                             ),
                             FieldConfig(
-                                label: 'Principal Rede de Apoio/Suporte do Paciente',
-                                hintText: dadosPacienteModel.outrasInformacoes.outrasInformacoes,
-                                valorInicial: dadosPacienteModel.outrasInformacoes.outrasInformacoes,
+                                label:
+                                    'Principal Rede de Apoio/Suporte do Paciente',
+                                hintText: dadosPacienteModel
+                                    .outrasInformacoes.outrasInformacoes,
+                                valorInicial: dadosPacienteModel
+                                    .outrasInformacoes.outrasInformacoes,
                                 widthFactor: 1.0,
                                 isDoubleHeight: true),
                             FieldConfig(
                                 label: 'Paciente Curatelado?',
-                                hintText: dadosPacienteModel.outrasInformacoes.pacienteCuratelado ? 'Sim' : 'Não',
-                                valorInicial: dadosPacienteModel.outrasInformacoes.pacienteCuratelado ? 'Sim' : 'Não',
+                                hintText: dadosPacienteModel
+                                        .outrasInformacoes.pacienteCuratelado
+                                    ? 'Sim'
+                                    : 'Não',
+                                valorInicial: dadosPacienteModel
+                                        .outrasInformacoes.pacienteCuratelado
+                                    ? 'Sim'
+                                    : 'Não',
                                 widthFactor: 1,
                                 onChangedRadio: (value) {
                                   setState(() {
@@ -3673,14 +4015,18 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                 isRadioField: true),
                             FieldConfig(
                               label: 'Técnico de Referência',
-                              hintText: dadosPacienteModel.outrasInformacoes.tecnicoReferencia,
-                              valorInicial: dadosPacienteModel.outrasInformacoes.tecnicoReferencia,
+                              hintText: dadosPacienteModel
+                                  .outrasInformacoes.tecnicoReferencia,
+                              valorInicial: dadosPacienteModel
+                                  .outrasInformacoes.tecnicoReferencia,
                               widthFactor: 1.0,
                             ),
                             FieldConfig(
                               label: 'Outras Informações',
-                              hintText: dadosPacienteModel.outrasInformacoes.observacao,
-                              valorInicial: dadosPacienteModel.outrasInformacoes.observacao,
+                              hintText: dadosPacienteModel
+                                  .outrasInformacoes.observacao,
+                              valorInicial: dadosPacienteModel
+                                  .outrasInformacoes.observacao,
                               widthFactor: 1.0,
                               isDoubleHeight: true,
                             ),
@@ -3691,7 +4037,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                 carregando: carregandoPaciente,
                                 textBotao: "Editar",
                                 onTapBotao: () async {
-                                  final formValues = formKey.currentState?.getFormValues();
+                                  final formValues =
+                                      formKey.currentState?.getFormValues();
                                   try {
                                     setState(() {
                                       carregandoPaciente = true;
@@ -3700,42 +4047,72 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                       formValues.remove(formValues.keys.last);
 
                                       // Atualize o modelo com os valores do formulário
-                                      dadosPacienteModel.nome = formValues['Nome Completo'] ?? dadosPacienteModel.nome;
+                                      dadosPacienteModel.nome =
+                                          formValues['Nome Completo'] ??
+                                              dadosPacienteModel.nome;
                                       dadosPacienteModel.dataNascimento =
-                                          formValues['Idade'] ?? dadosPacienteModel.dataNascimento;
-                                      dadosPacienteModel.genero = formValues['Gênero'] ?? dadosPacienteModel.genero;
-                                      dadosPacienteModel.cns = formValues['CNS'] ?? dadosPacienteModel.cns;
+                                          formValues['Idade'] ??
+                                              dadosPacienteModel.dataNascimento;
+                                      dadosPacienteModel.genero =
+                                          formValues['Gênero'] ??
+                                              dadosPacienteModel.genero;
+                                      dadosPacienteModel.cns =
+                                          formValues['CNS'] ??
+                                              dadosPacienteModel.cns;
                                       dadosPacienteModel.profissao =
-                                          formValues['Profissão'] ?? dadosPacienteModel.profissao;
+                                          formValues['Profissão'] ??
+                                              dadosPacienteModel.profissao;
                                       dadosPacienteModel.rendaMensal =
-                                          formValues['Renda Mensal'] ?? dadosPacienteModel.rendaMensal;
+                                          formValues['Renda Mensal'] ??
+                                              dadosPacienteModel.rendaMensal;
                                       dadosPacienteModel.endereco.cep =
-                                          formValues['CEP'] ?? dadosPacienteModel.endereco.cep;
+                                          formValues['CEP'] ??
+                                              dadosPacienteModel.endereco.cep;
                                       dadosPacienteModel.endereco.bairro =
-                                          formValues['Bairro'] ?? dadosPacienteModel.endereco.bairro;
+                                          formValues['Bairro'] ??
+                                              dadosPacienteModel
+                                                  .endereco.bairro;
                                       dadosPacienteModel.endereco.rua =
-                                          formValues['Logradouro'] ?? dadosPacienteModel.endereco.rua;
+                                          formValues['Logradouro'] ??
+                                              dadosPacienteModel.endereco.rua;
                                       dadosPacienteModel.endereco.numero =
-                                          formValues['Número'] ?? dadosPacienteModel.endereco.numero;
+                                          formValues['Número'] ??
+                                              dadosPacienteModel
+                                                  .endereco.numero;
                                       dadosPacienteModel.endereco.cidade =
-                                          formValues['Cidade'] ?? dadosPacienteModel.endereco.cidade;
+                                          formValues['Cidade'] ??
+                                              dadosPacienteModel
+                                                  .endereco.cidade;
                                       dadosPacienteModel.endereco.estado =
-                                          formValues['Estado'] ?? dadosPacienteModel.endereco.estado;
-                                      dadosPacienteModel.outrasInformacoes.outrasInformacoes =
-                                          formValues['Principal Rede de Apoio/Suporte do Paciente'] ??
-                                              dadosPacienteModel.outrasInformacoes.outrasInformacoes;
-                                      dadosPacienteModel.outrasInformacoes.pacienteCuratelado = curatelado;
-                                      dadosPacienteModel.outrasInformacoes.tecnicoReferencia =
+                                          formValues['Estado'] ??
+                                              dadosPacienteModel
+                                                  .endereco.estado;
+                                      dadosPacienteModel.outrasInformacoes
+                                          .outrasInformacoes = formValues[
+                                              'Principal Rede de Apoio/Suporte do Paciente'] ??
+                                          dadosPacienteModel.outrasInformacoes
+                                              .outrasInformacoes;
+                                      dadosPacienteModel.outrasInformacoes
+                                          .pacienteCuratelado = curatelado;
+                                      dadosPacienteModel.outrasInformacoes
+                                              .tecnicoReferencia =
                                           formValues['Técnico de Referência'] ??
-                                              dadosPacienteModel.outrasInformacoes.tecnicoReferencia;
-                                      dadosPacienteModel.outrasInformacoes.observacao =
+                                              dadosPacienteModel
+                                                  .outrasInformacoes
+                                                  .tecnicoReferencia;
+                                      dadosPacienteModel
+                                              .outrasInformacoes.observacao =
                                           formValues['Outras Informações'] ??
-                                              dadosPacienteModel.outrasInformacoes.observacao;
+                                              dadosPacienteModel
+                                                  .outrasInformacoes.observacao;
 
                                       await GerenciaPacienteRepository()
-                                          .editarPaciente(dadosPacienteModel, dadosPacienteModel.uidDocumento);
-                                      pacienteProvider.setDadosPaciente(dadosPacienteModel);
-                                      snackSucesso(context, "Salvo com sucesso");
+                                          .editarPaciente(dadosPacienteModel,
+                                              dadosPacienteModel.uidDocumento);
+                                      pacienteProvider
+                                          .setDadosPaciente(dadosPacienteModel);
+                                      snackSucesso(
+                                          context, "Salvo com sucesso");
                                       setState(() {
                                         carregandoPaciente = false;
                                       });
@@ -3743,7 +4120,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                     }
                                   } catch (e) {
                                     print("Erro: $e");
-                                    snackErro(context, "Erro ao editar dados do paciente");
+                                    snackErro(context,
+                                        "Erro ao editar dados do paciente");
                                     setState(() {
                                       carregandoPaciente = false;
                                     });
@@ -3781,13 +4159,19 @@ class _PacienteScreenState extends State<PacienteScreen> {
                           builder: (context, pacienteProvider, child) {
                             final formKey = GlobalKey<FormCategoriaState>();
 
-                            DiagnosticoModal? diagnosticoPacienteModel = pacienteProvider.paciente!.diagnosticoModal;
+                            DiagnosticoModal? diagnosticoPacienteModel =
+                                pacienteProvider.paciente!.diagnosticoModal;
 
-                            if (diagnosticoPacienteModel?.historiaCasoModel == null) {
+                            if (diagnosticoPacienteModel?.historiaCasoModel ==
+                                null) {
                               return NaoEncontrado(
-                                titulo: "Não há diagnóstico multiprofissional cadastrado",
-                                textButton: "Adicionar Diagnóstico Multiprofissional",
-                                onPressed: () => _dialogDiagnosticoMultiprofissional(pacienteProvider),
+                                titulo:
+                                    "Não há diagnóstico multiprofissional cadastrado",
+                                textButton:
+                                    "Adicionar Diagnóstico Multiprofissional",
+                                onPressed: () =>
+                                    _dialogDiagnosticoMultiprofissional(
+                                        pacienteProvider),
                               );
                             } else {
                               return FormCategoria(
@@ -3798,7 +4182,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                       maxLine: 5,
                                       minLine: 1,
                                       hintText: 'Descreva a história do caso',
-                                      valorInicial: diagnosticoPacienteModel?.historiaCasoModel!.historia,
+                                      valorInicial: diagnosticoPacienteModel
+                                          ?.historiaCasoModel!.historia,
                                       widthFactor: 1.0,
                                       isDoubleHeight: true),
                                   FieldConfig(
@@ -3807,50 +4192,70 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                     isButtonField: true,
                                     textBotao: "Editar História do Caso",
                                     onTapBotao: () async {
-                                      final formValues = formKey.currentState?.getFormValues();
+                                      final formValues =
+                                          formKey.currentState?.getFormValues();
                                       try {
                                         if (formValues != null) {
-                                          diagnosticoPacienteModel!.historiaCasoModel!.historia =
+                                          diagnosticoPacienteModel!
+                                                  .historiaCasoModel!.historia =
                                               formValues['História do Caso'];
 
-                                          await GerenciaPacienteRepository().updatehistoria(
-                                              diagnosticoPacienteModel.historiaCasoModel!.historia!,
-                                              dadosPacienteModel.uidDocumento);
+                                          await GerenciaPacienteRepository()
+                                              .updatehistoria(
+                                                  diagnosticoPacienteModel
+                                                      .historiaCasoModel!
+                                                      .historia!,
+                                                  dadosPacienteModel
+                                                      .uidDocumento);
 
-                                          pacienteProvider
-                                              .setOnlyHistoria(diagnosticoPacienteModel.historiaCasoModel!.historia!);
-                                          snackSucesso(context, "Salvo com sucesso");
+                                          pacienteProvider.setOnlyHistoria(
+                                              diagnosticoPacienteModel
+                                                  .historiaCasoModel!
+                                                  .historia!);
+                                          snackSucesso(
+                                              context, "Salvo com sucesso");
                                         }
                                       } catch (e) {
                                         print("Erro: $e");
-                                        snackErro(context, "Erro ao editar história do caso");
+                                        snackErro(context,
+                                            "Erro ao editar história do caso");
                                         return;
                                       }
 
                                       print(formValues);
                                     },
                                   ),
-                                  ...diagnosticoPacienteModel!.historiaCasoModel!.diagnosticos!
+                                  ...diagnosticoPacienteModel!
+                                      .historiaCasoModel!.diagnosticos!
                                       .mapIndexed((index, diagnostico) {
                                     return FieldConfig(
                                       label: 'Diagnóstico Multiprofissional',
-                                      hintText: 'Diagnósticos Multiprofissionais do paciente',
+                                      hintText:
+                                          'Diagnósticos Multiprofissionais do paciente',
                                       valorInicial: diagnostico.diagnosticos,
                                       isDoubleHeight: true,
                                       botaoAdicionar: true,
                                       textBotao: "Cadastrar Novo Diagnóstico",
                                       iconEdit: true,
                                       onTapIconEdit: () {
-                                        _dialogEditarDiagnostico(diagnostico, pacienteProvider,
-                                            diagnosticoPacienteModel.historiaCasoModel!.diagnosticos!, index);
+                                        _dialogEditarDiagnostico(
+                                            diagnostico,
+                                            pacienteProvider,
+                                            diagnosticoPacienteModel
+                                                .historiaCasoModel!
+                                                .diagnosticos!,
+                                            index);
                                       },
                                       onTapbotaoAdicionar: () {
                                         _dialogUpdateDiagnosticoMulti(
-                                            diagnosticoPacienteModel.historiaCasoModel!, pacienteProvider);
+                                            diagnosticoPacienteModel
+                                                .historiaCasoModel!,
+                                            pacienteProvider);
                                       },
                                       subtopico:
                                           '${diagnostico.nomeResponsavel} - ${diagnostico.profissaoResponsavel} - ${'CPF:${diagnostico.cpf}'}',
-                                      data: formatTimesTamp(diagnostico.dataCriacao),
+                                      data: formatTimesTamp(
+                                          diagnostico.dataCriacao),
                                     );
                                   }),
                                   FieldConfig(
@@ -3859,30 +4264,41 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                     isImageField: true,
                                     onDeleteImage: (String urlImagem) async {
                                       try {
-                                        diagnosticoPacienteModel.historiaCasoModel!.foto!.remove(urlImagem);
+                                        diagnosticoPacienteModel
+                                            .historiaCasoModel!.foto!
+                                            .remove(urlImagem);
 
-                                        await GerenciaPacienteRepository().deleteImage(
-                                          diagnosticoPacienteModel.historiaCasoModel!.foto!,
+                                        await GerenciaPacienteRepository()
+                                            .deleteImage(
+                                          diagnosticoPacienteModel
+                                              .historiaCasoModel!.foto!,
                                           urlImagem,
                                           dadosPacienteModel.uidDocumento,
                                         );
 
                                         setState(() {
-                                          diagnosticoPacienteModel.historiaCasoModel!.foto;
+                                          diagnosticoPacienteModel
+                                              .historiaCasoModel!.foto;
                                         });
 
-                                        snackSucesso(context, "Imagem deletada com sucesso");
+                                        snackSucesso(context,
+                                            "Imagem deletada com sucesso");
                                         Navigator.pop(context);
                                       } catch (e) {
                                         print("Erro: $e");
-                                        snackErro(context, "Erro ao deletar imagem");
+                                        snackErro(
+                                            context, "Erro ao deletar imagem");
                                         return;
                                       }
                                     },
                                     onTapContainer: () async {
-                                      await ImagePickerUtil.pegarFoto(context, (foto) async {
-                                        final urlImagem = await GerenciaPacienteRepository().cadastrarFotoDiagnostico(
-                                          diagnosticoPacienteModel.historiaCasoModel!,
+                                      await ImagePickerUtil.pegarFoto(context,
+                                          (foto) async {
+                                        final urlImagem =
+                                            await GerenciaPacienteRepository()
+                                                .cadastrarFotoDiagnostico(
+                                          diagnosticoPacienteModel
+                                              .historiaCasoModel!,
                                           foto,
                                           dadosPacienteModel.uidDocumento,
                                         );
@@ -3890,13 +4306,16 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                         // pacienteProvider.setHistoria(diagnosticoPacienteModel.historiaCasoModel!);
 
                                         Navigator.pop(context);
-                                        snackSucesso(context, "Salvo com sucesso");
+                                        snackSucesso(
+                                            context, "Salvo com sucesso");
                                       });
                                     },
-                                    images: diagnosticoPacienteModel.historiaCasoModel!.foto,
+                                    images: diagnosticoPacienteModel
+                                        .historiaCasoModel!.foto,
                                   ),
                                 ],
-                                titulo: 'História do caso e Diagnósticos Multiprofissionais',
+                                titulo:
+                                    'História do caso e Diagnósticos Multiprofissionais',
                               );
                             }
                           },
@@ -3913,15 +4332,19 @@ class _PacienteScreenState extends State<PacienteScreen> {
                         builder: (context) => Consumer<PacienteProvider>(
                           builder: (context, pacienteProvider, child) {
                             RecursoIndividuaisModel? recursoIndividuaisModel =
-                                pacienteProvider.paciente!.diagnosticoModal?.recursoIndividuaisModel;
+                                pacienteProvider.paciente!.diagnosticoModal
+                                    ?.recursoIndividuaisModel;
                             final formKey = GlobalKey<FormCategoriaState>();
 
                             if (recursoIndividuaisModel?.habilidades == null ||
                                 recursoIndividuaisModel!.habilidades!.isEmpty) {
                               return NaoEncontrado(
-                                titulo: "Não há Recursos Individuais cadastrado",
+                                titulo:
+                                    "Não há Recursos Individuais cadastrado",
                                 textButton: "Adicionar Recursos Individuais",
-                                onPressed: () => _dialogAdicionarRecursoIndividual(pacienteProvider),
+                                onPressed: () =>
+                                    _dialogAdicionarRecursoIndividual(
+                                        pacienteProvider),
                               );
                             } else {
                               return FormCategoria(
@@ -3929,12 +4352,15 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                 fields: [
                                   FieldConfig(
                                       label: 'Recursos Individuais',
-                                      hintText: 'Descreva o recursos Individual',
-                                      valorInicial: recursoIndividuaisModel.recursoIndividual,
+                                      hintText:
+                                          'Descreva o recursos Individual',
+                                      valorInicial: recursoIndividuaisModel
+                                          .recursoIndividual,
                                       widthFactor: 1.0,
                                       isDoubleHeight: true),
 
-                                  ...recursoIndividuaisModel.habilidades!.mapIndexed((index, diagnostico) {
+                                  ...recursoIndividuaisModel.habilidades!
+                                      .mapIndexed((index, diagnostico) {
                                     return FieldConfig(
                                       label: 'Habilidades do Paciente',
                                       hintText: 'Habilidades do paciente',
@@ -3943,9 +4369,12 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                       textBotao: "Cadastrar Novo Habildade",
                                       botaoAdicionar: true,
                                       onTapbotaoAdicionar: () {
-                                        _dialogAdicionarHabilidade(pacienteProvider, recursoIndividuaisModel);
+                                        _dialogAdicionarHabilidade(
+                                            pacienteProvider,
+                                            recursoIndividuaisModel);
                                       },
-                                      data: formatTimesTamp(diagnostico.dataCriacao),
+                                      data: formatTimesTamp(
+                                          diagnostico.dataCriacao),
                                     );
                                   }),
 
@@ -3956,19 +4385,27 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                     textBotao: "Editar Recursos Individuais",
                                     onTapBotao: () async {
                                       try {
-                                        final formValuesList = formKey.currentState?.getFormValuesList();
+                                        final formValuesList = formKey
+                                            .currentState
+                                            ?.getFormValuesList();
 
-                                        recursoIndividuaisModel.updateFromList(formValuesList!);
+                                        recursoIndividuaisModel
+                                            .updateFromList(formValuesList!);
 
-                                        await GerenciaPacienteRepository().cadastraRecursoIndividual(
+                                        await GerenciaPacienteRepository()
+                                            .cadastraRecursoIndividual(
                                           recursoIndividuaisModel,
                                           dadosPacienteModel.uidDocumento,
                                         );
-                                        pacienteProvider.setUpdateRecursoIndividual(recursoIndividuaisModel);
-                                        snackSucesso(context, "Salvo com sucesso");
+                                        pacienteProvider
+                                            .setUpdateRecursoIndividual(
+                                                recursoIndividuaisModel);
+                                        snackSucesso(
+                                            context, "Salvo com sucesso");
                                       } catch (e) {
                                         print("Erro: $e");
-                                        snackErro(context, "Erro ao editar recursos individuais");
+                                        snackErro(context,
+                                            "Erro ao editar recursos individuais");
                                         return;
                                       }
                                     },
@@ -3997,7 +4434,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                       builder: (context) => Consumer<PacienteProvider>(
                         builder: (context, pacienteProvider, child) {
                           PotencialidadeModel? potencialidadeModel =
-                              pacienteProvider.paciente!.diagnosticoModal?.potencialidadeModel;
+                              pacienteProvider.paciente!.diagnosticoModal
+                                  ?.potencialidadeModel;
                           final formKey = GlobalKey<FormCategoriaState>();
 
                           if (potencialidadeModel?.potencialidades == null ||
@@ -4005,23 +4443,28 @@ class _PacienteScreenState extends State<PacienteScreen> {
                             return NaoEncontrado(
                               titulo: "Não há potencialidades cadastradas",
                               textButton: "Adicionar Potencialidades",
-                              onPressed: () => _dialogAdicionarPotencialidade(pacienteProvider, potencialidadeModel),
+                              onPressed: () => _dialogAdicionarPotencialidade(
+                                  pacienteProvider, potencialidadeModel),
                             );
                           } else {
                             return FormCategoria(
                               key: formKey,
                               fields: [
-                                ...potencialidadeModel.potencialidades!.mapIndexed((index, potencialidade) {
+                                ...potencialidadeModel.potencialidades!
+                                    .mapIndexed((index, potencialidade) {
                                   return FieldConfig(
                                     label: 'Potencialidades',
                                     hintText: 'Potencialidades do paciente',
                                     valorInicial: potencialidade.potencialidade,
                                     isDoubleHeight: true,
                                     textBotao: "Cadastrar Nova Potencialidade",
-                                    data: formatTimesTamp(potencialidade.dataCriacao),
+                                    data: formatTimesTamp(
+                                        potencialidade.dataCriacao),
                                     botaoAdicionar: true,
                                     onTapbotaoAdicionar: () {
-                                      _dialogAdicionarPotencialidade(pacienteProvider, potencialidadeModel);
+                                      _dialogAdicionarPotencialidade(
+                                          pacienteProvider,
+                                          potencialidadeModel);
                                     },
                                   );
                                 }),
@@ -4033,31 +4476,40 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                   carregando: _carregando,
                                   onTapBotao: () async {
                                     try {
-                                      final formValuesList = formKey.currentState?.getFormValuesList();
+                                      final formValuesList = formKey
+                                          .currentState
+                                          ?.getFormValuesList();
                                       print(formValuesList);
                                       if (formValuesList != null) {
                                         setState(() {
                                           _carregando = true;
                                         });
-                                        potencialidadeModel.updateFromList(formValuesList);
+                                        potencialidadeModel
+                                            .updateFromList(formValuesList);
 
-                                        await GerenciaPacienteRepository().cadastraPotencialidade(
+                                        await GerenciaPacienteRepository()
+                                            .cadastraPotencialidade(
                                           potencialidadeModel,
                                           dadosPacienteModel.uidDocumento,
                                         );
-                                        pacienteProvider.setUpdatePotencialidade(potencialidadeModel);
-                                        snackSucesso(context, "Salvo com sucesso");
+                                        pacienteProvider
+                                            .setUpdatePotencialidade(
+                                                potencialidadeModel);
+                                        snackSucesso(
+                                            context, "Salvo com sucesso");
                                       }
                                       setState(() {
                                         _carregando = false;
                                       });
-                                      snackSucesso(context, "Salvo com sucesso");
+                                      snackSucesso(
+                                          context, "Salvo com sucesso");
                                     } catch (e) {
                                       setState(() {
                                         _carregando = false;
                                       });
                                       print("Erro: $e");
-                                      snackErro(context, "Erro ao editar recursos individuais");
+                                      snackErro(context,
+                                          "Erro ao editar recursos individuais");
                                       return;
                                     }
                                   },
@@ -4078,7 +4530,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                       MaterialPageRoute(
                         builder: (context) => Consumer<PacienteProvider>(
                           builder: (context, pacienteProvider, child) {
-                            DesejoModel? desejoModel = pacienteProvider.paciente!.diagnosticoModal?.desejoModel;
+                            DesejoModel? desejoModel = pacienteProvider
+                                .paciente!.diagnosticoModal?.desejoModel;
                             final formKey = GlobalKey<FormCategoriaState>();
 
                             if (desejoModel == null ||
@@ -4086,8 +4539,10 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                 desejoModel.sonhoVida!.isEmpty) {
                               return NaoEncontrado(
                                 titulo: "Não há desejos cadastrados!",
-                                textButton: "Adicionar Desejos e Sonhos de vida",
-                                onPressed: () => _dialogDesejosSonhos(pacienteProvider),
+                                textButton:
+                                    "Adicionar Desejos e Sonhos de vida",
+                                onPressed: () =>
+                                    _dialogDesejosSonhos(pacienteProvider),
                               );
                             } else {
                               return FormCategoria(
@@ -4108,7 +4563,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                       data: formatTimesTamp(sonhos.dataCriacao),
                                       botaoAdicionar: true,
                                       onTapbotaoAdicionar: () {
-                                        _dialogAdicionarSonhos(pacienteProvider, desejoModel);
+                                        _dialogAdicionarSonhos(
+                                            pacienteProvider, desejoModel);
                                       },
                                     );
                                   }),
@@ -4116,23 +4572,31 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                     label: '',
                                     hintText: '',
                                     isButtonField: true,
-                                    textBotao: "Editar Desejos e Sonhos de Vida",
+                                    textBotao:
+                                        "Editar Desejos e Sonhos de Vida",
                                     onTapBotao: () async {
                                       try {
-                                        final formValuesList = formKey.currentState?.getFormValuesList();
+                                        final formValuesList = formKey
+                                            .currentState
+                                            ?.getFormValuesList();
                                         if (formValuesList != null) {
-                                          desejoModel.updateFromList(formValuesList);
+                                          desejoModel
+                                              .updateFromList(formValuesList);
 
-                                          await GerenciaPacienteRepository().cadastrarDesejosSonhos(
+                                          await GerenciaPacienteRepository()
+                                              .cadastrarDesejosSonhos(
                                             desejoModel,
                                             dadosPacienteModel.uidDocumento,
                                           );
-                                          pacienteProvider.setUpdateDesejo(desejoModel);
-                                          snackSucesso(context, "Salvo com sucesso");
+                                          pacienteProvider
+                                              .setUpdateDesejo(desejoModel);
+                                          snackSucesso(
+                                              context, "Salvo com sucesso");
                                         }
                                       } catch (e) {
                                         print("Erro: $e");
-                                        snackErro(context, "Erro ao editar Desesjos e Sonhos de Vida");
+                                        snackErro(context,
+                                            "Erro ao editar Desesjos e Sonhos de Vida");
                                         return;
                                       }
                                     },
@@ -4154,19 +4618,24 @@ class _PacienteScreenState extends State<PacienteScreen> {
                       builder: (context) => Consumer<PacienteProvider>(
                         builder: (context, pacienteProvider, child) {
                           DificuldadePessoalModal? dificuldadePessoal =
-                              pacienteProvider.paciente!.diagnosticoModal?.dificuldadePessoalModel;
+                              pacienteProvider.paciente!.diagnosticoModal
+                                  ?.dificuldadePessoalModel;
                           final formKey = GlobalKey<FormCategoriaState>();
 
-                          if (dificuldadePessoal == null || dificuldadePessoal.dificuldadePessoal!.isEmpty) {
+                          if (dificuldadePessoal == null ||
+                              dificuldadePessoal.dificuldadePessoal!.isEmpty) {
                             return NaoEncontrado(
                                 titulo: "Não há dificuldades cadastradas",
-                                textButton: "Adicionar Dificuldades Pessoais, Coletivas e Estruturais",
-                                onPressed: () => _dialogAdicionarDificuldade(pacienteProvider, dificuldadePessoal));
+                                textButton:
+                                    "Adicionar Dificuldades Pessoais, Coletivas e Estruturais",
+                                onPressed: () => _dialogAdicionarDificuldade(
+                                    pacienteProvider, dificuldadePessoal));
                           } else {
                             return FormCategoria(
                               key: formKey,
                               fields: [
-                                ...dificuldadePessoal.dificuldadePessoal!.mapIndexed((index, dificuldade) {
+                                ...dificuldadePessoal.dificuldadePessoal!
+                                    .mapIndexed((index, dificuldade) {
                                   return [
                                     FieldConfig(
                                       label: dificuldade.tipoDificuldade!,
@@ -4176,19 +4645,26 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                       textBotao: "Cadastrar Nova Dificuldade",
                                       onTapIconEdit: () {
                                         _dialogEditarDificuldade(
-                                            dificuldade, pacienteProvider, dificuldadePessoal, index);
+                                            dificuldade,
+                                            pacienteProvider,
+                                            dificuldadePessoal,
+                                            index);
                                       },
                                       valorInicial: dificuldade.dificuldade!,
-                                      data: formatTimesTamp(dificuldade.dataCriacao),
+                                      data: formatTimesTamp(
+                                          dificuldade.dataCriacao),
                                       botaoAdicionar: true,
                                       onTapbotaoAdicionar: () {
-                                        _dialogAdicionarDificuldade(pacienteProvider, dificuldadePessoal);
+                                        _dialogAdicionarDificuldade(
+                                            pacienteProvider,
+                                            dificuldadePessoal);
                                       },
                                     ),
                                   ];
                                 }).expand((element) => element),
                               ],
-                              titulo: 'Dificuldades Pessoais, Coletivas e Estruturais',
+                              titulo:
+                                  'Dificuldades Pessoais, Coletivas e Estruturais',
                             );
                           }
                         },
@@ -4202,23 +4678,30 @@ class _PacienteScreenState extends State<PacienteScreen> {
                 onTap: () => Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => Consumer<PacienteProvider>(
                         builder: (context, pacienteProvider, child) {
-                          ListaDeMedicacoes? medicacoesModel =
-                              pacienteProvider.paciente!.diagnosticoModal?.medicacoesModel;
+                          ListaDeMedicacoes? medicacoesModel = pacienteProvider
+                              .paciente!.diagnosticoModal?.medicacoesModel;
 
-                          if (medicacoesModel == null || medicacoesModel.medicacoes.isEmpty) {
+                          if (medicacoesModel == null ||
+                              medicacoesModel.medicacoes.isEmpty) {
                             return NaoEncontrado(
                                 titulo: "Não há medicações em uso!",
                                 textButton: "Adicionar Medicamentos em Uso",
-                                onPressed: () => _dialogAdicionarMedicamento(pacienteProvider, medicacoesModel));
+                                onPressed: () => _dialogAdicionarMedicamento(
+                                    pacienteProvider, medicacoesModel));
                           } else {
                             return FormCategoria(
                               fields: [
-                                ...medicacoesModel.medicacoes.mapIndexed((index, medicacao) {
+                                ...medicacoesModel.medicacoes
+                                    .mapIndexed((index, medicacao) {
                                   return [
                                     FieldConfig(
                                         iconEdit: true,
                                         onTapIconEdit: () {
-                                          _dialogEditarMedicamento(medicacoesModel, medicacao, pacienteProvider, index);
+                                          _dialogEditarMedicamento(
+                                              medicacoesModel,
+                                              medicacao,
+                                              pacienteProvider,
+                                              index);
                                         },
                                         label: 'Medicação',
                                         hintText: 'Medicações em Uso',
@@ -4255,7 +4738,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                     carregando: _carregando,
                                     textBotao: "Adicionar Medicamento",
                                     onTapBotao: () {
-                                      _dialogAdicionarMedicamento(pacienteProvider, medicacoesModel);
+                                      _dialogAdicionarMedicamento(
+                                          pacienteProvider, medicacoesModel);
                                     },
                                     isButtonField: true),
                               ],
@@ -4274,19 +4758,23 @@ class _PacienteScreenState extends State<PacienteScreen> {
                       builder: (context) => Consumer<PacienteProvider>(
                         builder: (context, pacienteProvider, child) {
                           ListaDoencaClinica? doencaClinicaModel =
-                              pacienteProvider.paciente!.diagnosticoModal?.doencasClinicasModel;
+                              pacienteProvider.paciente!.diagnosticoModal
+                                  ?.doencasClinicasModel;
                           final formKey = GlobalKey<FormCategoriaState>();
 
-                          if (doencaClinicaModel == null || doencaClinicaModel.doencasClinicas!.isEmpty) {
+                          if (doencaClinicaModel == null ||
+                              doencaClinicaModel.doencasClinicas!.isEmpty) {
                             return NaoEncontrado(
                                 titulo: "Não há doenças clínicas cadastradas",
                                 textButton: "Adicionar Doenças Clínicas",
-                                onPressed: () => _dialogAdicionarDoencaClinica(pacienteProvider, doencaClinicaModel));
+                                onPressed: () => _dialogAdicionarDoencaClinica(
+                                    pacienteProvider, doencaClinicaModel));
                           } else {
                             return FormCategoria(
                               key: formKey,
                               fields: [
-                                ...doencaClinicaModel.doencasClinicas!.map((doenca) {
+                                ...doencaClinicaModel.doencasClinicas!
+                                    .map((doenca) {
                                   return [
                                     FieldConfig(
                                       label: 'Doença Clínica',
@@ -4297,7 +4785,9 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                       data: formatTimesTamp(doenca.dataCriacao),
                                       botaoAdicionar: true,
                                       onTapbotaoAdicionar: () {
-                                        _dialogAdicionarDoencaClinica(pacienteProvider, doencaClinicaModel);
+                                        _dialogAdicionarDoencaClinica(
+                                            pacienteProvider,
+                                            doencaClinicaModel);
                                       },
                                     ),
                                   ];
@@ -4310,19 +4800,25 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                   textBotao: "Editar Doenças Clinicas",
                                   onTapBotao: () async {
                                     try {
-                                      final formValuesList = formKey.currentState?.getFormValuesList();
+                                      final formValuesList = formKey
+                                          .currentState
+                                          ?.getFormValuesList();
                                       if (formValuesList != null) {
                                         setState(() {
                                           _carregando = true;
                                         });
-                                        doencaClinicaModel.updateFromList(formValuesList);
+                                        doencaClinicaModel
+                                            .updateFromList(formValuesList);
 
-                                        await GerenciaPacienteRepository().cadastrarDoenca(
+                                        await GerenciaPacienteRepository()
+                                            .cadastrarDoenca(
                                           doencaClinicaModel,
                                           dadosPacienteModel.uidDocumento,
                                         );
-                                        pacienteProvider.setUpdateDoenca(doencaClinicaModel);
-                                        snackSucesso(context, "Salvo com sucesso");
+                                        pacienteProvider.setUpdateDoenca(
+                                            doencaClinicaModel);
+                                        snackSucesso(
+                                            context, "Salvo com sucesso");
                                         setState(() {
                                           _carregando = false;
                                         });
@@ -4332,7 +4828,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                       setState(() {
                                         _carregando = false;
                                       });
-                                      snackErro(context, "Erro ao editar Doenças Clinicas");
+                                      snackErro(context,
+                                          "Erro ao editar Doenças Clinicas");
                                       return;
                                     }
                                   },
@@ -4352,14 +4849,17 @@ class _PacienteScreenState extends State<PacienteScreen> {
                 onTap: () => Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => Consumer<PacienteProvider>(
                         builder: (context, pacienteProvider, child) {
-                          ProblemaModel? problemaModel = pacienteProvider.paciente!.diagnosticoModal?.problemaModel;
+                          ProblemaModel? problemaModel = pacienteProvider
+                              .paciente!.diagnosticoModal?.problemaModel;
                           final formKey = GlobalKey<FormCategoriaState>();
 
-                          if (problemaModel?.problema == null || problemaModel!.problema!.isEmpty) {
+                          if (problemaModel?.problema == null ||
+                              problemaModel!.problema!.isEmpty) {
                             return NaoEncontrado(
                               titulo: "Não há problemas identificados",
                               textButton: "Adicionar Problemas",
-                              onPressed: () => _dialogAdicionarProblema(pacienteProvider, problemaModel),
+                              onPressed: () => _dialogAdicionarProblema(
+                                  pacienteProvider, problemaModel),
                             );
                           } else {
                             return FormCategoria(
@@ -4375,7 +4875,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                     data: formatTimesTamp(problema.dataCriacao),
                                     botaoAdicionar: true,
                                     onTapbotaoAdicionar: () {
-                                      _dialogAdicionarProblema(pacienteProvider, problemaModel);
+                                      _dialogAdicionarProblema(
+                                          pacienteProvider, problemaModel);
                                     },
                                   );
                                 }),
@@ -4387,19 +4888,25 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                   textBotao: "Editar Problemas",
                                   onTapBotao: () async {
                                     try {
-                                      final formValuesList = formKey.currentState?.getFormValuesList();
+                                      final formValuesList = formKey
+                                          .currentState
+                                          ?.getFormValuesList();
                                       if (formValuesList != null) {
                                         setState(() {
                                           _carregando = true;
                                         });
-                                        problemaModel.updateFromList(formValuesList);
+                                        problemaModel
+                                            .updateFromList(formValuesList);
 
-                                        await GerenciaPacienteRepository().cadastraProblema(
+                                        await GerenciaPacienteRepository()
+                                            .cadastraProblema(
                                           problemaModel,
                                           dadosPacienteModel.uidDocumento,
                                         );
-                                        pacienteProvider.setUpdateProblema(problemaModel);
-                                        snackSucesso(context, "Salvo com sucesso");
+                                        pacienteProvider
+                                            .setUpdateProblema(problemaModel);
+                                        snackSucesso(
+                                            context, "Salvo com sucesso");
                                         setState(() {
                                           _carregando = false;
                                         });
@@ -4409,7 +4916,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                       setState(() {
                                         _carregando = false;
                                       });
-                                      snackErro(context, "Erro ao editar Problemas");
+                                      snackErro(
+                                          context, "Erro ao editar Problemas");
                                       return;
                                     }
                                   },
@@ -4430,34 +4938,45 @@ class _PacienteScreenState extends State<PacienteScreen> {
                       builder: (context) => Consumer<PacienteProvider>(
                         builder: (context, pacienteProvider, child) {
                           ListaOutrasInformacoes? outrasInformacoesModel =
-                              pacienteProvider.paciente!.diagnosticoModal?.outrasInformacoesModel;
+                              pacienteProvider.paciente!.diagnosticoModal
+                                  ?.outrasInformacoesModel;
                           final formKey = GlobalKey<FormCategoriaState>();
 
                           if (outrasInformacoesModel == null ||
-                              outrasInformacoesModel.listaOutrasInformacoes!.isEmpty) {
+                              outrasInformacoesModel
+                                  .listaOutrasInformacoes!.isEmpty) {
                             return NaoEncontrado(
                                 titulo: "Não há outras informações cadastradas",
                                 textButton: "Adicionar Outras Informações",
                                 onPressed: () =>
-                                    _dialogAdicionarOutrasInformacoes(pacienteProvider, outrasInformacoesModel));
+                                    _dialogAdicionarOutrasInformacoes(
+                                        pacienteProvider,
+                                        outrasInformacoesModel));
                           } else {
                             return FormCategoria(
                               key: formKey,
                               fields: [
-                                ...outrasInformacoesModel.listaOutrasInformacoes!.map((outrasInformacoes) {
+                                ...outrasInformacoesModel
+                                    .listaOutrasInformacoes!
+                                    .map((outrasInformacoes) {
                                   return [
                                     FieldConfig(
                                       label: 'Informações',
-                                      hintText: outrasInformacoes.outrasInformacoes!,
+                                      hintText:
+                                          outrasInformacoes.outrasInformacoes!,
                                       isDoubleHeight: true,
                                       textBotao: "Cadastrar Novas Informações",
-                                      valorInicial: outrasInformacoes.outrasInformacoes,
-                                      data: formatTimesTamp(outrasInformacoes.dataCriacao),
+                                      valorInicial:
+                                          outrasInformacoes.outrasInformacoes,
+                                      data: formatTimesTamp(
+                                          outrasInformacoes.dataCriacao),
                                       botaoAdicionar: true,
                                       maxLine: 5,
                                       minLine: 1,
                                       onTapbotaoAdicionar: () {
-                                        _dialogAdicionarOutrasInformacoes(pacienteProvider, outrasInformacoesModel);
+                                        _dialogAdicionarOutrasInformacoes(
+                                            pacienteProvider,
+                                            outrasInformacoesModel);
                                       },
                                     ),
                                   ];
@@ -4468,24 +4987,31 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                   isButtonField: true,
                                   textBotao: "Editar Outras Informações",
                                   onTapBotao: () async {
-                                    final formValuesList = formKey.currentState?.getFormValuesList();
+                                    final formValuesList = formKey.currentState
+                                        ?.getFormValuesList();
                                     try {
                                       print(formValuesList);
 
                                       if (formValuesList != null) {
-                                        outrasInformacoesModel.updateFromList(formValuesList);
+                                        outrasInformacoesModel
+                                            .updateFromList(formValuesList);
 
-                                        await GerenciaPacienteRepository().cadastrarOutrasInformacoes(
+                                        await GerenciaPacienteRepository()
+                                            .cadastrarOutrasInformacoes(
                                           outrasInformacoesModel,
                                           dadosPacienteModel.uidDocumento,
                                         );
-                                        pacienteProvider.setUpdateOutrasInformacoes(outrasInformacoesModel);
-                                        snackSucesso(context, "Salvo com sucesso");
+                                        pacienteProvider
+                                            .setUpdateOutrasInformacoes(
+                                                outrasInformacoesModel);
+                                        snackSucesso(
+                                            context, "Salvo com sucesso");
                                       }
                                     } catch (e) {
                                       print("Erro: $e");
 
-                                      snackErro(context, "Erro ao editar Problemas");
+                                      snackErro(
+                                          context, "Erro ao editar Problemas");
                                       return;
                                     }
                                   },
@@ -4514,15 +5040,17 @@ class _PacienteScreenState extends State<PacienteScreen> {
               visible: true,
               textoBtn: "Adicionar Meta",
               onPressed: () {
-                _dialogAdicionaMeta(pacienteProvider, pacienteProvider.paciente!.metasModel);
+                _dialogAdicionaMeta(
+                    pacienteProvider, pacienteProvider.paciente!.metasModel);
               },
               conteudos: [
                 //mensagem que tem que cadastrar
                 ItemConteudo(
                   titulo: 'Metas a Curto Prazo (Inferiores a 2 meses)',
                   onTap: () {
-                    List<MetaList>? listaCurta =
-                        metaModel?.metas.where((element) => element.tipo == EnumMeta.curta.name).toList();
+                    List<MetaList>? listaCurta = metaModel?.metas
+                        .where((element) => element.tipo == EnumMeta.curta.name)
+                        .toList();
 
                     Navigator.of(context).push(
                       MaterialPageRoute(
@@ -4533,7 +5061,10 @@ class _PacienteScreenState extends State<PacienteScreen> {
                             : FormCategoria(
                                 fields: [
                                   ...listaCurta.map((meta) {
-                                    int indexLista = metaModel?.metas.indexWhere((element) => element == meta) ?? -1;
+                                    int indexLista = metaModel?.metas
+                                            .indexWhere(
+                                                (element) => element == meta) ??
+                                        -1;
 
                                     return FieldConfig(
                                       label: 'Meta a ${meta.tipo} Prazo',
@@ -4542,13 +5073,15 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                       valorInicial: meta.meta,
                                       iconEdit: true,
                                       onTapIconEdit: () {
-                                        _dialogEditarMeta(pacienteProvider, metaModel, meta, indexLista);
+                                        _dialogEditarMeta(pacienteProvider,
+                                            metaModel, meta, indexLista);
                                       },
                                       data: formatTimesTamp(meta.dataCriacao),
                                     );
                                   }),
                                 ],
-                                titulo: 'Metas a Curto Prazo (Inferiores a 2 meses)',
+                                titulo:
+                                    'Metas a Curto Prazo (Inferiores a 2 meses)',
                               ),
                       ),
                     );
@@ -4560,8 +5093,9 @@ class _PacienteScreenState extends State<PacienteScreen> {
                 ItemConteudo(
                   titulo: 'Metas a Médio Prazo (Até 6 meses)',
                   onTap: () {
-                    List<MetaList>? listaMedia =
-                        metaModel?.metas.where((element) => element.tipo == EnumMeta.media.name).toList();
+                    List<MetaList>? listaMedia = metaModel?.metas
+                        .where((element) => element.tipo == EnumMeta.media.name)
+                        .toList();
 
                     Navigator.of(context).push(
                       MaterialPageRoute(
@@ -4572,7 +5106,10 @@ class _PacienteScreenState extends State<PacienteScreen> {
                             : FormCategoria(
                                 fields: [
                                   ...listaMedia.map((meta) {
-                                    int indexLista = metaModel?.metas.indexWhere((element) => element == meta) ?? -1;
+                                    int indexLista = metaModel?.metas
+                                            .indexWhere(
+                                                (element) => element == meta) ??
+                                        -1;
 
                                     return FieldConfig(
                                       label: 'Meta a ${meta.tipo} Prazo',
@@ -4580,7 +5117,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                       isDoubleHeight: true,
                                       iconEdit: true,
                                       onTapIconEdit: () {
-                                        _dialogEditarMeta(pacienteProvider, metaModel, meta, indexLista);
+                                        _dialogEditarMeta(pacienteProvider,
+                                            metaModel, meta, indexLista);
                                       },
                                       valorInicial: meta.meta,
                                       data: formatTimesTamp(meta.dataCriacao),
@@ -4599,8 +5137,9 @@ class _PacienteScreenState extends State<PacienteScreen> {
                 ItemConteudo(
                   titulo: 'Metas a Longo Prazo (Até 12 meses)',
                   onTap: () {
-                    List<MetaList>? listaLonga =
-                        metaModel?.metas.where((element) => element.tipo == EnumMeta.longa.name).toList();
+                    List<MetaList>? listaLonga = metaModel?.metas
+                        .where((element) => element.tipo == EnumMeta.longa.name)
+                        .toList();
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => listaLonga!.isEmpty
@@ -4610,7 +5149,10 @@ class _PacienteScreenState extends State<PacienteScreen> {
                             : FormCategoria(
                                 fields: [
                                   ...listaLonga.map((meta) {
-                                    int indexLista = metaModel?.metas.indexWhere((element) => element == meta) ?? -1;
+                                    int indexLista = metaModel?.metas
+                                            .indexWhere(
+                                                (element) => element == meta) ??
+                                        -1;
 
                                     return FieldConfig(
                                       label: 'Meta a ${meta.tipo} Prazo',
@@ -4618,7 +5160,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                       widthFactor: 1.0,
                                       iconEdit: true,
                                       onTapIconEdit: () {
-                                        _dialogEditarMeta(pacienteProvider, metaModel, meta, indexLista);
+                                        _dialogEditarMeta(pacienteProvider,
+                                            metaModel, meta, indexLista);
                                       },
                                       valorInicial: meta.meta,
                                       data: formatTimesTamp(meta.dataCriacao),
@@ -4641,8 +5184,10 @@ class _PacienteScreenState extends State<PacienteScreen> {
       ),
       Consumer<PacienteProvider>(
         builder: (context, pacienteProvider, child) {
-          IntervencoesModel? intervencoesModel = pacienteProvider.paciente!.intervencoesModel;
-          ProblemaModel? problemaModel = pacienteProvider.paciente!.diagnosticoModal?.problemaModel;
+          IntervencoesModel? intervencoesModel =
+              pacienteProvider.paciente!.intervencoesModel;
+          ProblemaModel? problemaModel =
+              pacienteProvider.paciente!.diagnosticoModal?.problemaModel;
           MetaModel? metaModel = pacienteProvider.paciente?.metasModel;
 
           return buildCardPaciente(
@@ -4653,41 +5198,52 @@ class _PacienteScreenState extends State<PacienteScreen> {
               visible: true,
               textoBtn: "Adicionar Intervenção",
               onPressed: () {
-                if (problemaModel == null || problemaModel.problema?.isEmpty == true) {
-                  snackAtencao(context, "Cadastre um problema antes de adicionar uma intervenção");
+                if (problemaModel == null ||
+                    problemaModel.problema?.isEmpty == true) {
+                  snackAtencao(context,
+                      "Cadastre um problema antes de adicionar uma intervenção");
                   return;
                 }
 
                 if (metaModel?.metas == null || metaModel!.metas.isEmpty) {
-                  snackAtencao(context, "Cadastre uma meta antes de adicionar uma intervenção");
+                  snackAtencao(context,
+                      "Cadastre uma meta antes de adicionar uma intervenção");
                   return;
                 }
 
                 _dialogAdicionaIntervencao(pacienteProvider, intervencoesModel);
               },
               conteudos: [
-                if (intervencoesModel == null || intervencoesModel.intervencoesModel.isEmpty == true)
+                if (intervencoesModel == null ||
+                    intervencoesModel.intervencoesModel.isEmpty == true)
                   ItemConteudo(
                     titulo: 'Nenhum Intervenção Cadastrada',
                     onTap: () {
-                      if (problemaModel == null || problemaModel.problema?.isEmpty == true) {
-                        snackAtencao(context, "Cadastre um problema antes de adicionar uma intervenção");
+                      if (problemaModel == null ||
+                          problemaModel.problema?.isEmpty == true) {
+                        snackAtencao(context,
+                            "Cadastre um problema antes de adicionar uma intervenção");
                         return;
                       }
 
-                      if (metaModel?.metas == null || metaModel!.metas.isEmpty) {
-                        snackAtencao(context, "Cadastre uma meta antes de adicionar uma intervenção");
+                      if (metaModel?.metas == null ||
+                          metaModel!.metas.isEmpty) {
+                        snackAtencao(context,
+                            "Cadastre uma meta antes de adicionar uma intervenção");
                         return;
                       }
 
-                      _dialogAdicionaIntervencao(pacienteProvider, intervencoesModel);
+                      _dialogAdicionaIntervencao(
+                          pacienteProvider, intervencoesModel);
                     },
                     onTap2: () {
                       print("oi");
                     },
                   )
                 else
-                  ...intervencoesModel.intervencoesModel.mapIndexed((index, intervencao) => ItemConteudo(
+                  ...intervencoesModel.intervencoesModel.mapIndexed((index,
+                          intervencao) =>
+                      ItemConteudo(
                         titulo: 'Intervenção - ${intervencao.intervencoes}',
                         onTap: () => Navigator.of(context).push(
                           MaterialPageRoute(
@@ -4701,9 +5257,11 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                 ),
                                 FieldConfig(
                                   label: 'Intervenção',
-                                  hintText: intervencao.intervencoes ?? 'intervencoes',
+                                  hintText: intervencao.intervencoes ??
+                                      'intervencoes',
                                   valorInicial: intervencao.intervencoes,
-                                  data: formatTimesTamp(intervencao.dataCriacao),
+                                  data:
+                                      formatTimesTamp(intervencao.dataCriacao),
                                   widthFactor: 1.0,
                                 ),
                                 FieldConfig(
@@ -4730,7 +5288,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                   hintText: "",
                                   textBotao: "Editar Intervenção",
                                   onTapBotao: () async {
-                                    _dialogEditarIntervencao(pacienteProvider, intervencoesModel, intervencao, index);
+                                    _dialogEditarIntervencao(pacienteProvider,
+                                        intervencoesModel, intervencao, index);
                                   },
                                 ),
                               ],
@@ -4751,7 +5310,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
       Consumer<PacienteProvider>(
         builder: (context, value, child) {
           ListPactuacaoModel? pactuacaoModel = value.paciente!.pactuacoesModel;
-          IntervencoesModel? intervencaoModel = pacienteProvider.paciente!.intervencoesModel;
+          IntervencoesModel? intervencaoModel =
+              pacienteProvider.paciente!.intervencoesModel;
 
           return buildCardPaciente(
             context,
@@ -4761,8 +5321,10 @@ class _PacienteScreenState extends State<PacienteScreen> {
               visible: true,
               textoBtn: "Adicionar Pactuação",
               onPressed: () {
-                if (intervencaoModel == null || intervencaoModel.intervencoesModel.isEmpty) {
-                  snackAtencao(context, "Cadastre uma intervenção antes de adicionar uma pactuação");
+                if (intervencaoModel == null ||
+                    intervencaoModel.intervencoesModel.isEmpty) {
+                  snackAtencao(context,
+                      "Cadastre uma intervenção antes de adicionar uma pactuação");
                   return;
                 }
                 _dialogAdicionaPactuacao(pacienteProvider, pactuacaoModel);
@@ -4864,7 +5426,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                 _dialogAdicionaEstudoCaso(pacienteProvider, agendaModel);
               },
               conteudos: [
-                if (agendaModel == null || agendaModel.listaAgendaModel?.isEmpty == true)
+                if (agendaModel == null ||
+                    agendaModel.listaAgendaModel?.isEmpty == true)
                   ItemConteudo(
                     titulo: 'Nenhuma agenda cadastrada',
                     onTap: () {
@@ -4875,49 +5438,52 @@ class _PacienteScreenState extends State<PacienteScreen> {
                     },
                   )
                 else
-                  ...?agendaModel.listaAgendaModel?.map((agendas) => ItemConteudo(
-                        titulo: 'Agenda de estudo - ${formatTimesTamp(agendas.dataCriacao) ?? 'Data não disponível'}',
-                        onTap: () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => FormCategoria(
-                              fields: [
-                                FieldConfig(
-                                    label: 'Pauta da Reunião',
-                                    hintText: 'Pauta da reuniao',
-                                    minLine: 2,
-                                    maxLine: 5,
-                                    widthFactor: 0.5,
-                                    valorInicial: agendas.pauta),
-                                FieldConfig(
-                                    label: 'Participantes',
-                                    hintText: 'pauta da reuniao',
-                                    widthFactor: 0.5,
-                                    minLine: 2,
-                                    maxLine: 5,
-                                    valorInicial: agendas.participantes),
-                                FieldConfig(
-                                    label: 'E-mail dos participantes',
-                                    hintText: 'E-mail dos participantes',
-                                    widthFactor: 1.0,
-                                    minLine: 2,
-                                    maxLine: 5,
-                                    valorInicial: agendas.email.join(', ')),
-                                FieldConfig(
-                                    label: 'Data da reunião',
-                                    hintText: '',
-                                    widthFactor: 1.0,
-                                    isDoubleHeight: true,
-                                    valorInicial: formatTimesTamp(agendas.dataCriacao)),
-                              ],
-                              titulo:
-                                  'Agenda de estudo - ${formatTimesTamp(agendas.dataCriacao) ?? 'Data não disponível'}',
+                  ...?agendaModel.listaAgendaModel
+                      ?.map((agendas) => ItemConteudo(
+                            titulo:
+                                'Agenda de estudo - ${formatTimesTamp(agendas.dataCriacao) ?? 'Data não disponível'}',
+                            onTap: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => FormCategoria(
+                                  fields: [
+                                    FieldConfig(
+                                        label: 'Pauta da Reunião',
+                                        hintText: 'Pauta da reuniao',
+                                        minLine: 2,
+                                        maxLine: 5,
+                                        widthFactor: 0.5,
+                                        valorInicial: agendas.pauta),
+                                    FieldConfig(
+                                        label: 'Participantes',
+                                        hintText: 'pauta da reuniao',
+                                        widthFactor: 0.5,
+                                        minLine: 2,
+                                        maxLine: 5,
+                                        valorInicial: agendas.participantes),
+                                    FieldConfig(
+                                        label: 'E-mail dos participantes',
+                                        hintText: 'E-mail dos participantes',
+                                        widthFactor: 1.0,
+                                        minLine: 2,
+                                        maxLine: 5,
+                                        valorInicial: agendas.email.join(', ')),
+                                    FieldConfig(
+                                        label: 'Data da reunião',
+                                        hintText: '',
+                                        widthFactor: 1.0,
+                                        isDoubleHeight: true,
+                                        valorInicial: formatTimesTamp(
+                                            agendas.dataCriacao)),
+                                  ],
+                                  titulo:
+                                      'Agenda de estudo - ${formatTimesTamp(agendas.dataCriacao) ?? 'Data não disponível'}',
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        onTap2: () {
-                          print("oi");
-                        },
-                      )),
+                            onTap2: () {
+                              print("oi");
+                            },
+                          )),
               ],
             ),
           );
@@ -4936,78 +5502,85 @@ class _PacienteScreenState extends State<PacienteScreen> {
               _dialogAvaliacaoProgramada(pacienteProvider, avaliacaoModel);
             },
             conteudos: [
-              if (avaliacaoModel == null || avaliacaoModel.avaliacoesModel?.isEmpty == true)
+              if (avaliacaoModel == null ||
+                  avaliacaoModel.avaliacoesModel?.isEmpty == true)
                 ItemConteudo(
                   titulo: 'Nenhuma agenda cadastrada',
                   onTap: () {
-                    _dialogAvaliacaoProgramada(pacienteProvider, avaliacaoModel);
+                    _dialogAvaliacaoProgramada(
+                        pacienteProvider, avaliacaoModel);
                   },
                   onTap2: () {
                     print("oi");
                   },
                 )
               else
-                ...?avaliacaoModel.avaliacoesModel?.mapIndexed((index, avaliacoes) => ItemConteudo(
-                      titulo:
-                          'Avaliação Programada do PRP (A CADA 2 MESES) - ${formatTimesTamp(avaliacoes.dataCriacao)}',
-                      onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => FormCategoria(
-                            fields: [
-                              FieldConfig(
-                                  label: 'Intervenção/Pactuação',
-                                  hintText: 'Nome da Intervenção',
-                                  widthFactor: 1.0,
-                                  valorInicial: avaliacoes.intervencao),
-                              FieldConfig(
-                                  label: 'Responsável',
-                                  hintText: 'Nomes',
-                                  widthFactor: 1.0,
-                                  valorInicial: avaliacoes.responsavel),
-                              FieldConfig(
-                                  label: 'Avaliação dos Prazos do Projeto',
-                                  hintText: '',
-                                  widthFactor: 1.0,
-                                  valorInicial: avaliacoes.intervencao),
-                              FieldConfig(
-                                label: 'Pactuação',
-                                hintText: '',
-                                widthFactor: 1.0,
-                                valorInicial: avaliacoes.pactuacao,
+                ...?avaliacaoModel.avaliacoesModel
+                    ?.mapIndexed((index, avaliacoes) => ItemConteudo(
+                          titulo:
+                              'Avaliação Programada do PRP (A CADA 2 MESES) - ${formatTimesTamp(avaliacoes.dataCriacao)}',
+                          onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => FormCategoria(
+                                fields: [
+                                  FieldConfig(
+                                      label: 'Intervenção/Pactuação',
+                                      hintText: 'Nome da Intervenção',
+                                      widthFactor: 1.0,
+                                      valorInicial: avaliacoes.intervencao),
+                                  FieldConfig(
+                                      label: 'Responsável',
+                                      hintText: 'Nomes',
+                                      widthFactor: 1.0,
+                                      valorInicial: avaliacoes.responsavel),
+                                  FieldConfig(
+                                      label: 'Avaliação dos Prazos do Projeto',
+                                      hintText: '',
+                                      widthFactor: 1.0,
+                                      valorInicial: avaliacoes.intervencao),
+                                  FieldConfig(
+                                    label: 'Pactuação',
+                                    hintText: '',
+                                    widthFactor: 1.0,
+                                    valorInicial: avaliacoes.pactuacao,
+                                  ),
+                                  FieldConfig(
+                                      label: 'Observação',
+                                      hintText: 'Observação do Paciente',
+                                      widthFactor: 1.0,
+                                      minLine: 2,
+                                      maxLine: 5,
+                                      valorInicial: avaliacoes.observacao,
+                                      isDoubleHeight: true),
+                                  FieldConfig(
+                                    label: 'Imagens da Avaliação',
+                                    hintText: '',
+                                    imagem: avaliacoes.foto,
+                                    umaImagem: true,
+                                  ),
+                                  FieldConfig(
+                                    label: '',
+                                    isButtonField: true,
+                                    hintText: "",
+                                    textBotao: "Editar Agenda de estudo",
+                                    onTapBotao: () async {
+                                      _dialogEditarAvaliacaoProgramada(
+                                          pacienteProvider,
+                                          avaliacaoModel,
+                                          avaliacoes,
+                                          index);
+                                    },
+                                  ),
+                                ],
+                                titulo:
+                                    'Agenda de estudo - ${formatTimesTamp(avaliacoes.dataCriacao) ?? 'Data não disponível'}',
                               ),
-                              FieldConfig(
-                                  label: 'Observação',
-                                  hintText: 'Observação do Paciente',
-                                  widthFactor: 1.0,
-                                  minLine: 2,
-                                  maxLine: 5,
-                                  valorInicial: avaliacoes.observacao,
-                                  isDoubleHeight: true),
-                              FieldConfig(
-                                label: 'Imagens da Avaliação',
-                                hintText: '',
-                                imagem: avaliacoes.foto,
-                                umaImagem: true,
-                              ),
-                              FieldConfig(
-                                label: '',
-                                isButtonField: true,
-                                hintText: "",
-                                textBotao: "Editar Agenda de estudo",
-                                onTapBotao: () async {
-                                  _dialogEditarAvaliacaoProgramada(pacienteProvider, avaliacaoModel, avaliacoes, index);
-                                },
-                              ),
-                            ],
-                            titulo:
-                                'Agenda de estudo - ${formatTimesTamp(avaliacoes.dataCriacao) ?? 'Data não disponível'}',
+                            ),
                           ),
-                        ),
-                      ),
-                      onTap2: () {
-                        print("oi");
-                      },
-                    )),
+                          onTap2: () {
+                            print("oi");
+                          },
+                        )),
             ],
           ),
         );
@@ -5046,11 +5619,14 @@ class _PacienteScreenState extends State<PacienteScreen> {
                 text: 'Compartilhar Projeto',
                 onPressed: () async {
                   if (html.window.navigator.userAgent.contains('Mobi')) {
-                    await Share.share('Aqui está o código do projeto: ${pacienteProvider.paciente!.url}',
+                    await Share.share(
+                        'Aqui está o código do projeto: ${pacienteProvider.paciente!.url}',
                         subject: pacienteProvider.paciente!.url);
                   } else {
-                    await Clipboard.setData(ClipboardData(text: pacienteProvider.paciente!.url));
-                    snackSucesso(context, 'Código copiado para a área de transferência');
+                    await Clipboard.setData(
+                        ClipboardData(text: pacienteProvider.paciente!.url));
+                    snackSucesso(
+                        context, 'Código copiado para a área de transferência');
                   }
                 },
               ),
@@ -5063,7 +5639,9 @@ class _PacienteScreenState extends State<PacienteScreen> {
   }
 
   Widget buildCardPaciente(BuildContext context,
-      {required IconData icon, required String text, required DetalhesPaciente detalhesPaciente}) {
+      {required IconData icon,
+      required String text,
+      required DetalhesPaciente detalhesPaciente}) {
     return InkWell(
       onTap: () => Navigator.push(
           context,
@@ -5105,7 +5683,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
             const SizedBox(width: 16.0),
             Expanded(
               child: Text(
-                text,
+                text, 
                 style: const TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.w500,

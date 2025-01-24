@@ -88,8 +88,8 @@ class _SearchPageState extends State<SearchPage> {
   void _openMap(String placeName) async {
     final url = Uri.encodeFull(
         'https://www.google.com/maps/search/?api=1&query=$placeName');
-    if (await canLaunchUrl (Uri.parse(url) )) {
-      await launchUrl (Uri.parse(url));
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
     } else {
       throw Exception('Não foi possível abrir o mapa');
     }

@@ -62,16 +62,15 @@ cadastro de pactuacao mudar para Ata da pactuação e docs //FEITO E DPS
 
 	AGENDA DE ESTUDOS
 
-marcar data, hora e local add no adicionar
+marcar data, hora e local add no adicionar //FEITO
 
-enviar para email e whatzapp a angenda de estudos
+enviar para email e whatzapp a angenda de estudos //FEITO COM DETALHES
 
-	AVALIACAO DO PRP
 
 observacao opcional // FEITOS
 
-	FALTA REFERENCIAS
+	FALTA REFERENCIAS // FEITO
 
 	CREDITOS DESENV
 
-	ARRUAMR LOGO
+	ARRUAMR LOGO // FEITO

@@ -5,7 +5,13 @@ class CardEvolucao extends StatelessWidget {
   final String nome;
   final String imageUrl;
   final void Function()? onTap;
-  const CardEvolucao({super.key, required this.nome, required this.imageUrl, this.onTap});
+
+  const CardEvolucao({
+    super.key,
+    required this.nome,
+    required this.imageUrl,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -14,8 +20,8 @@ class CardEvolucao extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: Container(
+          height: 200, // Altura fixa para o card
           decoration: BoxDecoration(
-            color: Colors.white,
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
@@ -25,36 +31,38 @@ class CardEvolucao extends StatelessWidget {
               ),
             ],
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                height: 120,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: NetworkImage(imageUrl),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(16),
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: Image.network(
+                    imageUrl,
                     fit: BoxFit.cover,
                   ),
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(16),
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    color: Colors.black.withOpacity(0.6),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                    child: Text(
+                      nome,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(14),
-                child: Text(
-                  nome,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w600,
-                    color: verde1,
-                  ),
-                  textAlign: TextAlign.center,
-                  overflow: TextOverflow.visible,
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
