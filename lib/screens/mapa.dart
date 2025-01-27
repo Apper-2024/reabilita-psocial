@@ -101,7 +101,7 @@ class _SearchPageState extends State<SearchPage> {
       backgroundColor: background,
       appBar: AppBar(
         title: const Text(
-          'Busca Psicossocial',
+          'BUSCA DE SERVIÇOS DE SAÚDE MENTAL',
           style: TextStyle(color: preto1),
         ),
         centerTitle: true,
