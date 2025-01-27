@@ -6,6 +6,8 @@ import 'package:reabilita_social/widgets/botao/botaoPrincipal.dart';
 import 'package:intl/intl.dart';
 
 class RegistroProdutividade extends StatefulWidget {
+  const RegistroProdutividade({super.key});
+
   @override
   _RegistroProdutividadeState createState() => _RegistroProdutividadeState();
 }
@@ -40,7 +42,7 @@ class _RegistroProdutividadeState extends State<RegistroProdutividade> {
       await _firebaseQueries.deleteUserRecord(recordId);
       await _loadUserRecords();
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Registro excluído com sucesso!')),
+        const SnackBar(content: Text('Registro excluído com sucesso!')),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -54,7 +56,7 @@ class _RegistroProdutividadeState extends State<RegistroProdutividade> {
         _selectedSubtitle == null ||
         _formattedDateTime == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Por favor, selecione uma opção primeiro.')),
+        const SnackBar(content: Text('Por favor, selecione uma opção primeiro.')),
       );
       return;
     }
@@ -69,7 +71,7 @@ class _RegistroProdutividadeState extends State<RegistroProdutividade> {
     await _loadUserRecords();
 
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Registro salvo com sucesso!')),
+      const SnackBar(content: Text('Registro salvo com sucesso!')),
     );
   }
 
@@ -149,7 +151,7 @@ class _RegistroProdutividadeState extends State<RegistroProdutividade> {
             const SizedBox(height: 10),
             Expanded(
                 child: _userRecords.isEmpty
-                    ? Center(
+                    ? const Center(
                         child: Text(
                           'Nenhum registro salvo.',
                           style: TextStyle(color: Colors.grey),
@@ -175,7 +177,7 @@ class _RegistroProdutividadeState extends State<RegistroProdutividade> {
 
   Widget _buildRecordCard(
       String procedimento, String descricao, String dataHora, String recordId) {
-    return Container(
+    return SizedBox(
       width: MediaQuery.of(context).size.width * 0.9,
       child: Card(
         elevation: 2,

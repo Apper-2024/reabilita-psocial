@@ -38,8 +38,7 @@ class VerificaConta extends StatelessWidget {
           );
         } else {
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            Navigator.pushNamedAndRemoveUntil(
-                context, "/login", (route) => false);
+            Navigator.pushNamedAndRemoveUntil(context, "/login", (route) => false);
           });
           return const Scaffold(
             body: Center(child: CircularProgressIndicator()),
@@ -64,40 +63,30 @@ Future<void> verificaUser(BuildContext context, User user) async {
 
     if (usuario.tipoUsuario == EnumTipoUsuario.profissional.name) {
       ProfissionalProvider profissionalProvider = ProfissionalProvider.instance;
-      final profissional =
-          await GerenciaProfissionalRepository().buscaProfissional(usuario.uid);
+      final profissional = await GerenciaProfissionalRepository().buscaProfissional(usuario.uid);
       profissionalProvider.setProfissional(profissional);
 
       if (profissional.statusConta == EnumStatusConta.analise.name) {
-        Navigator.pushNamedAndRemoveUntil(
-            context, '/paginaEspera', (route) => false);
+        Navigator.pushNamedAndRemoveUntil(context, '/paginaEspera', (route) => false);
       } else {
-        Navigator.pushNamedAndRemoveUntil(
-            context, '/menuProfissional', (route) => false);
+        Navigator.pushNamedAndRemoveUntil(context, '/menuProfissional', (route) => false);
       }
     }
 
     if (usuario.tipoUsuario == EnumTipoUsuario.administrador.name) {
-      AdministradorProvider administradorProvider =
-          AdministradorProvider.instance;
+      AdministradorProvider administradorProvider = AdministradorProvider.instance;
 
       // Busca o administrador
-      final administrador = await GerenciaAdministradorRepository()
-          .buscaAdministrador(usuario.uid);
+      final administrador = await GerenciaAdministradorRepository().buscaAdministrador(usuario.uid);
 
       // Print para verificar se encontrou o administrador
-      if (administrador != null) {
-        print('Administrador encontrado: $administrador');
-      } else {
-        print('Nenhum administrador encontrado para o UID: ${usuario.uid}');
-      }
+      print('Administrador encontrado: $administrador');
 
       // Define o administrador no provider
       administradorProvider.setAdministrador(administrador);
 
       // Navegação
-      Navigator.pushNamedAndRemoveUntil(
-          context, '/usuariosAdministrador', (route) => false);
+      Navigator.pushNamedAndRemoveUntil(context, '/usuariosAdministrador', (route) => false);
     }
 
     // Navegue para o menu principal

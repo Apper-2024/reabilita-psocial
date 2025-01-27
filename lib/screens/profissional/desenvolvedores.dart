@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:reabilita_social/utils/colors.dart';
 
 class Desenvolvedores extends StatelessWidget {
+  const Desenvolvedores({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,12 +39,12 @@ class Desenvolvedores extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
+              child: const Padding(
+                padding: EdgeInsets.all(16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Enf. Fagner Ardisson',
                       style: TextStyle(
                         fontFamily: 'Poppins',
@@ -50,9 +52,9 @@ class Desenvolvedores extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    SizedBox(height: 10),
                     Row(
-                      children: const [
+                      children: [
                         Icon(Icons.email, color: Colors.blueGrey),
                         SizedBox(width: 10),
                         Text(
@@ -64,9 +66,9 @@ class Desenvolvedores extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 10),
+                    SizedBox(height: 10),
                     Row(
-                      children: const [
+                      children: [
                         Icon(Icons.alternate_email, color: Colors.pink),
                         SizedBox(width: 10),
                         Text(
@@ -78,9 +80,9 @@ class Desenvolvedores extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 10),
+                    SizedBox(height: 10),
                     Row(
-                      children: const [
+                      children: [
                         Icon(Icons.phone, color: Colors.green),
                         SizedBox(width: 10),
                         Text(
@@ -102,12 +104,12 @@ class Desenvolvedores extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
+              child: const Padding(
+                padding: EdgeInsets.all(16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Dev. João Antônio',
                       style: TextStyle(
                         fontFamily: 'Poppins',
@@ -115,9 +117,9 @@ class Desenvolvedores extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    SizedBox(height: 10),
                     Row(
-                      children: const [
+                      children: [
                         Icon(Icons.email, color: Colors.blueGrey),
                         SizedBox(width: 10),
                         Text(
@@ -129,9 +131,9 @@ class Desenvolvedores extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 10),
+                    SizedBox(height: 10),
                     Row(
-                      children: const [
+                      children: [
                         Icon(Icons.link, color: Colors.blue),
                         SizedBox(width: 10),
                         Text(
@@ -153,12 +155,12 @@ class Desenvolvedores extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
+              child: const Padding(
+                padding: EdgeInsets.all(16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Dev. Gabriel Lamarca',
                       style: TextStyle(
                         fontFamily: 'Poppins',
@@ -166,9 +168,9 @@ class Desenvolvedores extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    SizedBox(height: 10),
                     Row(
-                      children: const [
+                      children: [
                         Icon(Icons.email, color: Colors.blueGrey),
                         SizedBox(width: 10),
                         Text(
@@ -180,9 +182,9 @@ class Desenvolvedores extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 10),
+                    SizedBox(height: 10),
                     Row(
-                      children: const [
+                      children: [
                         Icon(Icons.link, color: Colors.blue),
                         SizedBox(width: 10),
                         Text(

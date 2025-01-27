@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:reabilita_social/utils/colors.dart';
 
 class InformacaoTecnica extends StatelessWidget {
+  const InformacaoTecnica({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,14 +19,14 @@ class InformacaoTecnica extends StatelessWidget {
         ),
       ),
       backgroundColor: Colors.grey[200],
-      body: Center(
+      body: const Center(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(16.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              Text(
                 'INFORMAÇÃO TÉCNICA:',
                 style: TextStyle(
                   fontFamily: 'Poppins',
@@ -32,17 +34,17 @@ class InformacaoTecnica extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 20),
-              const Text(
+              SizedBox(height: 20),
+              Text(
                 'Dúvidas, sugestões e problemas técnicos:',
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 16,
                 ),
               ),
-              const SizedBox(height: 15),
+              SizedBox(height: 15),
               Row(
-                children: const [
+                children: [
                   Icon(Icons.email, color: Colors.blueGrey),
                   SizedBox(width: 10),
                   Text(
@@ -54,9 +56,9 @@ class InformacaoTecnica extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: 10),
               Row(
-                children: const [
+                children: [
                   Icon(Icons.email, color: Colors.blueGrey),
                   SizedBox(width: 10),
                   Text(
@@ -68,9 +70,9 @@ class InformacaoTecnica extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: 10),
               Row(
-                children: const [
+                children: [
                   Icon(Icons.email, color: Colors.blueGrey),
                   SizedBox(width: 10),
                   Text(
@@ -82,17 +84,17 @@ class InformacaoTecnica extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
-              const Text(
+              SizedBox(height: 20),
+              Text(
                 'Produto Tecnológico fruto da Tese de Doutorado: "A construção e validação de um aplicativo virtual para elaboração, acompanhamento e avaliação de projetos de reabilitação psicossocial em saúde mental". Disponível na Biblioteca Digital de Teses e Dissertações da USP.',
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14,
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               Row(
-                children: const [
+                children: [
                   Icon(Icons.info_outline, color: Colors.blueGrey),
                   SizedBox(width: 10),
                   Expanded(

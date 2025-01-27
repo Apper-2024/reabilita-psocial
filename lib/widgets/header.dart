@@ -1,7 +1,10 @@
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:reabilita_social/provider/profissional_provider.dart';
 import 'package:reabilita_social/repository/auth/auth_repository.dart';
+import 'package:reabilita_social/utils/snack/snack_atencao.dart';
+import 'package:http/http.dart' as http;
 
 class Header extends StatelessWidget {
   Header({
@@ -31,10 +34,8 @@ class Header extends StatelessWidget {
             ),
             InkWell(
               onTap: () async {
-              AuthRepository().signOut(); // Remove autenticação do Firebase
-              Navigator.pushNamedAndRemoveUntil(context, '/login',
-                  (route) => false); // Redireciona para o login
-            
+                AuthRepository().signOut(); // Remove autenticação do Firebase
+                Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false); // Redireciona para o login
               },
               child: Container(
                 padding: const EdgeInsets.all(8.0),

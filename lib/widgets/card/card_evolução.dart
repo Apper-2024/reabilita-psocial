@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:reabilita_social/utils/colors.dart';
 
 class CardEvolucao extends StatelessWidget {
   final String nome;
@@ -35,18 +34,19 @@ class CardEvolucao extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
             child: Stack(
               children: [
-                Positioned.fill(
-                  child: Image.network(
-                    imageUrl,
-                    fit: BoxFit.cover,
-                  ),
-                ),
+                imageUrl.isEmpty
+                    ? Center(child: const Icon(Icons.person, size: 150))
+                    : Positioned.fill(
+                        child: Image.network(
+                          imageUrl,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Container(
                     color: Colors.black.withOpacity(0.6),
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                     child: Text(
                       nome,
                       style: const TextStyle(

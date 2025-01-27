@@ -22,7 +22,7 @@ class ImagePickerUtil {
                 BoxShadow(
                   color: Colors.black.withOpacity(0.1),
                   blurRadius: 8,
-                  offset: Offset(0, -2),
+                  offset: const Offset(0, -2),
                 ),
               ],
             ),
@@ -127,7 +127,7 @@ class ImagePickerUtil {
       {required IconData icon,
       required String label,
       required VoidCallback onTap}) {
-    return GestureDetector(
+    return InkWell(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
@@ -138,7 +138,7 @@ class ImagePickerUtil {
             BoxShadow(
               color: Colors.black.withOpacity(0.1),
               blurRadius: 6,
-              offset: Offset(0, 2),
+              offset: const Offset(0, 2),
             ),
           ],
         ),
@@ -149,7 +149,7 @@ class ImagePickerUtil {
               size: 60,
               color: Colors.blueGrey[700],
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
               label,
               style: TextStyle(

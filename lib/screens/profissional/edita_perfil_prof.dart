@@ -170,7 +170,7 @@ class _EditaPerfilProfState extends State<EditaPerfilProf> {
                       Center(
                         child: Column(
                           children: [
-                            GestureDetector(
+                            InkWell(
                               onTap: _selecionarImagem,
                               child: CircleAvatar(
                                 radius: 50,

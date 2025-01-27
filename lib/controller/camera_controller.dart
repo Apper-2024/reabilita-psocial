@@ -81,7 +81,7 @@ class _MyCustomCameraScreenState extends State<MyCustomCameraScreen> {
             left: 0,
             right: 0,
             child: Center(
-              child: GestureDetector(
+              child: InkWell(
                 onTap: () async {
                   try {
                     await _initializeControllerFuture;

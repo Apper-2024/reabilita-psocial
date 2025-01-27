@@ -7,6 +7,7 @@ import 'package:reabilita_social/model/endereco_model.dart';
 import 'package:reabilita_social/model/profissional/profissional_model.dart';
 import 'package:reabilita_social/utils/colors.dart';
 import 'package:reabilita_social/utils/formaters/formater_data.dart';
+import 'package:reabilita_social/utils/snack/snack_atencao.dart';
 import 'package:reabilita_social/utils/snack/snack_erro.dart';
 import 'package:reabilita_social/widgets/botao/botaoPrincipal.dart';
 import 'package:reabilita_social/widgets/dropdown_custom.dart';
@@ -227,24 +228,24 @@ class _CadastroScreenState extends State<CadastroScreen> {
                   text: "Continuar",
                   onPressed: () async {
                     try {
-                      // if (_senhaController.text != _repetirSenhaController.text) {
-                      //   snackAtencao(context, "Senhas devem ser iguais!");
-                      //   return;
-                      // }
+                      if (_senhaController.text != _repetirSenhaController.text) {
+                        snackAtencao(context, "Senhas devem ser iguais!");
+                        return;
+                      }
 
-                      // if (profissionalModel.genero == null) {
-                      //   snackAtencao(context, "Deve selecionar o gênero!");
-                      //   return;
-                      // }
-                      // if (!_formKey.currentState!.validate()) {
-                      //   snackAtencao(context, "Preencha os campos corretamente!");
-                      //   return;
-                      // }
+                      if (profissionalModel.genero == null) {
+                        snackAtencao(context, "Deve selecionar o gênero!");
+                        return;
+                      }
+                      if (!_formKey.currentState!.validate()) {
+                        snackAtencao(context, "Preencha os campos corretamente!");
+                        return;
+                      }
 
-                      // if (concordo == false) {
-                      //   snackAtencao(context, "Por favor, aceite os termos de uso!");
-                      //   return;
-                      // }
+                      if (concordo == false) {
+                        snackAtencao(context, "Por favor, aceite os termos de uso!");
+                        return;
+                      }
                       _formKey.currentState!.save();
 
                       Navigator.pushNamed(context, '/cadastroFinal', arguments: {

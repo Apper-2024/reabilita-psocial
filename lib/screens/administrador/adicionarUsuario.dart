@@ -15,7 +15,7 @@ import 'package:reabilita_social/utils/snack/snack_erro.dart';
 import 'package:reabilita_social/utils/snack/snack_sucesso.dart';
 
 class AddUserPage extends StatefulWidget {
-  const AddUserPage({Key? key}) : super(key: key);
+  const AddUserPage({super.key});
 
   @override
   State<AddUserPage> createState() => _AddUserPageState();
@@ -211,19 +211,19 @@ class _AddUserPageState extends State<AddUserPage> {
                   const SizedBox(height: 16),
                   EnderecoForm(
                     onCepSaved: (value) =>
-                        profissionalModel.endereco.cep = value!,
+                        profissionalModel.endereco.cep = value,
                     onRuaSaved: (value) =>
-                        profissionalModel.endereco.rua = value!,
+                        profissionalModel.endereco.rua = value,
                     onNumeroSaved: (value) =>
-                        profissionalModel.endereco.numero = value!,
+                        profissionalModel.endereco.numero = value,
                     onBairroSaved: (value) =>
-                        profissionalModel.endereco.bairro = value!,
+                        profissionalModel.endereco.bairro = value,
                     onCidadeSaved: (value) =>
-                        profissionalModel.endereco.cidade = value!,
+                        profissionalModel.endereco.cidade = value,
                     onEstadoSaved: (value) =>
-                        profissionalModel.endereco.estado = value!,
+                        profissionalModel.endereco.estado = value,
                     onComplementoSaved: (value) =>
-                        profissionalModel.endereco.complemento = value!,
+                        profissionalModel.endereco.complemento = value,
                     titulo: 'Informações Residenciais',
                   ),
                 ],
