@@ -36,8 +36,7 @@
         "firebase-debug.*.log",
         "*.local"
       ],
-      "predeploy": [
-      ]
+      "predeploy": []
     }
   ]
 }

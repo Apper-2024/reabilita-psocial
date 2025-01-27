@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:reabilita_social/widgets/protecao_dados.dart';
 import '../../utils/colors.dart';
 import '../../widgets/header.dart';
 
@@ -21,7 +22,7 @@ class RecursosScreen extends StatelessWidget {
                 alignment: Alignment.center,
                 children: [
                   Icon(
-                    Icons.extension, // Ícone de quebra-cabeça
+                    Icons.extension,
                     color: bege,
                     size: 70,
                   ),
@@ -148,20 +149,120 @@ class RecursosScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              child: const Row(
+              child: Row(
                 children: [
-                  Icon(Icons.document_scanner, size: 36),
-                  SizedBox(width: 10),
-                  Text(
-                    'Termos de Uso',
-                    style: TextStyle(
-                      fontSize: 20.0,
+                  const Icon(Icons.document_scanner, size: 36),
+                  const SizedBox(width: 10),
+                  InkWell(
+                    onTap: () {
+                      ProtecaoDialog.show(context);
+                    },
+                    child: const Text(
+                      'Termos de Uso',
+                      style: TextStyle(
+                        fontSize: 20.0,
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
             const SizedBox(height: 10),
+            InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, "/informacaoTecnica");
+              },
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.1),
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: const Row(
+                  children: [
+                    Icon(Icons.info_outline, size: 36),
+                    SizedBox(width: 10),
+                    Text(
+                      'Informações Técnicas',
+                      style: TextStyle(
+                        fontSize: 20.0,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, "/desenvolvedores");
+              },
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.1),
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: const Row(
+                  children: [
+                    Icon(Icons.computer, size: 36),
+                    SizedBox(width: 10),
+                    Text(
+                      'Desenvolvedores',
+                      style: TextStyle(
+                        fontSize: 20.0,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, "/agradecimentos");
+              },
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.1),
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: const Row(
+                  children: [
+                    Icon(Icons.star, size: 36),
+                    SizedBox(width: 10),
+                    Text(
+                      'Agradecimentos',
+                      style: TextStyle(
+                        fontSize: 20.0,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),

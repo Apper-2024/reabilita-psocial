@@ -16,9 +16,12 @@ import 'package:reabilita_social/screens/auth/cadastros/cadastro.dart';
 import 'package:reabilita_social/screens/auth/cadastros/cadastro_final.dart';
 import 'package:reabilita_social/screens/auth/login.dart';
 import 'package:reabilita_social/screens/auth/login_primeiro_acesso.dart';
+import 'package:reabilita_social/screens/profissional/agradecimento.dart';
 import 'package:reabilita_social/screens/profissional/cadastro_projeto.dart';
+import 'package:reabilita_social/screens/profissional/desenvolvedores.dart';
 import 'package:reabilita_social/screens/profissional/edita_perfil_prof.dart';
 import 'package:reabilita_social/screens/profissional/evolucao_paciente.dart';
+import 'package:reabilita_social/screens/profissional/informacao_tecnica.dart';
 import 'package:reabilita_social/screens/profissional/paciente.dart';
 import 'package:reabilita_social/screens/profissional/pagina_espera.dart';
 import 'package:reabilita_social/screens/profissional/recursos.dart';
@@ -116,6 +119,10 @@ class MyApp extends StatelessWidget {
             const RouteGuard(child: ReferenciasPage()),
         '/paginaEspera': (context) =>
             const RouteGuard(child: PaginaEsperaScreen()),
+        '/informacaoTecnica': (context) =>
+            RouteGuard(child: InformacaoTecnica()),
+        '/desenvolvedores': (context) => RouteGuard(child: Desenvolvedores()),
+        '/agradecimentos': (context) => RouteGuard(child: Agradecimentos()),
 
         //PACIENTE
       },
