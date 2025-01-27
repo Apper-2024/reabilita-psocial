@@ -263,6 +263,38 @@ class RecursosScreen extends StatelessWidget {
                 ),
               ),
             ),
+            const SizedBox(height: 10),
+            InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, "/registroProdutividade");
+              },
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.1),
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: const Row(
+                  children: [
+                    Icon(Icons.calendar_today, size: 36),
+                    SizedBox(width: 10),
+                    Text(
+                      'Registro da Produtividade',
+                      style: TextStyle(
+                        fontSize: 20.0,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),

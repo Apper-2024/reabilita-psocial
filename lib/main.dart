@@ -28,6 +28,7 @@ import 'package:reabilita_social/screens/profissional/recursos.dart';
 import 'package:reabilita_social/screens/profissional/pesquisa_usuario.dart';
 import 'package:reabilita_social/screens/profissional/projetos.dart';
 import 'package:reabilita_social/screens/profissional/referencias.dart';
+import 'package:reabilita_social/screens/profissional/registroProdutividade.dart';
 import 'package:reabilita_social/screens/profissional/suporteUsuario.dart';
 import 'package:reabilita_social/services/route_service.dart';
 import 'package:reabilita_social/verifica_conta.dart';
@@ -123,7 +124,7 @@ class MyApp extends StatelessWidget {
             RouteGuard(child: InformacaoTecnica()),
         '/desenvolvedores': (context) => RouteGuard(child: Desenvolvedores()),
         '/agradecimentos': (context) => RouteGuard(child: Agradecimentos()),
-
+        '/registroProdutividade': (context) => RouteGuard(child: RegistroProdutividade()),
         //PACIENTE
       },
     );
