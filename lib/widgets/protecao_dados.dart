@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
 
 class ProtecaoDialog {
   static void show(BuildContext context) {
@@ -41,11 +43,6 @@ class ProtecaoDialog {
                     child: InAppWebView(
                       initialUrlRequest: URLRequest(
                         url: WebUri('assets/pdf_viewer.html'),
-                      ),
-                      initialOptions: InAppWebViewGroupOptions(
-                        crossPlatform: InAppWebViewOptions(
-                          useShouldOverrideUrlLoading: true,
-                        ),
                       ),
                     ),
                   ),

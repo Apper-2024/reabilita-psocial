@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:reabilita_social/repository/paciente/gerencia_paciente_repository.dart';
 import 'package:reabilita_social/utils/colors.dart';
+import 'package:reabilita_social/widgets/botao/botaoPrincipal.dart';
 
 class CardProjeto extends StatelessWidget {
   final String foto;
   final String nome;
   final String observacao;
+  final String? uid;
   final void Function()? onTap;
 
   const CardProjeto({
@@ -12,6 +15,7 @@ class CardProjeto extends StatelessWidget {
     required this.foto,
     required this.nome,
     required this.observacao,
+    this.uid,
     this.onTap,
   });
 
@@ -41,6 +45,71 @@ class CardProjeto extends StatelessWidget {
               ),
             ),
           ],
+        );
+      },
+    );
+  }
+
+  Future<void> modalCerteza(String uid, context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setStateDialog) {
+              return SingleChildScrollView(
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 0.5,
+                  decoration: const BoxDecoration(
+                    color: background,
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
+                  padding: const EdgeInsets.all(26),
+                  child: Column(
+                    children: [
+                      const Text(
+                        'Tem certeza que deseja excluir o paciente?',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontFamily: 'Poppins',
+                          color: preto1,
+                        ),
+                      ),
+                          const SizedBox(height: 15),
+
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Botaoprincipal(
+                                cor: verde1,
+                                text: "Cancelar exclusão",
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                }),
+                          ),
+                          const SizedBox(width: 5),
+                          Expanded(
+                            child: Botaoprincipal(
+                                cor: vermelho,
+                                text: "Excluir",
+                                onPressed: () async {
+                                  await GerenciaPacienteRepository().excluirPaciente(uid);
+
+                                  Navigator.of(context).pop();
+                                }),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
         );
       },
     );
@@ -92,9 +161,20 @@ class CardProjeto extends StatelessWidget {
                   maxLines: null,
                 ),
               ),
-              IconButton(
-                icon: const Icon(Icons.info_outline, color: verde1),
-                onPressed: () => _showObservacao(context),
+              Row(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.info_outline, color: verde1),
+                    onPressed: () => _showObservacao(context),
+                  ),
+                  Visibility(
+                    visible: uid != null,
+                    child: IconButton(
+                      icon: const Icon(Icons.delete, color: verde1),
+                      onPressed: () => modalCerteza(uid!, context),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

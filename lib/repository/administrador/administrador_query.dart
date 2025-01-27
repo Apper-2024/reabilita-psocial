@@ -47,7 +47,6 @@ class AdmQuery {
     return false;
   }
 
-  // Função para exibir erros
   static void _showError(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(

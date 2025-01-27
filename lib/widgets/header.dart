@@ -1,10 +1,7 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:reabilita_social/provider/profissional_provider.dart';
 import 'package:reabilita_social/repository/auth/auth_repository.dart';
-import 'package:reabilita_social/utils/snack/snack_atencao.dart';
-import 'package:http/http.dart' as http;
 
 class Header extends StatelessWidget {
   Header({

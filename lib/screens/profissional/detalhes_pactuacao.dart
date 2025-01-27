@@ -4,7 +4,6 @@ import 'package:reabilita_social/model/paciente/dadosPaciente/dados_paciente_mod
 import 'package:reabilita_social/model/paciente/intervencoes/intervencoes_model.dart';
 import 'package:reabilita_social/model/paciente/pactuacoes/pactuacao_model.dart';
 import 'package:reabilita_social/provider/paciente_provider.dart';
-import 'package:reabilita_social/provider/profissional_provider.dart';
 import 'package:reabilita_social/repository/paciente/gerencia_paciente_repository.dart';
 import 'package:reabilita_social/screens/profissional/form_categoria.dart';
 import 'package:reabilita_social/utils/colors.dart';
@@ -33,7 +32,7 @@ class DetalhesPactuacao extends StatelessWidget {
 
   Future<void> _dialogEditarPactuacao(PacienteProvider pacienteProvider, ListPactuacaoModel? pactuacoes,
       PactuacaoModel pactuacao, int index, context) async {
-    IntervencoesModel? intervencaoModel = pacienteProvider.paciente!.intervencoesModel;
+    IntervencoesModel? intervencaoModel = pacienteProvider.paciente?.intervencoesModel;
 
     final formKey = GlobalKey<FormState>();
     return showDialog<void>(
@@ -94,7 +93,7 @@ class DetalhesPactuacao extends StatelessWidget {
                         const SizedBox(height: 16),
                         CustomDropdownButton(
                           hint: 'Selecione a intervenção',
-                          items: intervencaoModel!.intervencoesModel.map((e) => e.intervencoes!).toList(),
+                          items: intervencaoModel?.intervencoesModel.map((e) => e.intervencoes!).toList() ?? [],
                           dropdownValue: pactuacao.intervencao,
                           onChanged: (value) {
                             setStateDialog(() {
@@ -191,8 +190,7 @@ class DetalhesPactuacao extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final pacienteProvider = Provider.of<PacienteProvider>(context, listen: true);
-    DadosPacienteModel pacienteModel = pacienteProvider.paciente!.dadosPacienteModel;
-    ProfissionalProvider profissionalProvider = ProfissionalProvider.instance;
+    DadosPacienteModel? pacienteModel = pacienteProvider.paciente?.dadosPacienteModel;
 
     final filteredPactuacoes = pactuacaoModel?.pactuacoesModel?.where((p) => p.tipo == tipo).toList();
 
@@ -202,7 +200,7 @@ class DetalhesPactuacao extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: background,
         title: Text(
-          pacienteModel.nome,
+          pacienteModel?.nome ?? 'Paciente',
           style: const TextStyle(color: Colors.black),
         ),
         centerTitle: true,
@@ -217,62 +215,60 @@ class DetalhesPactuacao extends StatelessWidget {
                   style: TextStyle(fontSize: 18, color: preto1),
                 ),
               )
-            : Expanded(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: filteredPactuacoes.length,
-                  itemBuilder: (context, index) {
-                    final pactuacao = filteredPactuacoes[index];
-                    return InkWell(
-                        onTap: () => Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => FormCategoria(
-                                  fields: [
-                                    FieldConfig(
-                                        label: 'Responsáveis pela Pactuação',
-                                        hintText: 'Responsáveis pela Pactuação do paciente',
-                                        widthFactor: 1.0,
-                                        valorInicial: pactuacao.responsavel),
-                                    FieldConfig(
-                                        label: 'Prazo',
-                                        hintText: 'Prazo do paciente',
-                                        widthFactor: 1.0,
-                                        valorInicial: pactuacao.prazo),
-                                    FieldConfig(
-                                        label: 'Intervenção',
-                                        hintText: 'Intervenção do paciente',
-                                        widthFactor: 1.0,
-                                        valorInicial: pactuacao.intervencao),
-                                    FieldConfig(
-                                        label: 'Tipo da Pactuação',
-                                        hintText: 'Tipo da Pactuação',
-                                        widthFactor: 1.0,
-                                        valorInicial: pactuacao.tipo),
-                                    FieldConfig(
-                                      label: 'Ata da Pactuação',
-                                      hintText: '',
-                                      imagem: pactuacao.foto!,
-                                      umaImagem: true,
-                                    ),
-                                    FieldConfig(
-                                      label: '',
-                                      isButtonField: true,
-                                      hintText: "",
-                                      textBotao: "Editar Intervenção",
-                                      onTapBotao: () async {
-                                        _dialogEditarPactuacao(
-                                            pacienteProvider, pactuacaoModel, pactuacao, index, context);
-                                      },
-                                    ),
-                                  ],
-                                  titulo:
-                                      'Pactuação - ${formatTimesTamp(pactuacao.dataCriacao) ?? 'Data não disponível'}',
-                                ),
+            : ListView.builder(
+                shrinkWrap: true,
+                itemCount: filteredPactuacoes.length,
+                itemBuilder: (context, index) {
+                  final pactuacao = filteredPactuacoes[index];
+                  return InkWell(
+                      onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => FormCategoria(
+                                fields: [
+                                  FieldConfig(
+                                      label: 'Responsáveis pela Pactuação',
+                                      hintText: 'Responsáveis pela Pactuação do paciente',
+                                      widthFactor: 1.0,
+                                      valorInicial: pactuacao.responsavel),
+                                  FieldConfig(
+                                      label: 'Prazo',
+                                      hintText: 'Prazo do paciente',
+                                      widthFactor: 1.0,
+                                      valorInicial: pactuacao.prazo),
+                                  FieldConfig(
+                                      label: 'Intervenção',
+                                      hintText: 'Intervenção do paciente',
+                                      widthFactor: 1.0,
+                                      valorInicial: pactuacao.intervencao),
+                                  FieldConfig(
+                                      label: 'Tipo da Pactuação',
+                                      hintText: 'Tipo da Pactuação',
+                                      widthFactor: 1.0,
+                                      valorInicial: pactuacao.tipo),
+                                  FieldConfig(
+                                    label: 'Ata da Pactuação',
+                                    hintText: '',
+                                    imagem: pactuacao.foto!,
+                                    umaImagem: true,
+                                  ),
+                                  FieldConfig(
+                                    label: '',
+                                    isButtonField: true,
+                                    hintText: "",
+                                    textBotao: "Editar Intervenção",
+                                    onTapBotao: () async {
+                                      _dialogEditarPactuacao(
+                                          pacienteProvider, pactuacaoModel, pactuacao, index, context);
+                                    },
+                                  ),
+                                ],
+                                titulo:
+                                    'Pactuação - ${formatTimesTamp(pactuacao.dataCriacao) ?? 'Data não disponível'}',
                               ),
                             ),
-                        child: ItemLista(conteudo: filteredPactuacoes[index], index: index));
-                  },
-                ),
+                          ),
+                      child: ItemLista(conteudo: filteredPactuacoes[index], index: index));
+                },
               ),
       ),
     );

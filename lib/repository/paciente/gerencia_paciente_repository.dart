@@ -121,6 +121,17 @@ class GerenciaPacienteRepository {
     }
   }
 
+  Future<void> excluirPaciente(String uidPaciente) async {
+    try {
+      db.collection("Pacientes").doc(uidPaciente).delete();
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorRepository.handleFirebaseException(e);
+    } catch (e) {
+      print(e);
+      throw 'Ops, algo deu errado. Tente novamente mais tarde!';
+    }
+  }
+
   Future<void> cadastrarHistoria(HistoriaCasoModel historia, List<Uint8List> arquivos, String uidPaciente) async {
     final uuid = const UuidV4().generate();
     final batch = db.batch();

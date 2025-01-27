@@ -16,7 +16,7 @@ class MyCustomCameraScreen extends StatefulWidget {
 }
 
 class _MyCustomCameraScreenState extends State<MyCustomCameraScreen> {
-  late CameraController _controller;
+  CameraController? _controller;
   late Future<void> _initializeControllerFuture;
 
   @override
@@ -34,7 +34,7 @@ class _MyCustomCameraScreenState extends State<MyCustomCameraScreen> {
           ResolutionPreset.high,
           enableAudio: false, // Desabilita o áudio se não for necessário
         );
-        await _controller.initialize();
+        await _controller?.initialize();
         setState(() {});
       } else {
         snackAtencao(context, "Nenhuma câmera disponível");
@@ -46,9 +46,7 @@ class _MyCustomCameraScreenState extends State<MyCustomCameraScreen> {
 
   @override
   void dispose() {
-    if (_controller.value.isInitialized) {
-      _controller.dispose();
-    }
+    _controller?.dispose();
     super.dispose();
   }
 
@@ -61,11 +59,11 @@ class _MyCustomCameraScreenState extends State<MyCustomCameraScreen> {
           FutureBuilder<void>(
             future: _initializeControllerFuture,
             builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done && _controller.value.isInitialized) {
+              if (snapshot.connectionState == ConnectionState.done && _controller?.value.isInitialized == true) {
                 return Center(
                   child: AspectRatio(
-                    aspectRatio: _controller.value.aspectRatio,
-                    child: CameraPreview(_controller),
+                    aspectRatio: _controller!.value.aspectRatio,
+                    child: CameraPreview(_controller!),
                   ),
                 );
               } else if (snapshot.hasError) {
@@ -85,9 +83,11 @@ class _MyCustomCameraScreenState extends State<MyCustomCameraScreen> {
                 onTap: () async {
                   try {
                     await _initializeControllerFuture;
-                    final image = await _controller.takePicture();
-                    final bytes = await image.readAsBytes();
-                    widget.onPictureTaken(bytes);
+                    if (_controller != null && _controller!.value.isInitialized) {
+                      final image = await _controller!.takePicture();
+                      final bytes = await image.readAsBytes();
+                      widget.onPictureTaken(bytes);
+                    }
                   } catch (e) {
                     print(e);
                     snackAtencao(context, "Erro ao tirar foto: $e");

@@ -20,8 +20,7 @@ class ProjetosScreen extends StatefulWidget {
 
 class _ProjetosScreenState extends State<ProjetosScreen> {
   final FirebaseFirestore db = FirebaseService().db;
-  final ProfissionalProvider profissionalProvider =
-      ProfissionalProvider.instance;
+  final ProfissionalProvider profissionalProvider = ProfissionalProvider.instance;
   final TextEditingController _searchController = TextEditingController();
   String _query = '';
 
@@ -32,15 +31,13 @@ class _ProjetosScreenState extends State<ProjetosScreen> {
     super.initState();
     _baseQuery = db
         .collection("Pacientes")
-        .where('dadosPacienteModel.uidProfisional',
-            isEqualTo: profissionalProvider.profissional!.uidProfissional)
+        .where('dadosPacienteModel.uidProfisional', isEqualTo: profissionalProvider.profissional!.uidProfissional)
         .orderBy('dadosPacienteModel.dataCriacao', descending: true);
     _searchController.addListener(_onSearchChanged);
   }
 
   void _onSearchChanged() {
     setState(() {
-      print(_query);
       _query = _searchController.text;
     });
   }
@@ -53,16 +50,6 @@ class _ProjetosScreenState extends State<ProjetosScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Query query = _baseQuery;
-
-    if (_searchController.text.isNotEmpty) {
-      query = query
-          .where('dadosPacienteModel.nome',
-              isGreaterThanOrEqualTo: _searchController.text)
-          .where('dadosPacienteModel.nome',
-              isLessThanOrEqualTo: '${_searchController.text}\uf8ff');
-    }
-
     return Scaffold(
       backgroundColor: background,
       floatingActionButton: FloatingActionButton.extended(
@@ -106,15 +93,12 @@ class _ProjetosScreenState extends State<ProjetosScreen> {
               ],
             ),
             const SizedBox(height: 16),
-            TextSearch(
-                hintText: 'Procure o nome do paciente',
-                controller: _searchController),
+            TextSearch(hintText: 'Procure o nome do paciente', controller: _searchController),
             const SizedBox(height: 16),
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
-                stream: query.snapshots(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                stream: _baseQuery.snapshots(),
+                builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.hasError) {
                     print(snapshot.error);
                     return const Center(child: Text('Algo deu errado'));
@@ -125,22 +109,25 @@ class _ProjetosScreenState extends State<ProjetosScreen> {
                   }
 
                   if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                    return const Center(
-                        child: Text("Nenhum usuário encontrado"));
+                    return const Center(child: Text("Nenhum usuário encontrado"));
                   }
 
-                  final List<PacienteModel> pacientes =
-                      snapshot.data!.docs.map((doc) {
-                    return PacienteModel.fromMap(
-                        doc.data() as Map<String, dynamic>);
+                  final List<PacienteModel> pacientes = snapshot.data!.docs.map((doc) {
+                    return PacienteModel.fromMap(doc.data() as Map<String, dynamic>);
+                  }).toList();
+
+                  // Filtrar os pacientes no lado do cliente
+                  final List<PacienteModel> pacientesFiltrados = pacientes.where((paciente) {
+                    return paciente.dadosPacienteModel.nome.toLowerCase().contains(_query.toLowerCase());
                   }).toList();
 
                   return ListView.builder(
-                    itemCount: pacientes.length,
+                    itemCount: pacientesFiltrados.length,
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
-                      final paciente = pacientes[index];
+                      final paciente = pacientesFiltrados[index];
                       return CardProjeto(
+                        uid: paciente.dadosPacienteModel.uidDocumento,
                         onTap: () {
                           pacienteProvider.setPaciente(paciente);
 
@@ -150,8 +137,7 @@ class _ProjetosScreenState extends State<ProjetosScreen> {
                         },
                         foto: paciente.dadosPacienteModel.urlFoto,
                         nome: paciente.dadosPacienteModel.nome,
-                        observacao: paciente
-                            .dadosPacienteModel.outrasInformacoes.observacao,
+                        observacao: paciente.dadosPacienteModel.outrasInformacoes.observacao,
                       );
                     },
                   );

@@ -319,7 +319,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
                         TextFieldCustom(
                           tipoTexto: TextInputType.text,
                           hintText: "ex. Depressão",
-                          labelText: "Diagnostico",
+                          labelText: "Diagnóstico",
                           senha: false,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -805,7 +805,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
                         const SizedBox(height: 16),
                         TextFieldCustom(
                           tipoTexto: TextInputType.text,
-                          hintText: ".....",
+                          hintText: "Problema e determinada questão que requer solução",
                           labelText: "Problema",
                           senha: false,
                           validator: (value) {
@@ -912,7 +912,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          'Cadastro de Diagnóstico Multiprofissional',
+                          'Cadastro de Desejos e Sonhos de vida',
                           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 16),
@@ -1032,7 +1032,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          'Cadastro de Diagnóstico Multiprofissional',
+                          'Cadastro de Sonhos de vida',
                           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 16),
@@ -1665,7 +1665,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
                         const SizedBox(height: 16),
                         TextFieldCustom(
                           tipoTexto: TextInputType.text,
-                          hintText: "ex. Fazer tal coisa",
+                          hintText: "ex. Objetivo que se almeja ",
                           labelText: "Meta",
                           senha: false,
                           validator: (value) {
@@ -1836,7 +1836,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
                         TextFieldCustom(
                           tipoTexto: TextInputType.text,
                           hintText: "ex. João",
-                          labelText: "Ator Social",
+                          labelText: "Responsável",
                           senha: false,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -2114,10 +2114,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                       snackAtencao(context, "Preencha todos os campos");
                                       return;
                                     }
-                                    if (image == null) {
-                                      snackAtencao(context, "Selecione uma ATA");
-                                      return;
-                                    }
+
                                     setStateDialog(() {
                                       _carregando = true;
                                     });
@@ -2232,7 +2229,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
                         const SizedBox(height: 16),
                         TextFieldCustom(
                           tipoTexto: TextInputType.text,
-                          hintText: ".......",
+                          hintText: "ex. Oque se trata a reuniao",
                           labelText: "Pauta",
                           senha: false,
                           validator: (value) {
@@ -2711,7 +2708,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
                             const SizedBox(width: 12),
                             Expanded(
                               child: Botaoprincipal(
-                                text: "Editar",
+                                text: "Salvar Alterações",
                                 carregando: _carregando,
                                 onPressed: () async {
                                   try {
@@ -2736,7 +2733,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                       _carregando = false;
                                     });
                                     Navigator.pop(context);
-                                    snackSucesso(context, "Cadastrado com sucesso");
+                                    snackSucesso(context, "Editado com sucesso");
                                   } catch (e) {
                                     setStateDialog(() {
                                       _carregando = false;
@@ -2844,7 +2841,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
                             const SizedBox(width: 12),
                             Expanded(
                               child: Botaoprincipal(
-                                text: "Editar",
+                                text: "Salvar Alterações",
                                 carregando: _carregando,
                                 onPressed: () async {
                                   try {
@@ -2869,7 +2866,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                       _carregando = false;
                                     });
                                     Navigator.pop(context);
-                                    snackSucesso(context, "Cadastrado com sucesso");
+                                    snackSucesso(context, "Editado com sucesso");
                                   } catch (e) {
                                     setStateDialog(() {
                                       _carregando = false;
@@ -3029,7 +3026,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
                             const SizedBox(width: 12),
                             Expanded(
                               child: Botaoprincipal(
-                                text: "Editar",
+                                text: "Salvar Alterações",
                                 onPressed: () async {
                                   try {
                                     if (!formKey.currentState!.validate()) {
@@ -3053,7 +3050,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                       _carregando = false;
                                     });
                                     Navigator.pop(context);
-                                    snackSucesso(context, "Cadastrado com sucesso");
+                                    snackSucesso(context, "Editado com sucesso");
                                   } catch (e) {
                                     setStateDialog(() {
                                       _carregando = false;
@@ -3152,7 +3149,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
                             const SizedBox(width: 12),
                             Expanded(
                               child: Botaoprincipal(
-                                text: "Editar",
+                                text: "Salvar Alterações",
                                 carregando: _carregando,
                                 onPressed: () async {
                                   try {
@@ -3177,12 +3174,16 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                       _carregando = false;
                                     });
                                     Navigator.pop(context);
-                                    snackSucesso(context, "Cadastrado com sucesso");
+                                    Navigator.pop(context);
+                                    snackSucesso(context, "Editado com sucesso");
                                   } catch (e) {
                                     setStateDialog(() {
                                       _carregando = false;
                                     });
+
                                     snackErro(context, "Erro ao editar Metas");
+                                    Navigator.pop(context);
+
                                     Navigator.pop(context);
 
                                     return;
@@ -3272,7 +3273,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
                         TextFieldCustom(
                           tipoTexto: TextInputType.text,
                           hintText: "ex. João",
-                          labelText: "Ator Social",
+                          labelText: "Responsável",
                           valorInicial: intervencao.nomeResponsavel,
                           senha: false,
                           validator: (value) {
@@ -3328,7 +3329,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
                             const SizedBox(width: 12),
                             Expanded(
                               child: Botaoprincipal(
-                                text: "Editar",
+                                text: "Salvar Alterações",
                                 onPressed: () async {
                                   try {
                                     if (!formKey.currentState!.validate()) {
@@ -3351,7 +3352,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                     setStateDialog(() {
                                       _carregando = false;
                                     });
-                                    snackSucesso(context, "Cadastrado com sucesso");
+                                    snackSucesso(context, "Editado com sucesso");
                                     Navigator.pop(context);
                                     Navigator.pop(context);
                                     Navigator.pop(context);
@@ -3930,6 +3931,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                       label: 'Recursos Individuais',
                                       hintText: 'Descreva o recursos Individual',
                                       valorInicial: recursoIndividuaisModel.recursoIndividual,
+                                      minLine: 3,
+                                      maxLine: 5,
                                       widthFactor: 1.0,
                                       isDoubleHeight: true),
 
@@ -3939,7 +3942,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                       hintText: 'Habilidades do paciente',
                                       valorInicial: diagnostico.habilidades,
                                       isDoubleHeight: true,
-                                      textBotao: "Cadastrar Novo Habildade",
+                                      textBotao: "Cadastrar Nova Habilidade",
                                       botaoAdicionar: true,
                                       onTapbotaoAdicionar: () {
                                         _dialogAdicionarHabilidade(pacienteProvider, recursoIndividuaisModel);
@@ -3952,7 +3955,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                     label: '',
                                     hintText: '',
                                     isButtonField: true,
-                                    textBotao: "Editar Recursos Individuais",
+                                    textBotao: "Editar Recursos e Habilidades Individuais",
                                     onTapBotao: () async {
                                       try {
                                         final formValuesList = formKey.currentState?.getFormValuesList();
@@ -4093,6 +4096,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                 key: formKey,
                                 fields: [
                                   FieldConfig(
+                                      minLine: 3,
+                                      maxLine: 5,
                                       label: 'Desejos',
                                       hintText: 'Desejos do paciente',
                                       isDoubleHeight: true,
@@ -4771,14 +4776,15 @@ class _PacienteScreenState extends State<PacienteScreen> {
                   (pactuacao) => ItemConteudo(
                     titulo: pactuacao,
                     onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => DetalhesPactuacao(
-                            pactuacaoModel: pactuacaoModel,
-                            tipo: pactuacao,
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => DetalhesPactuacao(
+                              pactuacaoModel: pactuacaoModel,
+                              tipo: pactuacao,
+                            ),
                           ),
-                        ),
-                      );
+                        );
+                    
                     },
                     onTap2: () {
                       print('l');

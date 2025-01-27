@@ -1,8 +1,5 @@
-//verificar porque nao mantem a sessao
+TODO VER DE EXCLUIR IMG QUANDO EXCLUI PROJETO
 
-//arrumar porque nao arruma estado
-
-        "npm --prefix \"$RESOURCE_DIR\" run lint"
 
 == TODO 15/01
 
@@ -75,43 +72,45 @@ observacao opcional // FEITOS
 
 	ARRUAMR LOGO // FEITO
 
-	-- cadastro projeto faltou aceitar
+	-- cadastro projeto faltou aceitar // FEITO
 	-- arrumar email // FEITO
-	-- tirar foto no celular - verificar
-	-- remove primeiro acesso paciente
-	-- excluir projeto criado - lixiera do lado
-	-- salvar alterações no btn do projeto editar
-	-- assento diagnostico
-	-- todos cpf e cns maiusculo
-	-- problemas indentificados - tirar o i para deixar identificados
-	-- cadastro de problemas - placholder - Problema e determinada questão que requer solução.
-	-- cadastro de diagnostico multiprofissional - mudar o titulo do modal para desejos e sonhos de vida
-	-- sonhos de vida no input do no desejos e sonho
-	-- sonhos estao duplicando no cadastro
-	-- aumentar o input do desejo
-	-- ver recursos individuais - tbm aumentar a altura do input
-	-- cadastro de medicamento - placeholder: Diazepam, dipirona, diclofenaco...
-	-- cadastro de meta - objetivo que se almeja
-	-- reload da tela quando editar a tela de metas
-	-- cadastro de intercensao - mudar ator social para responsável
+	-- tirar foto no celular - verificar // FEITO
+	-- remove primeiro acesso paciente // FEITO
+	-- excluir projeto criado - lixiera do lado // FEITO - VER DE EXCLUIR IMG
+	-- salvar alterações no btn do projeto editar // FEITO
+	-- assento diagnostico // FEITO
+	-- todos cpf e cns maiusculo // FEITO
+	-- problemas indentificados - tirar o i para deixar identificados // FEITO
+	-- cadastro de problemas - placholder - Problema e determinada questão que requer solução. // FEITO
+	-- cadastro de diagnostico multiprofissional - mudar o titulo do modal para desejos e sonhos de vida // FEITO
+	-- sonhos de vida no input do no desejos e sonho // FEITO
+	-- sonhos estao duplicando no cadastro // FEITO
+	-- aumentar o input do desejo // FEITO
+	-- ver recursos individuais - tbm aumentar a altura do input // FEITO
+	-- cadastro de medicamento - placeholder: Diazepam, dipirona, diclofenaco... // FEITO
+	-- cadastro de meta - objetivo que se almeja // FEITO
+	-- reload da tela quando editar a tela de metas // FEITO
+	-- cadastro de intercensao - mudar ator social para responsável // FEITO
 	-- erro no editar intervenção
-	-- colocar um titulo no dropdown do editar intervenção e metas, ver todos titulos de dropdowns
-	-- ata da pactucao é opcional
+	-- colocar um titulo no dropdown do editar intervenção e metas, ver todos titulos de dropdowns //FEITO
+	-- ata da pactucao é opcional // FEITO
 	-- paciente psiquiatrico bugado
-	-- erro ao cadastrar agenda de estudo e ver opcoes de edicao e duplicando agenda ao cadastrar
-	-- em pauta - mudar para oque se trata a reuniao
+	-- erro ao cadastrar agenda de estudo e ver opcoes de edicao e duplicando agenda ao cadastrar // FEITO
+	-- em pauta - mudar para oque se trata a reuniao // FEITO
 	-- mudar appbar - avaliacao programada do prp
 	-- campos obrigatório na avaliação programa prp - o primeiro ou o segudo apenas
 	-- avaliação programa prp coisas do cadastro nao aparecerem
-	-- arrumar o tamanho do card no fullscreen
+	-- arrumar o tamanho do card no fullscreen 
 	-- na evolucao, remover adicionar comentario e colocar adicionar evolução
 	-- no ultimo cadastro da evolucao, fica salvo as ultimas coisas
 	-- opcao de excluir a evolucao
 	-- faltou um scroll nos recursos
 	-- ajuda e suporte colocar coisas dentro - registro e pesquisar pacientes
 	-- mudar filtros
-	-- mudar código do paciente compartilhado
+	-- mudar código do paciente compartilhado 
 	-- card suporte ao usuário levar pra tela de ajuda e suporte
 	-- referencias em ordem alfabetica pelo autor
 	-- formatar card legislação em saúde mental, colocar até a data no titulo e o restante em baixo
-	-- busca psicosocial mudar titulo da appbar pro anterior
+	-- busca psicosocial mudar titulo da appbar pro anterior // FEITO
+	-- mudar icone do flutter
+	-- modal para excluir paciente // FEITO

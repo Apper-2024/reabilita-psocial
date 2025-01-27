@@ -35,7 +35,7 @@ class CardEvolucao extends StatelessWidget {
             child: Stack(
               children: [
                 imageUrl.isEmpty
-                    ? Center(child: const Icon(Icons.person, size: 150))
+                    ? const Center(child: Icon(Icons.person, size: 150))
                     : Positioned.fill(
                         child: Image.network(
                           imageUrl,

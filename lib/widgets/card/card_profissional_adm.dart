@@ -8,7 +8,7 @@ class CardProfissionaisAdm extends StatelessWidget {
   final String urlFoto;
   final String status;
   final String uidDocumento;
-  final String tipoUsuario; // Adicionado tipoUsuario
+  final String tipoUsuario;
   final VoidCallback onTap;
 
   const CardProfissionaisAdm({
@@ -19,7 +19,7 @@ class CardProfissionaisAdm extends StatelessWidget {
     required this.urlFoto,
     required this.status,
     required this.uidDocumento,
-    required this.tipoUsuario, // Recebe o tipoUsuario
+    required this.tipoUsuario, 
     required this.onTap,
   });
 
@@ -32,7 +32,7 @@ class CardProfissionaisAdm extends StatelessWidget {
           MaterialPageRoute(
             builder: (context) => DetalheAdministrador(
               uidDocumento: uidDocumento,
-              userType: tipoUsuario, // Passa o tipoUsuario correto
+              userType: tipoUsuario, 
             ),
           ),
         );
@@ -47,7 +47,6 @@ class CardProfissionaisAdm extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Row(
             children: [
-              // Foto
               ClipRRect(
                 borderRadius: BorderRadius.circular(8.0),
                 child: Image.network(
@@ -62,7 +61,6 @@ class CardProfissionaisAdm extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 12),
-              // Informações principais
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,11 +75,10 @@ class CardProfissionaisAdm extends StatelessWidget {
                         style:
                             const TextStyle(fontSize: 14, color: Colors.grey)),
                     Text(
-                        'Tipo: ${tipoUsuario.toUpperCase()}'), // Mostra o tipoUsuario
+                        'Tipo: ${tipoUsuario.toUpperCase()}'), 
                   ],
                 ),
               ),
-              // Status
               Container(
                 padding:
                     const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),

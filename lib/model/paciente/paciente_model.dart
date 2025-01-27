@@ -59,4 +59,6 @@ class PacienteModel {
       'url': url,
     };
   }
+
+  toJson() {}
 }

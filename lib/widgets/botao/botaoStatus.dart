@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:reabilita_social/enum/enum_status_conta.dart';
+import 'package:reabilita_social/utils/colors.dart';
+import 'package:reabilita_social/widgets/botao/botaoPrincipal.dart';
 
 class StatusButton extends StatelessWidget {
   final String status;
@@ -14,23 +17,18 @@ class StatusButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: SizedBox(
-        height: 50,
-        width: MediaQuery.of(context).size.width * 0.9,
-        child: ElevatedButton(
-          onPressed: isLoading ? null : onPressed,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: status == 'suspenso' ? Colors.green : Colors.redAccent,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-          ),
-          child: Text(
-            isLoading ? 'Atualizando...' : (status == 'suspenso' ? 'Reativar Usuário' : 'Suspender Usuário'),
-            style: const TextStyle(color: Colors.white, fontSize: 16),
-          ),
-        ),
-      ),
+    return Column(
+      children: [
+        Visibility(
+            visible: status == EnumStatusConta.analise.name,
+          child: Botaoprincipal(text: "Aceitar Usuário", onPressed: onPressed)),
+        const SizedBox(height: 10),
+        Botaoprincipal(
+            text: status == 'suspenso' ? 'Reativar Usuário' : 'Suspender Usuário',
+            carregando: isLoading,
+            onPressed: onPressed,
+            cor: vermelho),
+      ],
     );
   }
 }

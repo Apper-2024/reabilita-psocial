@@ -114,7 +114,7 @@ class _DetalheAdministradorState extends State<DetalheAdministrador> {
             ClipRRect(
               borderRadius: BorderRadius.circular(16.0),
               child: Image.network(
-                _userData!['urlFoto'] ?? 'https://via.placeholder.com/200',
+                _userData!['urlFoto'],
                 width: 200,
                 height: 200,
                 fit: BoxFit.cover,
@@ -151,18 +151,21 @@ class _DetalheAdministradorState extends State<DetalheAdministrador> {
                   InfoTile(title: 'CEP', value: _userData!['endereco']['cep'] ?? 'N/A'),
                 ],
               ),
+            StatusButton(
+                status: status,
+                isLoading: _isLoading,
+                onPressed: () {
+                  String? statusUser;
+                  if (status == 'suspenso') {
+                    statusUser = 'ativo';
+                  } else if (status == 'ativo') {
+                    statusUser = 'suspenso';
+                  } else if (status == 'analise') {
+                    statusUser = 'ativo';
+                  }
+                  _atualizarStatus(statusUser!);
+                }),
           ],
-        ),
-      ),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(16.0),
-        color: Colors.white,
-        child: StatusButton(
-          status: status,
-          isLoading: _isLoading,
-          onPressed: () => _atualizarStatus(
-            status == 'suspenso' ? 'ativo' : 'suspenso',
-          ),
         ),
       ),
     );

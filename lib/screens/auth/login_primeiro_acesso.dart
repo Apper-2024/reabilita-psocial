@@ -83,7 +83,7 @@ class _LoginPrimeiroAcessoState extends State<LoginPrimeiroAcesso> {
                       TextFieldCustom(
                         tipoTexto: TextInputType.number,
                         hintText: "ex. 123456789012345",
-                        labelText: "Digite seu cns",
+                        labelText: "Digite seu CNS",
                         senha: false,
                         formController: cnsController,
                         validator: (value) {

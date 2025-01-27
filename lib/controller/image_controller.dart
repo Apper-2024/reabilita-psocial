@@ -1,165 +1,198 @@
-import 'dart:async';
 import 'dart:typed_data';
-import 'dart:html' as html;
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:reabilita_social/controller/camera_controller.dart';
+import 'package:reabilita_social/screens/profissional/preview_page.dart';
+import 'package:reabilita_social/utils/snack/snack_atencao.dart';
+
+class ImageController {
+  final picker = ImagePicker();
+
+  Future<Uint8List?> getFileFromGallery() async {
+    final file = await picker.pickImage(source: ImageSource.gallery);
+
+    if (file != null) {
+      return await file.readAsBytes();
+    }
+    return null;
+  }
+
+  Future<Uint8List?> showPreview(BuildContext context, Uint8List fileBytes) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PreviewPage(fileBytes: fileBytes),
+      ),
+    );
+
+    if (result != null) {
+      return result;
+    }
+    return null;
+  }
+}
 
 class ImagePickerUtil {
-  static Future<void> pegarFoto(
-      BuildContext context, Function(Uint8List) setImage) async {
+  static Future<void> pegarFoto(BuildContext context, Function(Uint8List) setImage) async {
     showModalBottomSheet<void>(
       context: context,
-      backgroundColor: Colors.transparent,
       builder: (BuildContext context) {
-        return ClipRRect(
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(24),
-            topRight: Radius.circular(24),
+        return Container(
+          height: 200,
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
+            color: Colors.white,
           ),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 8,
-                  offset: const Offset(0, -2),
-                ),
-              ],
-            ),
-            height: 250,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Text(
-                  "Escolha uma opção",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blueGrey[800],
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  InkWell(
+                    onTap: () async {
+                      Navigator.pop(context);
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MyCustomCameraScreen(
+                            onPictureTaken: (Uint8List bytes) async {
+                              final imageController = ImageController();
+                              final foto = await imageController.showPreview(context, bytes);
+                              if (foto == null) {
+                                snackAtencao(context, "Selecione uma foto");
+                                return;
+                              }
+                              setImage(foto);
+                            },
+                          ),
+                        ),
+                      );
+                    },
+                    child: const Column(
+                      children: [
+                        Icon(
+                          Icons.camera_alt_outlined,
+                          size: 70,
+                        ),
+                        Text(
+                          "Tirar foto",
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _buildOption(
-                      context,
-                      icon: Icons.camera_alt_outlined,
-                      label: "Tirar foto",
-                      onTap: () async {
-                        print("Botão 'Tirar foto' clicado");
-                        Navigator.pop(context);
-                        // Navegação para a câmera ou outra funcionalidade
-                      },
+                  InkWell(
+                    onTap: () async {
+                      final imageController = ImageController();
+                      final foto = await imageController.getFileFromGallery();
+                      if (foto == null) {
+                        snackAtencao(context, "Selecione uma foto");
+                        return;
+                      }
+                      setImage(foto);
+                      Navigator.pop(context);
+                    },
+                    child: const Column(
+                      children: [
+                        Icon(
+                          Icons.photo_library_outlined,
+                          size: 70,
+                        ),
+                        Text(
+                          "Escolher foto",
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                        ),
+                      ],
                     ),
-                    _buildOption(
-                      context,
-                      icon: Icons.photo_library_outlined,
-                      label: "Escolher foto",
-                      onTap: () async {
-                        print("Botão 'Escolher foto' clicado");
-                        final foto = await _pickFile();
-                        if (foto != null) {
-                          print("Foto selecionada com sucesso");
-                          setImage(foto);
-                          Navigator.pop(context);
-                        } else {
-                          print("Nenhuma foto foi selecionada");
-                        }
-                      },
+                  ),
+                  InkWell(
+                    onTap: () async {},
+                    child: const Column(
+                      children: [
+                        Icon(
+                          Icons.document_scanner,
+                          size: 70,
+                        ),
+                        Text(
+                          "Escolher documento",
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                        ),
+                      ],
                     ),
-                    _buildOption(
-                      context,
-                      icon: Icons.document_scanner_outlined,
-                      label: "Escolher documento",
-                      onTap: () async {
-                        print("Botão 'Escolher documento' clicado");
-                        final documento = await _pickFile(isDocument: true);
-                        if (documento != null) {
-                          print("Documento selecionado com sucesso");
-                          setImage(documento);
-                          Navigator.pop(context);
-                        } else {
-                          print("Nenhum documento foi selecionado");
-                        }
-                      },
-                    ),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                ],
+              ),
+            ],
           ),
         );
       },
     );
   }
+}
 
-  static Future<Uint8List?> _pickFile({bool isDocument = false}) async {
-    print("Abrindo FileUploadInputElement");
-    final input = html.FileUploadInputElement()
-      ..accept = isDocument ? '.pdf, .doc, .docx' : 'image/*'
-      ..click();
+class TakePictureScreen extends StatefulWidget {
+  final CameraDescription camera;
+  final Function(Uint8List) onPictureTaken;
 
-    final completer = Completer<Uint8List?>();
+  const TakePictureScreen({
+    super.key,
+    required this.camera,
+    required this.onPictureTaken,
+  });
 
-    input.onChange.listen((e) async {
-      final files = input.files;
-      print("Arquivos selecionados: ${files?.length}");
-      if (files?.isEmpty ?? true) {
-        print("Nenhum arquivo foi selecionado");
-        completer.complete(null);
-        return;
-      }
-      final file = files!.first;
-      print("Nome do arquivo selecionado: ${file.name}"); // Nome do documento
+  @override
+  _TakePictureScreenState createState() => _TakePictureScreenState();
+}
 
-      final reader = html.FileReader();
-      reader.readAsArrayBuffer(file);
-      reader.onLoadEnd.listen((e) {
-        print("Leitura do arquivo concluída");
-        completer.complete(reader.result as Uint8List?);
-      });
-    });
+class _TakePictureScreenState extends State<TakePictureScreen> {
+  late CameraController _controller;
+  late Future<void> _initializeControllerFuture;
 
-    return completer.future;
+  @override
+  void initState() {
+    super.initState();
+    _controller = CameraController(
+      widget.camera,
+      ResolutionPreset.high,
+    );
+    _initializeControllerFuture = _controller.initialize();
   }
 
-  static Widget _buildOption(BuildContext context,
-      {required IconData icon,
-      required String label,
-      required VoidCallback onTap}) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-        decoration: BoxDecoration(
-          color: Colors.blueGrey[50],
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 6,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Column(
-          children: [
-            Icon(
-              icon,
-              size: 60,
-              color: Colors.blueGrey[700],
-            ),
-            const SizedBox(height: 8),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color: Colors.blueGrey[700],
-              ),
-            ),
-          ],
-        ),
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Tirar foto')),
+      body: FutureBuilder<void>(
+        future: _initializeControllerFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return CameraPreview(_controller);
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          try {
+            await _initializeControllerFuture;
+            final image = await _controller.takePicture();
+            final bytes = await image.readAsBytes();
+            widget.onPictureTaken(bytes);
+          } catch (e) {
+            print(e);
+          }
+        },
+        child: const Icon(Icons.camera_alt),
       ),
     );
   }
