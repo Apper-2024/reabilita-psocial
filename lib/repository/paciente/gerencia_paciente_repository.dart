@@ -617,6 +617,24 @@ class GerenciaPacienteRepository {
     }
   }
 
+  Future<void> deleteImagePactuacao(ListPactuacaoModel pactuacao, String uidPaciente) async {
+    final batch = db.batch();
+
+    final pacienteRef = db.collection("Pacientes").doc(uidPaciente);
+
+    try {
+      batch.update(pacienteRef, {
+        'pactuacoesModel': pactuacao.toMap(),
+      });
+      await batch.commit();
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorRepository.handleFirebaseException(e);
+    } catch (e) {
+      print(e);
+      throw 'Ops, algo deu errado. Tente novamente mais tarde!';
+    }
+  }
+
   Future<void> cadastraRecursoIndividual(RecursoIndividuaisModel recurso, String uidPaciente) async {
     final batch = db.batch();
     Map<String, dynamic> recursoMap = recurso.toMap();

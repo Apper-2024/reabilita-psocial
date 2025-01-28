@@ -4904,63 +4904,6 @@ class _PacienteScreenState extends State<PacienteScreen> {
                   ),
                 ),
 
-                // if (pactuacaoModel == null || pactuacaoModel.pactuacoesModel?.isEmpty == true)
-                //   ItemConteudo(
-                //     titulo: 'Nenhuma pactuação cadastrada',
-                //     onTap: () {
-                //       _dialogAdicionaPactuacao(pacienteProvider, pactuacaoModel);
-                //     },
-                //     onTap2: () {
-                //       print("oi");
-                //     },
-                //   )
-                // else
-                //   ...?pactuacaoModel.pactuacoesModel?.map((pactuacao) => ItemConteudo(
-                //         titulo: 'Pactuação - ${formatTimesTamp(pactuacao.dataCriacao) ?? 'Data não disponível'}',
-                //         onTap: () => Navigator.of(context).push(
-                //           MaterialPageRoute(
-                //             builder: (context) => FormCategoria(
-                //               fields: [
-                //                 FieldConfig(
-                //                     label: 'Paciente Psiquiátrico',
-                //                     hintText: 'Paciente Psiquiátrico',
-                //                     valorInicial: pactuacao.paciente,
-                //                     widthFactor: 1.0),
-                //                 FieldConfig(
-                //                     label: 'Responsáveis pela Intervenção',
-                //                     hintText: 'Responsáveis pela Intervenção do paciente',
-                //                     widthFactor: 1.0,
-                //                     valorInicial: pactuacao.responsavel),
-                //                 FieldConfig(
-                //                     label: 'Prazo',
-                //                     hintText: 'Prazo do paciente',
-                //                     widthFactor: 1.0,
-                //                     valorInicial: pactuacao.prazo),
-                //                 FieldConfig(
-                //                     label: 'Família',
-                //                     hintText: 'Família do paciente',
-                //                     widthFactor: 1.0,
-                //                     valorInicial: pactuacao.familia),
-                //                 FieldConfig(
-                //                     label: 'Responsáveis pela Intervenção',
-                //                     hintText: 'Responsáveis pela Intervenção do paciente',
-                //                     widthFactor: 1.0,
-                //                     valorInicial: pactuacao.responsavelPactuacao),
-                //                 FieldConfig(
-                //                   label: 'Ata da Pactuação',
-                //                   hintText: '',
-                //                   imagem: pactuacao.foto!,
-                //                   umaImagem: true,
-                //                 ),
-                //               ],
-                //               titulo: 'Pactuação - ${formatTimesTamp(pactuacao.dataCriacao) ?? 'Data não disponível'}',
-                //             ),
-                //           ),
-                //         ),
-                //         onTap2: () {
-                //           print("oi");
-                //         },
-                //       )),
               ],
             ),
           );

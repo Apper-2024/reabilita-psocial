@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reabilita_social/controller/image_controller.dart';
 import 'package:reabilita_social/model/paciente/dadosPaciente/dados_paciente_model.dart';
 import 'package:reabilita_social/model/paciente/intervencoes/intervencoes_model.dart';
 import 'package:reabilita_social/model/paciente/pactuacoes/pactuacao_model.dart';
@@ -250,6 +251,46 @@ class DetalhesPactuacao extends StatelessWidget {
                                     hintText: '',
                                     imagem: pactuacao.foto!,
                                     umaImagem: true,
+                                    // onDeleteImage: (String urlImagem) async {
+                                    //   try {
+                                    //     ListPactuacaoModel pactuacaoOri;
+
+                                    //     pactuacaoModel?.pactuacoesModel!.forEach((element) {
+                                    //       if (element.foto == urlImagem) {
+                                    //         element.foto = '';
+                                    //       }
+                                    //     });
+
+                                    //     await GerenciaPacienteRepository().deleteImagePactuacao(
+                                    //       pactuacaoModel!,
+                                    //       pacienteProvider.paciente!.dadosPacienteModel.uidDocumento,
+                                    //     );
+
+                                    //     pacienteProvider.setUpdatePactuacao(pactuacaoModel!);
+
+                                    //     snackSucesso(context, "Arquivo deletado com sucesso");
+                                    //     Navigator.pop(context);
+                                    //   } catch (e) {
+                                    //     print("Erro: $e");
+                                    //     snackErro(context, "Erro ao deletar arquivo");
+                                    //     return;
+                                    //   }
+                                    // },
+                                    // onTapContainer: () async {
+                                    //   await ImagePickerUtil.pegarFoto(context, (foto) async {
+                                    //     await GerenciaPacienteRepository()
+                                    //         .cadastrarImagemPactuacao(dadosPacienteModel, foto!, 'jpg');
+
+                                    //     snackSucesso(context, "Salvo com sucesso");
+                                    //     Navigator.pop(context);
+                                    //     pacienteProvider.setDadosPaciente(dadosPacienteModel);
+                                    //   }, (pdf) async {
+                                    //     await GerenciaPacienteRepository()
+                                    //         .cadastrarImagemPactuacao(dadosPacienteModel, pdf!, 'pdf');
+                                    //     Navigator.pop(context);
+                                    //     snackSucesso(context, "Salvo com sucesso");
+                                    //   }, true);
+                                    // },
                                   ),
                                   FieldConfig(
                                     label: '',
