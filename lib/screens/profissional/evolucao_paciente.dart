@@ -289,7 +289,7 @@ class _EvolucaoPacientePageState extends State<EvolucaoPacientePage> {
                           final evolucao = evolucoesFiltradas[index];
                           return ListTile(
                             trailing: IconButton(
-                              icon: Icon(Icons.delete),
+                              icon: const Icon(Icons.delete),
                               onPressed: () async {
                                 try {
                                   setState(() {

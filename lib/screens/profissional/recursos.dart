@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:reabilita_social/widgets/protecao_dados.dart';
+import 'package:reabilita_social/screens/profissional/pdf_viewer.dart';
 import '../../utils/colors.dart';
 import '../../widgets/header.dart';
 
@@ -125,7 +125,7 @@ class RecursosScreen extends StatelessWidget {
                     const SizedBox(width: 10),
                     InkWell(
                       onTap: () {
-                        ProtecaoDialog.show(context);
+                    pdfasset(context);
                       },
                       child: const Text(
                         'Termos de Uso',

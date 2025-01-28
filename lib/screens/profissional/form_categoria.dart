@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:reabilita_social/provider/imagem_provider.dart';
+import 'package:reabilita_social/screens/profissional/pdf_viewer.dart';
 import 'package:reabilita_social/utils/colors.dart';
 import 'package:reabilita_social/widgets/botao/botaoPrincipal.dart';
 import 'package:reabilita_social/widgets/dropdown_custom.dart';
@@ -176,6 +177,7 @@ class FormCategoriaState extends State<FormCategoria> {
               label: field.label,
               image: field.imagem,
               onTapContainer: field.onTapContainer,
+              onDeleteImage: field.onDeleteImage,
             ),
           ),
         );
@@ -592,7 +594,13 @@ class ImageField extends StatelessWidget {
                         width: MediaQuery.of(context).size.width * 0.22,
                         height: MediaQuery.of(context).size.width * 0.22,
                         color: Colors.grey[300],
-                        child: Image.network(image, fit: BoxFit.cover),
+                        child: image.contains('.jpg')
+                            ? Image.network(image, fit: BoxFit.cover)
+                            : InkWell(
+                                onTap: () {
+                                  showFullScreenPDF(context, image);
+                                },
+                                child: const Icon(Icons.picture_as_pdf)),
                       ),
                       Positioned(
                         top: 0,
@@ -635,8 +643,9 @@ class ImageField2 extends StatelessWidget {
   final String label;
   final String? image;
   final void Function()? onTapContainer;
+  final void Function(String)? onDeleteImage;
 
-  const ImageField2({super.key, required this.label, this.image, this.onTapContainer});
+  const ImageField2({super.key, required this.label, this.image, this.onTapContainer, this.onDeleteImage});
 
   @override
   Widget build(BuildContext context) {
@@ -651,12 +660,44 @@ class ImageField2 extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8),
-        Container(
-          width: MediaQuery.of(context).size.width * 0.22,
-          height: MediaQuery.of(context).size.width * 0.22,
-          color: Colors.grey[300],
-          child: Image.network(image!, fit: BoxFit.cover),
-        ),
+        if ((image == ''))
+          InkWell(
+            onTap: onTapContainer,
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.22,
+              height: MediaQuery.of(context).size.width * 0.22,
+              color: Colors.grey[300],
+              child: const Icon(Icons.add_a_photo),
+            ),
+          ),
+        if (image != '')
+          Stack(
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width * 0.22,
+                height: MediaQuery.of(context).size.width * 0.22,
+                color: Colors.grey[300],
+                child: image!.contains('.jpg')
+                    ? Image.network(image!, fit: BoxFit.cover)
+                    : InkWell(
+                        onTap: () {
+                          showFullScreenPDF(context, image!);
+                        },
+                        child: const Icon(Icons.picture_as_pdf)),
+              ),
+              Positioned(
+                top: 0,
+                right: 0,
+                child: InkWell(
+                  onTap: () => onDeleteImage?.call(image!),
+                  child: Container(
+                    color: Colors.black54,
+                    child: const Icon(Icons.close, color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
+          )
       ],
     );
   }

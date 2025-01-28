@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:path_provider/path_provider.dart';
-import 'dart:io';
 
 class ProtecaoDialog {
   static void show(BuildContext context) {
@@ -34,7 +32,6 @@ class ProtecaoDialog {
                   ],
                 ),
               ),
-              // WebView para carregar o PDF via PDF.js
               Flexible(
                 child: SizedBox(
                   height: MediaQuery.of(context).size.height * 0.8,

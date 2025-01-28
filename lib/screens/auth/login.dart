@@ -2,11 +2,11 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:reabilita_social/repository/auth/auth_repository.dart';
 import 'package:reabilita_social/screens/auth/resetar_senha.dart';
+import 'package:reabilita_social/screens/profissional/pdf_viewer.dart';
 import 'package:reabilita_social/utils/colors.dart';
 import 'package:reabilita_social/utils/snack/snack_erro.dart';
 import 'package:reabilita_social/verifica_conta.dart';
 import 'package:reabilita_social/widgets/botao/botaoPrincipal.dart';
-import 'package:reabilita_social/widgets/protecao_dados.dart';
 import 'package:reabilita_social/widgets/text_field_custom.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -133,8 +133,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         text: 'Login',
                         onPressed: () async {
                           try {
-                            final usuario = await AuthRepository().fazerLogin(
-                                emailController.text, senhaController.text);
+                            final usuario =
+                                await AuthRepository().fazerLogin(emailController.text, senhaController.text);
                             verificaUser(context, usuario);
                           } catch (e) {
                             snackErro(context, e.toString());
@@ -178,7 +178,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Center(
                 child: InkWell(
                   onTap: () {
-                    ProtecaoDialog.show(context);
+                    pdfasset(context);
                   },
                   child: const Text(
                     'Termo e Condições de Uso do webapp “App projeto de reabilitação psicossocial”',

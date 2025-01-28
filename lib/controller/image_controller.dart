@@ -67,7 +67,7 @@ class ImageController {
 
 class ImagePickerUtil {
   static Future<void> pegarFoto(
-      BuildContext context, Function(Uint8List?)? setImage, Function(Uint8List?)? setPdf) async {
+      BuildContext context, Function(Uint8List?)? setImage, Function(Uint8List?)? setPdf, bool documento) async {
     showModalBottomSheet<void>(
       context: context,
       builder: (BuildContext context) {
@@ -144,27 +144,30 @@ class ImagePickerUtil {
                       ],
                     ),
                   ),
-                  InkWell(
-                    onTap: () async {
-                      final imageController = ImageController();
-                      final pdf = await imageController.pegarArquivo(context);
-
-                      setPdf!(pdf!);
-                      setImage!(null);
-
-                      Navigator.pop(context);
-                    },
-                    child: const Column(
-                      children: [
-                        Icon(
-                          Icons.document_scanner,
-                          size: 70,
-                        ),
-                        Text(
-                          "Escolher documento",
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                        ),
-                      ],
+                  Visibility(
+                    visible: documento,
+                    child: InkWell(
+                      onTap: () async {
+                        final imageController = ImageController();
+                        final pdf = await imageController.pegarArquivo(context);
+                    
+                        setPdf!(pdf!);
+                        setImage!(null);
+                    
+                        Navigator.pop(context);
+                      },
+                      child: const Column(
+                        children: [
+                          Icon(
+                            Icons.document_scanner,
+                            size: 70,
+                          ),
+                          Text(
+                            "Escolher documento",
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],

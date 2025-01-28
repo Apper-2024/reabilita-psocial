@@ -56,6 +56,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
 
   Future<void> _dialogDiagnosticoMultiprofissional(PacienteProvider pacienteProvider) async {
     final List<Uint8List> images = [];
+    final List<Uint8List> pdfs = [];
 
     HistoriaCasoModel historiaCasoModel = HistoriaCasoModel(
       historia: null,
@@ -198,14 +199,25 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                     color: Colors.grey[300],
                                     child: Image.memory(image, fit: BoxFit.cover),
                                   )),
-                            if ((images.length ?? 0) < 3)
+                            if (pdfs.isNotEmpty)
+                              ...pdfs.map((image) => Container(
+                                    width: MediaQuery.of(context).size.width * 0.22,
+                                    height: MediaQuery.of(context).size.width * 0.22,
+                                    color: Colors.grey[300],
+                                    child: const Icon(Icons.picture_as_pdf),
+                                  )),
+                            if ((images.length + pdfs.length ?? 0) < 3)
                               InkWell(
                                 onTap: () {
                                   ImagePickerUtil.pegarFoto(context, (foto) {
                                     setStateDialog(() {
                                       images.add(foto!);
                                     });
-                                  }, (pdf) {});
+                                  }, (pdf) {
+                                    setStateDialog(() {
+                                      pdfs.add(pdf!);
+                                    });
+                                  }, true);
                                 },
                                 child: Container(
                                   width: MediaQuery.of(context).size.width * 0.22,
@@ -232,11 +244,28 @@ class _PacienteScreenState extends State<PacienteScreen> {
                             Expanded(
                               child: Botaoprincipal(
                                 text: "Cadastrar",
+                                carregando: _carregando,
                                 onPressed: () async {
                                   try {
                                     if (!formKey.currentState!.validate()) {
                                       snackAtencao(context, "Preencha todos os campos");
                                       return;
+                                    }
+                                    setStateDialog(() {
+                                      _carregando = true;
+                                    });
+
+                                    List<Map<Uint8List, String>> tiposExtensoes = [];
+
+                                    if (images.isNotEmpty) {
+                                      for (var image in images) {
+                                        tiposExtensoes.add({image: 'jpg'});
+                                      }
+                                    }
+                                    if (pdfs.isNotEmpty) {
+                                      for (var pdf in pdfs) {
+                                        tiposExtensoes.add({pdf: 'pdf'});
+                                      }
                                     }
                                     // if (images.isEmpty) {
                                     //   snackAtencao(context, "Adicione uma imagem");
@@ -250,16 +279,22 @@ class _PacienteScreenState extends State<PacienteScreen> {
 
                                     await GerenciaPacienteRepository().cadastrarHistoria(
                                       historiaCasoModel,
-                                      images,
+                                      tiposExtensoes,
                                       pacienteProvider.paciente!.dadosPacienteModel.uidDocumento,
                                     );
 
                                     pacienteProvider.setHistoria(historiaCasoModel);
 
                                     Navigator.pop(context);
+                                    setStateDialog(() {
+                                      _carregando = false;
+                                    });
                                     snackSucesso(context, "Cadastrado com sucesso");
                                   } catch (e) {
                                     snackErro(context, "Erro ao cadastrar diagnóstico multiprofissional");
+                                    setStateDialog(() {
+                                      _carregando = false;
+                                    });
                                     return;
                                   }
                                 },
@@ -1977,6 +2012,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
 
     IntervencoesModel? intervencaoModel = pacienteProvider.paciente!.intervencoesModel;
     Uint8List? image;
+    Uint8List? pdfOriginal;
 
     final formKey = GlobalKey<FormState>();
     return showDialog<void>(
@@ -2073,6 +2109,13 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                 color: Colors.grey[300],
                                 child: Image.memory(image!, fit: BoxFit.cover),
                               ),
+                            if (pdfOriginal != null)
+                              Container(
+                                width: MediaQuery.of(context).size.width * 0.22,
+                                height: MediaQuery.of(context).size.width * 0.22,
+                                color: Colors.grey[300],
+                                child: const Icon(Icons.picture_as_pdf),
+                              ),
                             if (image == null)
                               InkWell(
                                 onTap: () {
@@ -2080,7 +2123,11 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                     setStateDialog(() {
                                       image = foto;
                                     });
-                                  }, (pdf) {});
+                                  }, (pdf) {
+                                    setStateDialog(() {
+                                      pdfOriginal = pdf;
+                                    });
+                                  }, true);
                                 },
                                 child: Container(
                                   width: MediaQuery.of(context).size.width * 0.22,
@@ -2130,7 +2177,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                         pactuacao!,
                                         pacienteProvider.paciente!.dadosPacienteModel.uidDocumento,
                                         pactuacaoModel,
-                                        image!);
+                                        image != null ? image! : pdfOriginal!,
+                                        image != null ? 'jpg' : 'pdf');
 
                                     pacienteProvider.setUpdatePactuacao(pactuacao!);
 
@@ -2396,6 +2444,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
     ListPactuacaoModel? pactuacaoModel = pacienteProvider.paciente!.pactuacoesModel;
 
     Uint8List? image;
+    Uint8List? pdfOriginal;
 
     final formKey = GlobalKey<FormState>();
     return showDialog<void>(
@@ -2499,6 +2548,13 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                 color: Colors.grey[300],
                                 child: Image.memory(image!, fit: BoxFit.cover),
                               ),
+                            if (pdfOriginal != null)
+                              Container(
+                                width: MediaQuery.of(context).size.width * 0.22,
+                                height: MediaQuery.of(context).size.width * 0.22,
+                                color: Colors.grey[300],
+                                child: const Icon(Icons.picture_as_pdf),
+                              ),
                             if (image == null)
                               InkWell(
                                 onTap: () {
@@ -2506,7 +2562,11 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                     setStateDialog(() {
                                       image = foto;
                                     });
-                                  }, (pdf) {});
+                                  }, (pdf) {
+                                    setStateDialog(() {
+                                      pdfOriginal = pdf;
+                                    });
+                                  }, true);
                                 },
                                 child: Container(
                                   width: MediaQuery.of(context).size.width * 0.22,
@@ -2562,7 +2622,8 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                         avaliacao!,
                                         pacienteProvider.paciente!.dadosPacienteModel.uidDocumento,
                                         avaliacaoModel,
-                                        image!);
+                                        image != null ? image! : pdfOriginal!,
+                                        image != null ? 'jpg' : 'pdf');
 
                                     pacienteProvider.setUpdateAvaliacoes(avaliacao!);
 
@@ -3583,6 +3644,48 @@ class _PacienteScreenState extends State<PacienteScreen> {
                           key: formKey,
                           fields: [
                             FieldConfig(
+                                label: 'Imagem do Paciente',
+                                hintText: '',
+                                umaImagem: true,
+                                onDeleteImage: (String urlImagem) async {
+                                  try {
+                                    dadosPacienteModel.urlFoto = '';
+                                    await GerenciaPacienteRepository().deleteImage([dadosPacienteModel.urlFoto],
+                                        urlImagem, dadosPacienteModel.uidDocumento, 'dadosPacienteModel.urlFoto');
+
+                                    setState(() {
+                                      dadosPacienteModel.urlFoto;
+                                    });
+
+                                    pacienteProvider.setDadosPaciente(dadosPacienteModel);
+
+                                    snackSucesso(context, "Arquivo deletada com sucesso");
+                                    Navigator.pop(context);
+                                  } catch (e) {
+                                    print("Erro: $e");
+                                    snackErro(context, "Erro ao deletar arquivo");
+                                    return;
+                                  }
+                                },
+                                onTapContainer: () async {
+                                  await ImagePickerUtil.pegarFoto(context, (foto) async {
+                                    await GerenciaPacienteRepository()
+                                        .cadastrarImagemPaciente(dadosPacienteModel, foto!, 'jpg');
+                                    // diagnosticoPacienteModel.historiaCasoModel!.foto!.add(urlImagem);
+                                    // pacienteProvider.setHistoria(diagnosticoPacienteModel.historiaCasoModel!);
+
+                                    snackSucesso(context, "Salvo com sucesso");
+                                    Navigator.pop(context);
+                                    pacienteProvider.setDadosPaciente(dadosPacienteModel);
+                                  }, (pdf) async {
+                                    await GerenciaPacienteRepository()
+                                        .cadastrarImagemPaciente(dadosPacienteModel, pdf!, 'pdf');
+                                    Navigator.pop(context);
+                                    snackSucesso(context, "Salvo com sucesso");
+                                  }, true);
+                                },
+                                imagem: dadosPacienteModel.urlFoto),
+                            FieldConfig(
                                 label: 'Nome Completo',
                                 hintText: dadosPacienteModel.nome,
                                 widthFactor: 1.0,
@@ -3866,36 +3969,42 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                         diagnosticoPacienteModel.historiaCasoModel!.foto!.remove(urlImagem);
 
                                         await GerenciaPacienteRepository().deleteImage(
-                                          diagnosticoPacienteModel.historiaCasoModel!.foto!,
-                                          urlImagem,
-                                          dadosPacienteModel.uidDocumento,
-                                        );
+                                            diagnosticoPacienteModel.historiaCasoModel!.foto!,
+                                            urlImagem,
+                                            dadosPacienteModel.uidDocumento,
+                                            'diagnosticoModal.historiaCasoModel.foto');
 
                                         setState(() {
                                           diagnosticoPacienteModel.historiaCasoModel!.foto;
                                         });
 
-                                        snackSucesso(context, "Imagem deletada com sucesso");
+                                        snackSucesso(context, "Arquivo deletada com sucesso");
                                         Navigator.pop(context);
                                       } catch (e) {
                                         print("Erro: $e");
-                                        snackErro(context, "Erro ao deletar imagem");
+                                        snackErro(context, "Erro ao deletar arquivo");
                                         return;
                                       }
                                     },
                                     onTapContainer: () async {
                                       await ImagePickerUtil.pegarFoto(context, (foto) async {
-                                        final urlImagem = await GerenciaPacienteRepository().cadastrarFotoDiagnostico(
-                                          diagnosticoPacienteModel.historiaCasoModel!,
-                                          foto!,
-                                          dadosPacienteModel.uidDocumento,
-                                        );
+                                        await GerenciaPacienteRepository().cadastrarFotoDiagnostico(
+                                            diagnosticoPacienteModel.historiaCasoModel!,
+                                            foto!,
+                                            dadosPacienteModel.uidDocumento,
+                                            'jpg');
                                         // diagnosticoPacienteModel.historiaCasoModel!.foto!.add(urlImagem);
                                         // pacienteProvider.setHistoria(diagnosticoPacienteModel.historiaCasoModel!);
 
-                                        Navigator.pop(context);
                                         snackSucesso(context, "Salvo com sucesso");
-                                      }, (pdf) {});
+                                      }, (pdf) async {
+                                        await GerenciaPacienteRepository().cadastrarFotoDiagnostico(
+                                            diagnosticoPacienteModel.historiaCasoModel!,
+                                            pdf!,
+                                            dadosPacienteModel.uidDocumento,
+                                            'pdf');
+                                        snackSucesso(context, "Salvo com sucesso");
+                                      }, true);
                                     },
                                     images: diagnosticoPacienteModel.historiaCasoModel!.foto,
                                   ),
@@ -4933,6 +5042,9 @@ class _PacienteScreenState extends State<PacienteScreen> {
       ),
       Consumer<PacienteProvider>(builder: (context, value, child) {
         AvaliacaoModel? avaliacaoModel = value.paciente!.avaliacoesModel;
+        IntervencoesModel? intervencoesModel = pacienteProvider.paciente!.intervencoesModel;
+        ListPactuacaoModel? pactuacaoModel = pacienteProvider.paciente!.pactuacoesModel;
+
         return buildCardPaciente(
           context,
           icon: Icons.assessment,
@@ -4941,6 +5053,14 @@ class _PacienteScreenState extends State<PacienteScreen> {
             visible: true,
             textoBtn: "Adicionar Avaliação",
             onPressed: () {
+              if (intervencoesModel == null || intervencoesModel.intervencoesModel.isEmpty) {
+                snackAtencao(context, "Cadastre uma intervenção antes de adicionar uma avaliação");
+                return;
+              }
+              if (pactuacaoModel == null || pactuacaoModel.pactuacoesModel!.isEmpty) {
+                snackAtencao(context, "Cadastre uma pactuação antes de adicionar uma avaliação");
+                return;
+              }
               _dialogAvaliacaoProgramada(pacienteProvider, avaliacaoModel);
             },
             conteudos: [
@@ -4948,6 +5068,14 @@ class _PacienteScreenState extends State<PacienteScreen> {
                 ItemConteudo(
                   titulo: 'Nenhuma agenda cadastrada',
                   onTap: () {
+                    if (intervencoesModel == null || intervencoesModel.intervencoesModel.isEmpty) {
+                      snackAtencao(context, "Cadastre uma intervenção antes de adicionar uma avaliação");
+                      return;
+                    }
+                    if (pactuacaoModel == null || pactuacaoModel.pactuacoesModel!.isEmpty) {
+                      snackAtencao(context, "Cadastre uma pactuação antes de adicionar uma avaliação");
+                      return;
+                    }
                     _dialogAvaliacaoProgramada(pacienteProvider, avaliacaoModel);
                   },
                   onTap2: () {

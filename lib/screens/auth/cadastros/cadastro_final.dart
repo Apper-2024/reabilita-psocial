@@ -27,6 +27,7 @@ class CadastroFinalScreen extends StatefulWidget {
 class _CadastroFinalScreenState extends State<CadastroFinalScreen> {
   final _formKey = GlobalKey<FormState>();
   Uint8List? _image;
+  Uint8List? _pdf;
 
   @override
   Widget build(BuildContext context) {
@@ -167,8 +168,11 @@ class _CadastroFinalScreenState extends State<CadastroFinalScreen> {
                         _image = foto;
                       });
                     }, (pdf){
-                      
-                    });
+                       setState(() {
+                        _pdf = pdf;
+                      });
+                    },
+                    false);
                   },
                   child: const Text(
                     "Tire uma foto ou selecione uma imagem",

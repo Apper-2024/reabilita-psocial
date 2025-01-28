@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:reabilita_social/screens/Mapa.dart';
 import 'package:reabilita_social/screens/profissional/legislacao.dart';
-import 'package:reabilita_social/screens/profissional/registroProdutividade.dart';
 import 'package:reabilita_social/utils/colors.dart';
 import 'package:reabilita_social/widgets/card/card_opcao.dart';
 import 'referencias.dart';
@@ -20,14 +19,14 @@ class SuporteUsuario extends StatelessWidget {
         backgroundColor: background,
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             OpcaoCard(
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ReferenciasPage()),
+                  MaterialPageRoute(builder: (context) => const ReferenciasPage()),
                 );
               },
               icon: Icons.healing,
@@ -37,7 +36,7 @@ class SuporteUsuario extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => LegislacaoPage()),
+                  MaterialPageRoute(builder: (context) => const LegislacaoPage()),
                 );
               },
               icon: Icons.gavel,
@@ -47,7 +46,7 @@ class SuporteUsuario extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => SearchPage()),
+                  MaterialPageRoute(builder: (context) => const SearchPage()),
                 );
               },
               icon: Icons.search,

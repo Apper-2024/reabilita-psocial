@@ -26,13 +26,14 @@ class GerenciaPacienteRepository {
   final db = FirebaseFirestore.instance;
   final storageRef = FirebaseStorage.instance.ref();
 
-  Future<void> cadastrarPacienteNovo(DadosPacienteModel paciente, Uint8List? arquivo, String senha) async {
+  Future<void> cadastrarPacienteNovo(
+      DadosPacienteModel paciente, Uint8List? arquivo, String extensao, String senha) async {
     final uuid = const UuidV4().generate();
 
     final batch = db.batch();
     try {
       if (arquivo != null) {
-        final imagesRef = storageRef.child("Pacientes/${paciente.uidPaciente}/$uuid.jpg");
+        final imagesRef = storageRef.child("Pacientes/${paciente.uidDocumento}/$uuid.$extensao");
         await imagesRef.putData(arquivo);
 
         String imageUrl = await imagesRef.getDownloadURL();
@@ -63,6 +64,35 @@ class GerenciaPacienteRepository {
       batch.set(pacienteRef, {
         ...pacienteModel.toMap(),
         "senha": senha,
+      });
+
+      // Commit do batch
+      await batch.commit();
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorRepository.handleFirebaseException(e);
+    } catch (e) {
+      print(e);
+      throw 'Ops, algo deu errado. Tente novamente mais tarde!';
+    }
+  }
+
+  Future<void> cadastrarImagemPaciente(DadosPacienteModel paciente, Uint8List? arquivo, String extensao) async {
+    final uuid = const UuidV4().generate();
+
+    final batch = db.batch();
+    try {
+      if (arquivo != null) {
+        final imagesRef = storageRef.child("Pacientes/${paciente.uidDocumento}/$uuid.$extensao");
+        await imagesRef.putData(arquivo);
+
+        String imageUrl = await imagesRef.getDownloadURL();
+        paciente.urlFoto = imageUrl;
+      }
+
+      final pacienteRef = db.collection("Pacientes").doc(paciente.uidDocumento);
+
+      batch.update(pacienteRef, {
+        'dadosPacienteModel': paciente.toMap(),
       });
 
       // Commit do batch
@@ -132,7 +162,8 @@ class GerenciaPacienteRepository {
     }
   }
 
-  Future<void> cadastrarHistoria(HistoriaCasoModel historia, List<Uint8List> arquivos, String uidPaciente) async {
+  Future<void> cadastrarHistoria(
+      HistoriaCasoModel historia, List<Map<Uint8List, String>> arquivos, String uidPaciente) async {
     final uuid = const UuidV4().generate();
     final batch = db.batch();
 
@@ -140,8 +171,10 @@ class GerenciaPacienteRepository {
       List<String> imageUrls = [];
 
       for (var arquivo in arquivos) {
-        final imagesRef = storageRef.child("DiagnosticoMultiprofissional/$uuid.jpg");
-        await imagesRef.putData(arquivo);
+        Uint8List fileData = arquivo.keys.first;
+        String fileExtension = arquivo.values.first;
+        final imagesRef = storageRef.child("DiagnosticoMultiprofissional/$uuid.$fileExtension");
+        await imagesRef.putData(fileData);
         String imageUrl = await imagesRef.getDownloadURL();
         imageUrls.add(imageUrl);
       }
@@ -324,13 +357,13 @@ class GerenciaPacienteRepository {
     }
   }
 
-  Future<void> cadastrarPactuacao(
-      ListPactuacaoModel pactuacao, String uidPaciente, PactuacaoModel pactuacaoModel, Uint8List image) async {
+  Future<void> cadastrarPactuacao(ListPactuacaoModel pactuacao, String uidPaciente, PactuacaoModel pactuacaoModel,
+      Uint8List image, String extensao) async {
     final batch = db.batch();
     final uuid = const UuidV4().generate();
 
     try {
-      final imagesRef = storageRef.child("Pactuacoes/$uuid.jpg");
+      final imagesRef = storageRef.child("Pactuacoes/$uuid.$extensao");
       await imagesRef.putData(image);
       String imageUrl = await imagesRef.getDownloadURL();
 
@@ -394,13 +427,13 @@ class GerenciaPacienteRepository {
     }
   }
 
-  Future<void> cadastrarAvaliacao(
-      AvaliacaoModel avaliacao, String uidPaciente, ListAvaliacao avaliacaoModel, Uint8List image) async {
+  Future<void> cadastrarAvaliacao(AvaliacaoModel avaliacao, String uidPaciente, ListAvaliacao avaliacaoModel,
+      Uint8List image, String extensao) async {
     final batch = db.batch();
     final uuid = const UuidV4().generate();
 
     try {
-      final imagesRef = storageRef.child("Avaliacoes/$uuid.jpg");
+      final imagesRef = storageRef.child("Avaliacoes/$uuid.$extensao");
       await imagesRef.putData(image);
       String imageUrl = await imagesRef.getDownloadURL();
 
@@ -465,12 +498,13 @@ class GerenciaPacienteRepository {
     }
   }
 
-  Future<String> cadastrarFotoDiagnostico(HistoriaCasoModel historia, Uint8List arquivo, String uidPaciente) async {
+  Future<String> cadastrarFotoDiagnostico(
+      HistoriaCasoModel historia, Uint8List arquivo, String uidPaciente, String extensao) async {
     final uuid = const UuidV4().generate();
     final batch = db.batch();
 
     try {
-      final imagesRef = storageRef.child("DiagnosticoMultiprofissional/$uuid.jpg");
+      final imagesRef = storageRef.child("DiagnosticoMultiprofissional/$uuid.$extensao");
       await imagesRef.putData(arquivo);
       String imageUrl = await imagesRef.getDownloadURL();
 
@@ -562,7 +596,7 @@ class GerenciaPacienteRepository {
     }
   }
 
-  Future<void> deleteImage(List<String> fotos, String url, String uidPaciente) async {
+  Future<void> deleteImage(List<String> fotos, String url, String uidPaciente, String caminho) async {
     final batch = db.batch();
 
     final storageRef = FirebaseStorage.instance.ref();
@@ -572,7 +606,7 @@ class GerenciaPacienteRepository {
       await storageRef.child(url).delete();
 
       batch.update(pacienteRef, {
-        'diagnosticoModal.historiaCasoModel.foto': fotos,
+        caminho: '',
       });
       await batch.commit();
     } on FirebaseException catch (e) {

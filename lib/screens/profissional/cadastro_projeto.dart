@@ -403,7 +403,7 @@ class _CadastroProjetoScreenState extends State<CadastroProjetoScreen> {
                       setState(() {
                         _pdf = pdf;
                       });
-                    });
+                    }, true);
                   },
                   child: const Text(
                     "Tire uma foto ou selecione uma imagem do Paciente",
@@ -411,7 +411,9 @@ class _CadastroProjetoScreenState extends State<CadastroProjetoScreen> {
                   ),
                 ),
                 if (_image != null) Anexo(arquivoBytes: _image!),
-                if (_pdf != null) Center(child: Text('PDF SELECIONADO COM SUCESSO!', style: TextStyle(color: verde1, fontSize: 16 ), )),
+                if (_pdf != null)
+                  const Center(
+                      child: Text('PDF SELECIONADO COM SUCESSO!', style: TextStyle(color: verde1, fontSize: 16))),
                 const SizedBox(height: 32),
                 Botaoprincipal(
                   text: "Finalizar Cadastro do Projeto",
@@ -447,8 +449,8 @@ class _CadastroProjetoScreenState extends State<CadastroProjetoScreen> {
 
                       paciente.dadosPacienteModel.dataCriacao = Timestamp.now();
 
-                      await GerenciaPacienteRepository()
-                          .cadastrarPacienteNovo(paciente.dadosPacienteModel, _image, senha);
+                      await GerenciaPacienteRepository().cadastrarPacienteNovo(paciente.dadosPacienteModel,
+                          _image ?? _pdf, _image != null ? 'jpg' : 'pdf', senha);
 
                       setState(() {
                         _carregando = false;

@@ -69,7 +69,7 @@ class MyApp extends StatelessWidget {
       theme: getApplicationTheme(),
       initialRoute: '/',
       locale: const Locale('pt', 'BR'),
-      supportedLocales: [
+      supportedLocales: const [
         Locale('pt', 'BR'),
       ],
       localizationsDelegates: const [
