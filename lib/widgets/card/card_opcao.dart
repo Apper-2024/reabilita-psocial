@@ -4,13 +4,13 @@ import 'package:reabilita_social/utils/colors.dart';
 class OpcaoCard extends StatelessWidget {
   final IconData icon;
   final String title;
-  final Widget destination;
+ void Function()? onTap;
 
-  const OpcaoCard({
+   OpcaoCard({
     super.key,
     required this.icon,
     required this.title,
-    required this.destination,
+    required this.onTap,
   });
 
   @override
@@ -18,12 +18,7 @@ class OpcaoCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6.0),
       child: InkWell(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => destination),
-          );
-        },
+        onTap:onTap,
         child: Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(

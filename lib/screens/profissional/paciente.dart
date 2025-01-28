@@ -203,9 +203,9 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                 onTap: () {
                                   ImagePickerUtil.pegarFoto(context, (foto) {
                                     setStateDialog(() {
-                                      images.add(foto);
+                                      images.add(foto!);
                                     });
-                                  });
+                                  }, (pdf) {});
                                 },
                                 child: Container(
                                   width: MediaQuery.of(context).size.width * 0.22,
@@ -2080,7 +2080,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                     setStateDialog(() {
                                       image = foto;
                                     });
-                                  });
+                                  }, (pdf) {});
                                 },
                                 child: Container(
                                   width: MediaQuery.of(context).size.width * 0.22,
@@ -2384,7 +2384,13 @@ class _PacienteScreenState extends State<PacienteScreen> {
 
   Future<void> _dialogAvaliacaoProgramada(PacienteProvider pacienteProvider, AvaliacaoModel? avaliacao) async {
     ListAvaliacao avaliacaoModel = ListAvaliacao(
-        dataCriacao: Timestamp.now(), avaliacao: null, intervencao: '', responsavel: '', observacao: "", foto: "");
+        dataCriacao: Timestamp.now(),
+        avaliacao: null,
+        intervencao: '',
+        pactuacao: '',
+        responsavel: '',
+        observacao: "",
+        foto: "");
 
     IntervencoesModel? intervencoesModel = pacienteProvider.paciente!.intervencoesModel;
     ListPactuacaoModel? pactuacaoModel = pacienteProvider.paciente!.pactuacoesModel;
@@ -2500,7 +2506,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                     setStateDialog(() {
                                       image = foto;
                                     });
-                                  });
+                                  }, (pdf) {});
                                 },
                                 child: Container(
                                   width: MediaQuery.of(context).size.width * 0.22,
@@ -2534,14 +2540,14 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                       snackAtencao(context, "Preencha todos os campos");
                                       return;
                                     }
-                                    if (image == null) {
-                                      snackAtencao(context, "Selecione uma imagem");
-                                      return;
-                                    }
 
                                     formKey.currentState!.save();
                                     if (avaliacaoModel.avaliacao == null) {
                                       snackAtencao(context, "Selecione uma avaliação");
+                                      return;
+                                    }
+                                    if (avaliacaoModel.pactuacao == '' && avaliacaoModel.intervencao == '') {
+                                      snackAtencao(context, "Selecione pelo menos uma pactuação ou intervenção");
                                       return;
                                     }
 
@@ -3355,13 +3361,11 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                     snackSucesso(context, "Editado com sucesso");
                                     Navigator.pop(context);
                                     Navigator.pop(context);
-                                    Navigator.pop(context);
                                   } catch (e) {
                                     setStateDialog(() {
                                       _carregando = false;
                                     });
                                     snackErro(context, "Erro ao cadastrar Intervenção");
-                                    Navigator.pop(context);
                                     Navigator.pop(context);
                                     Navigator.pop(context);
 
@@ -3883,7 +3887,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
                                       await ImagePickerUtil.pegarFoto(context, (foto) async {
                                         final urlImagem = await GerenciaPacienteRepository().cadastrarFotoDiagnostico(
                                           diagnosticoPacienteModel.historiaCasoModel!,
-                                          foto,
+                                          foto!,
                                           dadosPacienteModel.uidDocumento,
                                         );
                                         // diagnosticoPacienteModel.historiaCasoModel!.foto!.add(urlImagem);
@@ -3891,7 +3895,7 @@ class _PacienteScreenState extends State<PacienteScreen> {
 
                                         Navigator.pop(context);
                                         snackSucesso(context, "Salvo com sucesso");
-                                      });
+                                      }, (pdf) {});
                                     },
                                     images: diagnosticoPacienteModel.historiaCasoModel!.foto,
                                   ),
@@ -4776,15 +4780,14 @@ class _PacienteScreenState extends State<PacienteScreen> {
                   (pactuacao) => ItemConteudo(
                     titulo: pactuacao,
                     onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => DetalhesPactuacao(
-                              pactuacaoModel: pactuacaoModel,
-                              tipo: pactuacao,
-                            ),
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => DetalhesPactuacao(
+                            pactuacaoModel: pactuacaoModel,
+                            tipo: pactuacao,
                           ),
-                        );
-                    
+                        ),
+                      );
                     },
                     onTap2: () {
                       print('l');
@@ -4952,67 +4955,75 @@ class _PacienteScreenState extends State<PacienteScreen> {
                   },
                 )
               else
-                ...?avaliacaoModel.avaliacoesModel?.mapIndexed((index, avaliacoes) => ItemConteudo(
-                      titulo:
-                          'Avaliação Programada do PRP (A CADA 2 MESES) - ${formatTimesTamp(avaliacoes.dataCriacao)}',
-                      onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => FormCategoria(
-                            fields: [
-                              FieldConfig(
-                                  label: 'Intervenção/Pactuação',
-                                  hintText: 'Nome da Intervenção',
-                                  widthFactor: 1.0,
-                                  valorInicial: avaliacoes.intervencao),
-                              FieldConfig(
-                                  label: 'Responsável',
-                                  hintText: 'Nomes',
-                                  widthFactor: 1.0,
-                                  valorInicial: avaliacoes.responsavel),
-                              FieldConfig(
-                                  label: 'Avaliação dos Prazos do Projeto',
-                                  hintText: '',
-                                  widthFactor: 1.0,
-                                  valorInicial: avaliacoes.intervencao),
-                              FieldConfig(
-                                label: 'Pactuação',
-                                hintText: '',
-                                widthFactor: 1.0,
-                                valorInicial: avaliacoes.pactuacao,
+                ...?avaliacaoModel.avaliacoesModel
+                    ?.sorted((a, b) => b.dataCriacao!.compareTo(a.dataCriacao!))
+                    .mapIndexed((index, avaliacoes) => ItemConteudo(
+                          titulo:
+                              'Avaliação Programada do PRP (A CADA 2 MESES) - ${formatTimesTamp(avaliacoes.dataCriacao)}',
+                          onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => FormCategoria(
+                                fields: [
+                                  FieldConfig(
+                                      label: 'Intervenção',
+                                      hintText: 'Nome da Intervenção',
+                                      widthFactor: 1.0,
+                                      valorInicial: avaliacoes.intervencao),
+                                  FieldConfig(
+                                      label: 'Pactuação',
+                                      hintText: 'Nome da Pactuação',
+                                      widthFactor: 1.0,
+                                      valorInicial: avaliacoes.pactuacao),
+                                  FieldConfig(
+                                      label: 'Responsável',
+                                      hintText: 'Nomes',
+                                      widthFactor: 1.0,
+                                      valorInicial: avaliacoes.responsavel),
+                                  FieldConfig(
+                                      label: 'Avaliação dos Prazos do Projeto',
+                                      hintText: '',
+                                      widthFactor: 1.0,
+                                      valorInicial: avaliacoes.intervencao),
+                                  FieldConfig(
+                                    label: 'Avaliação',
+                                    hintText: '',
+                                    widthFactor: 1.0,
+                                    valorInicial: avaliacoes.avaliacao,
+                                  ),
+                                  FieldConfig(
+                                      label: 'Observação',
+                                      hintText: 'Observação do Paciente',
+                                      widthFactor: 1.0,
+                                      minLine: 2,
+                                      maxLine: 5,
+                                      valorInicial: avaliacoes.observacao,
+                                      isDoubleHeight: true),
+                                  FieldConfig(
+                                    label: 'Imagens da Avaliação',
+                                    hintText: '',
+                                    imagem: avaliacoes.foto,
+                                    umaImagem: true,
+                                  ),
+                                  FieldConfig(
+                                    label: '',
+                                    isButtonField: true,
+                                    hintText: "",
+                                    textBotao: "Editar Agenda de estudo",
+                                    onTapBotao: () async {
+                                      _dialogEditarAvaliacaoProgramada(
+                                          pacienteProvider, avaliacaoModel, avaliacoes, index);
+                                    },
+                                  ),
+                                ],
+                                titulo:
+                                    'Avaliação Programada do PRP - ${formatTimesTamp(avaliacoes.dataCriacao) ?? 'Data não disponível'}',
                               ),
-                              FieldConfig(
-                                  label: 'Observação',
-                                  hintText: 'Observação do Paciente',
-                                  widthFactor: 1.0,
-                                  minLine: 2,
-                                  maxLine: 5,
-                                  valorInicial: avaliacoes.observacao,
-                                  isDoubleHeight: true),
-                              FieldConfig(
-                                label: 'Imagens da Avaliação',
-                                hintText: '',
-                                imagem: avaliacoes.foto,
-                                umaImagem: true,
-                              ),
-                              FieldConfig(
-                                label: '',
-                                isButtonField: true,
-                                hintText: "",
-                                textBotao: "Editar Agenda de estudo",
-                                onTapBotao: () async {
-                                  _dialogEditarAvaliacaoProgramada(pacienteProvider, avaliacaoModel, avaliacoes, index);
-                                },
-                              ),
-                            ],
-                            titulo:
-                                'Agenda de estudo - ${formatTimesTamp(avaliacoes.dataCriacao) ?? 'Data não disponível'}',
+                            ),
                           ),
-                        ),
-                      ),
-                      onTap2: () {
-                        print("oi");
-                      },
-                    )),
+                          onTap2: () {
+                            print("oi");
+                          },
+                        )),
             ],
           ),
         );

@@ -20,8 +20,7 @@ class PesquisaUsuarioScreen extends StatefulWidget {
 
 class _PesquisaUsuarioScreenState extends State<PesquisaUsuarioScreen> {
   final FirebaseFirestore db = FirebaseService().db;
-  final ProfissionalProvider profissionalProvider =
-      ProfissionalProvider.instance;
+  final ProfissionalProvider profissionalProvider = ProfissionalProvider.instance;
   final TextEditingController _searchController = TextEditingController();
   String _query = '';
 
@@ -74,7 +73,7 @@ class _PesquisaUsuarioScreenState extends State<PesquisaUsuarioScreen> {
         child: Column(
           children: [
             const Text(
-              'Procure pelo nome ou código do paciente',
+              'Procure pelo código do paciente',
               style: TextStyle(
                 fontSize: 18,
                 fontFamily: 'Poppins',
@@ -84,10 +83,7 @@ class _PesquisaUsuarioScreenState extends State<PesquisaUsuarioScreen> {
             const SizedBox(height: 16),
             Row(
               children: [
-                Expanded(
-                    child: TextSearch(
-                        hintText: 'Digite o nome ou código do paciente',
-                        controller: _searchController)),
+                Expanded(child: TextSearch(hintText: 'Digite o código do paciente', controller: _searchController)),
                 IconButton(
                   onPressed: () {
                     setState(() {
@@ -102,8 +98,7 @@ class _PesquisaUsuarioScreenState extends State<PesquisaUsuarioScreen> {
             if (_query.isNotEmpty)
               FutureBuilder<QuerySnapshot>(
                 future: query.get(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.hasError) {
                     print(snapshot.error);
                     return const Center(child: Text('Algo deu errado'));
@@ -114,12 +109,11 @@ class _PesquisaUsuarioScreenState extends State<PesquisaUsuarioScreen> {
                   }
 
                   if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                    return const Center(
-                        child: Text("Nenhum usuário encontrado"));
+                    return const Center(child: Text("Nenhum usuário encontrado"));
                   }
 
-                  final PacienteModel paciente = PacienteModel.fromMap(
-                      snapshot.data!.docs.first.data() as Map<String, dynamic>);
+                  final PacienteModel paciente =
+                      PacienteModel.fromMap(snapshot.data!.docs.first.data() as Map<String, dynamic>);
 
                   return CardProjeto(
                     onTap: () {
@@ -131,8 +125,7 @@ class _PesquisaUsuarioScreenState extends State<PesquisaUsuarioScreen> {
                     },
                     foto: paciente.dadosPacienteModel.urlFoto,
                     nome: paciente.dadosPacienteModel.nome,
-                    observacao: paciente
-                        .dadosPacienteModel.outrasInformacoes.observacao,
+                    observacao: paciente.dadosPacienteModel.outrasInformacoes.observacao,
                   );
                 },
               ),

@@ -19,7 +19,7 @@ class CardEvolucao extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: Container(
-          height: 200, // Altura fixa para o card
+          height: 200,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
             boxShadow: [

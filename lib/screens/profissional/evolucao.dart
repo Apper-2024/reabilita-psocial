@@ -81,24 +81,37 @@ class _EvolucaoScreenState extends State<EvolucaoScreen> {
                     return PacienteModel.fromMap(doc.data() as Map<String, dynamic>);
                   }).toList();
 
-                  return GridView.builder(
-                    itemCount: pacientes.length,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2, // Define duas colunas
-                      crossAxisSpacing: 5, // Espaçamento horizontal reduzido
-                      mainAxisSpacing: 5, // Espaçamento vertical reduzido
-                      childAspectRatio: 2 / 2, // Ajuste da proporção
-                    ),
-                    itemBuilder: (context, index) {
-                      final paciente = pacientes[index];
-                      return CardEvolucao(
-                        imageUrl: paciente.dadosPacienteModel.urlFoto,
-                        nome: paciente.dadosPacienteModel.nome,
-                        onTap: () {
-                          pacienteProvider.setPaciente(paciente);
-                          Navigator.pushNamed(context, "/evolucaoPaciente");
+                  return LayoutBuilder(
+                    builder: (context, constraints) {
+                      // Defina o número de colunas dependendo da largura da tela
+                      int crossAxisCount = 2; // Definir um valor padrão para telas pequenas
+                      if (constraints.maxWidth > 600) {
+                        crossAxisCount = 3; // 3 colunas para telas maiores
+                      }
+                      if (constraints.maxWidth > 1000) {
+                        crossAxisCount = 4; // 4 colunas para telas muito grandes
+                      }
+
+                      return GridView.builder(
+                        itemCount: pacientes.length,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: crossAxisCount, // Número de colunas baseado na largura
+                          crossAxisSpacing: 5, // Espaçamento horizontal
+                          mainAxisSpacing: 5, // Espaçamento vertical
+                          childAspectRatio: 1 / 1.5, // Proporção do item
+                        ),
+                        itemBuilder: (context, index) {
+                          final paciente = pacientes[index];
+                          return CardEvolucao(
+                            imageUrl: paciente.dadosPacienteModel.urlFoto,
+                            nome: paciente.dadosPacienteModel.nome,
+                            onTap: () {
+                              pacienteProvider.setPaciente(paciente);
+                              Navigator.pushNamed(context, "/evolucaoPaciente");
+                            },
+                          );
                         },
                       );
                     },

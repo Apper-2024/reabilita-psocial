@@ -19,13 +19,14 @@ class EvolucaoPacientePage extends StatefulWidget {
   _EvolucaoPacientePageState createState() => _EvolucaoPacientePageState();
 }
 
+bool _carregando = false;
+
 class _EvolucaoPacientePageState extends State<EvolucaoPacientePage> {
   DateTime selectedDate = DateTime.now();
   CalendarFormat calendarFormat = CalendarFormat.week;
   TextEditingController comentarioController = TextEditingController();
   Map<DateTime, List<String>> comentarios = {};
 
-  bool _carregando = false;
   void _adicionarComentario() {
     PacienteProvider pacienteProvider = PacienteProvider.instance;
     EvolucaoModel? evolucao = pacienteProvider.paciente!.evolucoesModel;
@@ -54,23 +55,24 @@ class _EvolucaoPacientePageState extends State<EvolucaoPacientePage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             const Text(
-              "Adicionar comentário",
+              "Adicionar evolução",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
             TextField(
               controller: comentarioController,
               decoration: const InputDecoration(
-                labelText: "Digite o comentário",
+                labelText: "Digite a evolução do paciente",
                 border: OutlineInputBorder(),
               ),
               maxLines: 3,
             ),
             const SizedBox(height: 20),
             Botaoprincipal(
-              text: 'Salvar Comentário',
+              text: 'Salvar Evolução',
               carregando: _carregando,
               onPressed: () async {
+                if (_carregando) return;
                 try {
                   if (comentarioController.text.isEmpty) {
                     snackAtencao(context, "Digite um comentário para salvar");
@@ -91,16 +93,20 @@ class _EvolucaoPacientePageState extends State<EvolucaoPacientePage> {
                       .cadastraEvolucao(evolucao!, pacienteProvider.paciente!.dadosPacienteModel.uidDocumento);
 
                   pacienteProvider.setUpdateEvolucao(novoComentario);
+
+                  snackSucesso(context, "Comentário salvo com sucesso");
+                  Navigator.of(context).pop();
                   setState(() {
                     _carregando = false;
                   });
-                  snackSucesso(context, "Comentário salvo com sucesso");
-                  Navigator.of(context).pop();
+                  comentarioController.text = '';
                 } catch (e) {
                   setState(() {
                     _carregando = false;
                   });
                   print(e);
+                  comentarioController.text = '';
+
                   snackErro(context, "Erro ao salvar comentário");
                 }
               },
@@ -275,14 +281,28 @@ class _EvolucaoPacientePageState extends State<EvolucaoPacientePage> {
                         );
                       }
 
+                      evolucoesFiltradas.sort((a, b) => b.dataCriancao!.compareTo(a.dataCriancao!));
+
                       return ListView.builder(
                         itemCount: evolucoesFiltradas.length,
                         itemBuilder: (context, index) {
                           final evolucao = evolucoesFiltradas[index];
                           return ListTile(
-                            // leading: const CircleAvatar(
-                            //   backgroundImage: AssetImage('assets/psicologo.jpg'),
-                            // ),
+                            trailing: IconButton(
+                              icon: Icon(Icons.delete),
+                              onPressed: () async {
+                                try {
+                                  setState(() {
+                                    evolucaoModel?.evolucoesModel?.remove(evolucao);
+                                  });
+                                  await GerenciaPacienteRepository().cadastraEvolucao(
+                                      evolucaoModel!, pacienteProvider.dadosPacienteModel.uidDocumento);
+                                  snackSucesso(context, "Comentário excluído com sucesso");
+                                } catch (e) {
+                                  snackErro(context, "Erro ao excluir comentário");
+                                }
+                              },
+                            ),
                             title: Text(evolucao.nome ?? "Nome não disponível"),
                             subtitle: Text(evolucao.comentario ?? "Comentário não disponível"),
                           );
@@ -290,7 +310,7 @@ class _EvolucaoPacientePageState extends State<EvolucaoPacientePage> {
                       );
                     },
                   ),
-                ),
+                )
               ],
             );
           },

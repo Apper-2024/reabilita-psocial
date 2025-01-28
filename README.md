@@ -91,26 +91,25 @@ observacao opcional // FEITOS
 	-- cadastro de meta - objetivo que se almeja // FEITO
 	-- reload da tela quando editar a tela de metas // FEITO
 	-- cadastro de intercensao - mudar ator social para responsável // FEITO
-	-- erro no editar intervenção
+	-- erro no editar intervenção // FEITO
 	-- colocar um titulo no dropdown do editar intervenção e metas, ver todos titulos de dropdowns //FEITO
 	-- ata da pactucao é opcional // FEITO
-	-- paciente psiquiatrico bugado
 	-- erro ao cadastrar agenda de estudo e ver opcoes de edicao e duplicando agenda ao cadastrar // FEITO
 	-- em pauta - mudar para oque se trata a reuniao // FEITO
-	-- mudar appbar - avaliacao programada do prp
-	-- campos obrigatório na avaliação programa prp - o primeiro ou o segudo apenas
-	-- avaliação programa prp coisas do cadastro nao aparecerem
-	-- arrumar o tamanho do card no fullscreen 
-	-- na evolucao, remover adicionar comentario e colocar adicionar evolução
+	-- mudar appbar - avaliacao programada do prp // FEITO
+	-- campos obrigatório na avaliação programa prp - o primeiro ou o segudo apenas // FEITO
+	-- avaliação programa prp coisas do cadastro nao aparecerem // FEITO
+	-- arrumar o tamanho do card no fullscreen // FEITO
+	-- na evolucao, remover adicionar comentario e colocar adicionar evolução // FEITO
 	-- no ultimo cadastro da evolucao, fica salvo as ultimas coisas
-	-- opcao de excluir a evolucao
-	-- faltou um scroll nos recursos
-	-- ajuda e suporte colocar coisas dentro - registro e pesquisar pacientes
-	-- mudar filtros
-	-- mudar código do paciente compartilhado 
-	-- card suporte ao usuário levar pra tela de ajuda e suporte
-	-- referencias em ordem alfabetica pelo autor
-	-- formatar card legislação em saúde mental, colocar até a data no titulo e o restante em baixo
+	-- opcao de excluir a evolucao // FEITO
+	-- faltou um scroll nos recursos // FEITO
+	-- ajuda e suporte colocar coisas dentro - registro e pesquisar pacientes // FEITO
+	-- mudar filtros // FEITO
+	-- mudar código do paciente compartilhado // FEITO
+	-- card suporte ao usuário levar pra tela de ajuda e suporte // FEITO
+	-- formatar card legislação em saúde mental, colocar até a data no titulo e o restante em baixo // FEITO
 	-- busca psicosocial mudar titulo da appbar pro anterior // FEITO
-	-- mudar icone do flutter
+	-- mudar icone do flutter // FEITO
 	-- modal para excluir paciente // FEITO
+	-- referencias em ordem alfabetica pelo autor // FEITO

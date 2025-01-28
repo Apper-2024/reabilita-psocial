@@ -68,6 +68,14 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: getApplicationTheme(),
       initialRoute: '/',
+      locale: const Locale('pt', 'BR'),
+      supportedLocales: [
+        Locale('pt', 'BR'),
+      ],
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
       routes: {
         //GERAL
         '/': (context) => const VerificaConta(),

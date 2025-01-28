@@ -31,6 +31,7 @@ class CadastroProjetoScreen extends StatefulWidget {
 
 class _CadastroProjetoScreenState extends State<CadastroProjetoScreen> {
   Uint8List? _image;
+  Uint8List? _pdf;
   bool _carregando = false;
   final paciente = PacienteModel(
     url: '',
@@ -398,6 +399,10 @@ class _CadastroProjetoScreenState extends State<CadastroProjetoScreen> {
                       setState(() {
                         _image = foto;
                       });
+                    }, (pdf) {
+                      setState(() {
+                        _pdf = pdf;
+                      });
                     });
                   },
                   child: const Text(
@@ -406,6 +411,7 @@ class _CadastroProjetoScreenState extends State<CadastroProjetoScreen> {
                   ),
                 ),
                 if (_image != null) Anexo(arquivoBytes: _image!),
+                if (_pdf != null) Center(child: Text('PDF SELECIONADO COM SUCESSO!', style: TextStyle(color: verde1, fontSize: 16 ), )),
                 const SizedBox(height: 32),
                 Botaoprincipal(
                   text: "Finalizar Cadastro do Projeto",

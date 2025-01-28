@@ -166,6 +166,8 @@ class _CadastroFinalScreenState extends State<CadastroFinalScreen> {
                       setState(() {
                         _image = foto;
                       });
+                    }, (pdf){
+                      
                     });
                   },
                   child: const Text(
